@@ -1,0 +1,17 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[GetAllInterrailCompanies]    Script Date: 12/05/2013 18:42:35 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+ALTER PROCEDURE [dbo].[GetAllInterrailCompanies]
+
+as 
+
+begin
+
+	select * from irgcompany order by CompanyName
+	
+end

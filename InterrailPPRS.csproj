@@ -832,6 +832,10 @@
     <Content Include="Scripts\kendo\2013.3.1119\kendo.view.min.js" />
     <Content Include="Scripts\kendo\2013.3.1119\kendo.web.min.js" />
     <Content Include="Scripts\kendo\2013.3.1119\kendo.window.min.js" />
+    <Content Include="Scripts\sql scripts\sp_GetAllInterrailCompanies.txt" />
+    <Content Include="Scripts\sql scripts\sp_GetAllInterrailUsers.txt" />
+    <Content Include="Scripts\sql scripts\sp_GetAllInterrailUsers2.txt" />
+    <Content Include="Scripts\sql scripts\sp_SearchInterrailUsers.txt" />
     <Content Include="Scripts\Validation.js" />
     <Content Include="Styles\styles.css" />
     <Content Include="Web.config">
