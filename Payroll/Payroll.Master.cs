@@ -1,0 +1,38 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Text;
+using System.Data;
+using System.Data.Sql;
+using System.Data.SqlClient;
+using System.Configuration;
+
+using Interrial.PPRS.Dal.TypedListClasses;
+using Interrial.PPRS.Dal.EntityClasses;
+using Interrial.PPRS.Dal.FactoryClasses;
+using Interrial.PPRS.Dal.CollectionClasses;
+using Interrial.PPRS.Dal.HelperClasses;
+using Interrial.PPRS.Dal;
+
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.DQE.SqlServer;
+
+namespace InterrailPPRS.Payroll
+{
+    public partial class Payroll : System.Web.UI.MasterPage
+    {
+               
+ 
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+        
+    }
+}

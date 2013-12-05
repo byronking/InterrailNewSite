@@ -1,0 +1,188 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Reports.Master.cs" Inherits="InterrailPPRS.Reports.Reports" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<!-- #BeginTemplate "/Templates/admin.dwt" -->
+<head>
+
+<title>PPRS</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link rel="stylesheet" href="../Styles/styles.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../Scripts/Validation.js"></script>
+
+<script type="text/javascript" language="JavaScript">
+<!--
+    function MM_reloadPage(init) {  //reloads the window if Nav4 resized
+        if (init == true) with (navigator) {
+            if ((appName == "Netscape") && (parseInt(appVersion) == 4)) {
+                document.MM_pgW = innerWidth; document.MM_pgH = innerHeight; onresize = MM_reloadPage;
+            } 
+        }
+        else if (innerWidth != document.MM_pgW || innerHeight != document.MM_pgH) location.reload();
+    }
+    MM_reloadPage(true);
+// -->
+</script>
+
+
+<asp:ContentPlaceHolder ID="Scripts" runat="server"></asp:ContentPlaceHolder>
+
+</head>
+<body bgcolor="#FFFFFF" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" <%if (Request["PrintPreview"] != "0") { %>background="../images/bglines.gif"<% }  %> onload="try{bodyload()}catch(e){};" onbeforeunload="try{bodyunload()}catch(e){};">
+<%if (Request["PrintPreview"] != "0") { %>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td bgcolor="#9999cc">
+      <table width="760" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td class="company" width="272" bgcolor="#FFFFFF">
+            <div align="center"><%=Session["CompanyName"]%></div>
+          </td>
+          <td width="488"><img src="../images/train.jpg" width="488" height="68" alt="" /></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table width="100%" height="32" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="100%" height="6" background="../images/topbevelbg.gif" bgcolor="#9999CC" ><img src="../images/topbevel.gif" width="760" height="6" alt="" /></td>
+        </tr>
+        <tr>
+          <td bgcolor="#FF3300">
+            <table width="760" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="200" class="date" bgcolor="#FF3300" background="../images/dateblock.gif">
+                  <div align="center">
+                    <script type="text/javascript" language="JavaScript1.2">
+                       <!--
+                        var months=new Array(13);
+                        months[1]="JANUARY";
+                        months[2]="FEBRUARY";
+                        months[3]="MARCH";
+                        months[4]="APRIL";
+                        months[5]="MAY";
+                        months[6]="JUNE";
+                        months[7]="JULY";
+                        months[8]="AUGUST";
+                        months[9]="SEPTEMBER";
+                        months[10]="OCTOBER";
+                        months[11]="NOVEMBER";
+                        months[12]="DECEMBER";
+                        var time=new Date();
+                        var lmonth=months[time.getMonth() + 1];
+                        var date=time.getDate();
+                        var year=time.getYear();
+                        if (year < 2000)    // Y2K Fix, Isaac Powell
+                        year = year + 1900; // http://onyx.idbsu.edu/~ipowell
+                        document.write(lmonth + " ");
+                        document.write(date + ", " + year);
+                        // -->
+                        </script>
+                  </div>
+                </td>
+                <td width="45"><img src="../images/navgrad01.gif" width="74" height="20" alt="" /></td>
+                <td width="115"><a href="../Admin/Default.aspx"><img src="../images/nav01.gif" width="115" height="20" border="0" alt="" /></a></td>
+                <td width="91"><a href="../Production/Default.aspx"><img src="../images/nav02.gif" width="91" height="20" border="0" alt="" /></a></td>
+                <td width="68"><a href="../Payroll/Default.aspx"><img src="../images/nav03.gif" width="68" height="20" border="0" alt="" /></a></td>
+                <td width="83"><a href="../Rebilling/Default.aspx"><img src="../images/nav04a.gif" width="83" height="20" border="0" alt="" /></a></td>
+                <td width="83"><a href="../Reports/Default.aspx"><img src="../images/nav05a.gif"  alt="Reports"  width="83" height="20" border="0" /></a></td>
+                <td width="180"><img src="../images/navgrad02.gif" width="59" height="20" alt="" /></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td width="100%" height="6" background="../images/botbevelbg.gif" ><img src="../images/botbevel.gif" width="760" height="6" alt="" /></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<table width="580" height="100%" border="0" cellspacing="0" cellpadding="0">
+  
+  <tr>
+    <td height="14" align="left" valign="top"><img src="../images/subnavtop.gif" width="180" height="14" alt="" /></td>
+  </tr>
+
+  <tr>
+  <td height="100%" align="left" valign="top">
+    <table width="760" height="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="156" height="100%"  background="../images/subnavbg.gif" align="left" valign="top" >
+          <table width="156" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td><img src="../images/subnav00.gif" width="156" height="22" alt="" /></td>
+            </tr>
+            <tr>
+              <td height="220" background="../Images/Subnav.gif" valign="top">
+                <p>&nbsp;</p>
+                
+                <asp:ContentPlaceHolder ID="Navigation"  runat="server"></asp:ContentPlaceHolder>
+                                
+                </td>
+            </tr>
+            <tr>
+              <td> 
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p align="center"><img src="../images/g1440.gif" width="76" height="23" alt="" /></p>
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td align="left" valign="top" height="100%">
+          <table width="580" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td><img src="../images/spacer.gif" width="12" height="1" alt="" /></td>
+              <td><img src="../Images/moduletopreports.gif" width="580" height="56" alt="" /></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                <table width="580" height="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td width="2" align="left" valign="top" background="../images/leftborder.gif"><img src="../images/leftborder.gif" width="2" height="10" alt="" /></td>
+                    <td width="547" bgcolor="#FFFFFF" align="center">
+
+
+                      <table width="90%" border="0" cellspacing="0" cellpadding="8">
+                        <tr>
+                          <td> 
+                          <% } %>
+                          <asp:ContentPlaceHolder ID="Main" runat="server"></asp:ContentPlaceHolder>
+                            <%if (Request["PrintPreview"] != "0") { %>   
+                          </td>
+                        </tr>
+                      </table>
+
+
+                      <p>&nbsp;</p>
+                    </td>
+                    <td width="31" align="right" valign="top" background="../images/rightborder.gif">
+                      <img src="../images/modulecorner.gif" width="31" height="38" alt="" />
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><img src="../images/modulebottom.gif" width="580" height="20" alt="" /></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td>
+  </tr>
+
+</table>
+<% }  %> 
+</body>
+
+</html>
+

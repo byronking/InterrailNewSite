@@ -1,0 +1,50 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+using System.Data;
+using System.Data.Sql;
+using System.Data.SqlClient;
+using System.Configuration;
+
+using Interrial.PPRS.Dal.TypedListClasses;
+using Interrial.PPRS.Dal.EntityClasses;
+using Interrial.PPRS.Dal.FactoryClasses;
+using Interrial.PPRS.Dal.CollectionClasses;
+using Interrial.PPRS.Dal.HelperClasses;
+using Interrial.PPRS.Dal;
+
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.DQE.SqlServer;
+
+namespace InterrailPPRS.Reports
+{
+    public partial class FacilityMonitor : PageBase
+    {
+        public DataReader rsRegions;
+
+        protected override void Page_Load(object sender, EventArgs e)
+        {
+
+            base.Page_Load(sender, e);
+
+            GrantAccess("Super, Admin, User");
+
+
+            if (Session["UserType"] == "User")
+            {
+                rsRegions = new DataReader(" SELECT id, RegionDescription FROM IRGRegion WHERE id IN (SELECT regionId FROM RegionalRights WHERE UserProfileId = " + Session["UserID"] + " ) ORDER BY RegionDescription ");
+            }
+            else
+            {
+                rsRegions = new DataReader(" SELECT id, RegionDescription FROM IRGRegion ORDER BY RegionDescription ");
+            }
+            rsRegions.Open();
+
+
+        }
+    }
+}
