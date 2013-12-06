@@ -1,0 +1,22 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[SearchInterrailCompanies]    Script Date: 12/05/2013 21:11:51 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+ALTER PROCEDURE [dbo].[SearchInterrailCompanies]
+
+@searchCriteria varchar(50)
+
+as 
+
+begin
+
+	select Id, CompanyID, CompanyName, LogoPath, PayPeriodID, PayrollCompanyCode, OutOfTownRate,
+	OutOfTownHoursPerDay, LastModifiedBy, LastModifiedOn, Active from irgcompany	
+	where CompanyID like '%'+@searchCriteria+'%' or CompanyName like '%'+@searchCriteria+'%' 	
+	order by CompanyName
+	
+end

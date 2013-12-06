@@ -26,3 +26,13 @@ C:\development\ProductionWebSiteNew\obj\Debug\InterrailPPRS.Reports.AdminReport.
 C:\development\ProductionWebSiteNew\obj\Debug\InterrailPPRS.csproj.GenerateResource.Cache
 C:\development\ProductionWebSiteNew\obj\Debug\InterrailPPRS.dll
 C:\development\ProductionWebSiteNew\obj\Debug\InterrailPPRS.pdb
+C:\Development\InterrailNewSite\bin\InterrailPPRS.dll
+C:\Development\InterrailNewSite\bin\InterrailPPRS.pdb
+C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.csprojResolveAssemblyReference.cache
+C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.Rebilling.ManageAttachments.resources
+C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.Reports.WebForm1.resources
+C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.Reports.WebForm2.resources
+C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.Reports.AdminReport.resources
+C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.csproj.GenerateResource.Cache
+C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.dll
+C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.pdb
