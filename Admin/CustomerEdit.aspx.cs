@@ -38,6 +38,9 @@ namespace InterrailPPRS.Admin
             GrantAccess("Super, Admin, User");
 
 
+            //ddlCarrierSelect.
+
+
             // *** Edit Operations: declare variables;
 
             MM_editAction = cStr(Request["URL"]);
@@ -206,6 +209,11 @@ namespace InterrailPPRS.Admin
 
          rsRC = new DataReader("SELECT RailCarrierCode, RailCarrierName  FROM dbo.IRGRailCarrier  Order By RailCarrierName");
          rsRC.Open();
+
+        }
+
+        private void PopulateCarrierDropdownList()
+        {
 
         }
     }

@@ -1548,6 +1548,7 @@
     </Compile>
     <Compile Include="App_Code\InterrailCompany.cs" />
     <Compile Include="App_Code\InterrailCompanyRepository.cs" />
+    <Compile Include="App_Code\InterrailCustomer.cs" />
     <Compile Include="App_Code\InterrailUser.cs" />
     <Compile Include="App_Code\InterrailUserRepository.cs" />
     <Compile Include="Common\OutOfTown.aspx.cs">
