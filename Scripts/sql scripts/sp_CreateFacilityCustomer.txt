@@ -1,0 +1,36 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[CreateFacilityCustomer]    Script Date: 12/10/2013 10:44:12 PM ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+ALTER PROCEDURE [dbo].[CreateFacilityCustomer]
+
+@facilityId int, 
+@customerCode varchar(10), 
+@customerName varchar(30), 
+@contactName varchar(250), 
+@contactAddress1 varchar(250), 
+@contactAddress2 varchar(250), 
+@contactAddress3 varchar(250),
+@defaultCustomer bit, 
+@lastModifiedBy varchar(50), 
+@lastModifiedOn datetime, 
+@active bit	
+
+as 
+
+begin
+
+set nocount on
+declare @id int 
+insert into FacilityCustomer values (@facilityId, @customerCode, @customerName, @contactName, @contactAddress1, @contactAddress2, 
+@contactAddress3, @defaultCustomer, @lastModifiedBy, @lastModifiedOn, @active);
+
+set @id = SCOPE_IDENTITY();
+
+return (@id);
+	
+end

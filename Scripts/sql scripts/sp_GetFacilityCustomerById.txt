@@ -1,0 +1,21 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[GetFacilityCustomerById]    Script Date: 12/10/2013 10:45:10 PM ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+ALTER PROCEDURE [dbo].[GetFacilityCustomerById]
+
+@facilityCustomerId int
+
+as 
+
+begin
+
+	select Id, FacilityId, CustomerCode, CustomerName, ContactName, ContactAddress1, ContactAddress2, ContactAddress3,
+	DefaultCustomer, LastModifiedBy, LastModifiedOn, Active from FacilityCustomer 
+	where Id = @facilityCustomerId
+	
+end
