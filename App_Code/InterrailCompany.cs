@@ -7,7 +7,7 @@ namespace InterrailPPRS.App_Code
 {
     public class InterrailCompany
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string CompanyId { get; set; }
         public string CompanyName { get; set; }
         public string LogoPath { get; set; }

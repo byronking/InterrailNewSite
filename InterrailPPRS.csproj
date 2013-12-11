@@ -836,7 +836,9 @@
     <Content Include="Scripts\sql scripts\sp_GetAllInterrailUsers.txt" />
     <Content Include="Scripts\sql scripts\sp_GetAllInterrailUsers2.txt" />
     <Content Include="Scripts\sql scripts\sp_SearchInterrailCompanies.txt" />
+    <Content Include="Scripts\sql scripts\sp_GetInterrailCarrierByCode.txt" />
     <Content Include="Scripts\sql scripts\sp_SearchInterrailUsers.txt" />
+    <Content Include="Scripts\sql scripts\sp_GetAllInterrailCarriers.txt" />
     <Content Include="Scripts\Validation.js" />
     <Content Include="Styles\styles.css" />
     <Content Include="Web.config">
@@ -1549,8 +1551,12 @@
     <Compile Include="App_Code\InterrailCompany.cs" />
     <Compile Include="App_Code\InterrailCompanyRepository.cs" />
     <Compile Include="App_Code\InterrailCustomer.cs" />
+    <Compile Include="App_Code\InterrailFacilityCustomer.cs" />
+    <Compile Include="App_Code\InterrailFacilityCustomerRepository.cs" />
     <Compile Include="App_Code\InterrailUser.cs" />
     <Compile Include="App_Code\InterrailUserRepository.cs" />
+    <Compile Include="App_Code\IRGRailCarrier.cs" />
+    <Compile Include="App_Code\IRGRailCarrierRepository.cs" />
     <Compile Include="Common\OutOfTown.aspx.cs">
       <DependentUpon>OutOfTown.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

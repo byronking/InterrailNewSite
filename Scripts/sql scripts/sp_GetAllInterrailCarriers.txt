@@ -1,0 +1,17 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[GetAllInterrailCarriers]    Script Date: 12/9/2013 9:34:34 PM ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+CREATE PROCEDURE [dbo].[GetAllInterrailCarriers]
+
+as 
+
+begin
+
+	select id, RailCarrierCode, RailCarrierName, LastModifiedBy, LastModifiedOn from IRGRailCarrier order by RailCarrierName
+	
+end

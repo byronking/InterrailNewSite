@@ -35,3 +35,13 @@ C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.Reports.AdminReport.reso
 C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.csproj.GenerateResource.Cache
 C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.dll
 C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.pdb
+C:\Users\Byron\Documents\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.Rebilling.ManageAttachments.resources
+C:\Users\Byron\Documents\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.Reports.WebForm1.resources
+C:\Users\Byron\Documents\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.Reports.WebForm2.resources
+C:\Users\Byron\Documents\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.Reports.AdminReport.resources
+C:\Users\Byron\Documents\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.csproj.GenerateResource.Cache
+C:\Users\Byron\Documents\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.dll
+C:\Users\Byron\Documents\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.pdb
+C:\Users\Byron\Documents\GitHub\InterrailNewSite\bin\InterrailPPRS.dll
+C:\Users\Byron\Documents\GitHub\InterrailNewSite\bin\InterrailPPRS.pdb
+C:\Users\Byron\Documents\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.csprojResolveAssemblyReference.cache

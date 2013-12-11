@@ -25,7 +25,7 @@ namespace InterrailPPRS.App_Code
                 {
                     var company = new InterrailCompany()
                     {
-                        ID = reader.GetInt32(0),
+                        Id = reader.GetInt32(0),
                         CompanyId = reader.GetString(1),
                         CompanyName = reader.GetString(2),
                         LogoPath = reader.GetString(3),
@@ -62,7 +62,7 @@ namespace InterrailPPRS.App_Code
                 {
                     var company = new InterrailCompany()
                     {
-                        ID = reader.GetInt32(0),
+                        Id = reader.GetInt32(0),
                         CompanyId = reader.GetString(1),
                         CompanyName = reader.GetString(2),
                         LogoPath = reader.GetString(3),
