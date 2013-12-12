@@ -92,8 +92,16 @@ namespace InterrailPPRS.Admin
             var carrierRepo = new IRGRailCarrierRepository();
             var carrier = carrierRepo.GetInterrailCarrierByCode(ddlCarrierSelect.SelectedValue);
 
-            txtCustomerCode.Text = carrier.RailCarrierCode;
-            txtCustomerName.Text = carrier.RailCarrierName;
+            if (ddlCarrierSelect.SelectedValue.Trim() == "NONE")
+            {
+                txtCustomerCode.Text = string.Empty;
+                txtCustomerName.Text = string.Empty;
+            }
+            else
+            {
+                txtCustomerCode.Text = carrier.RailCarrierCode;
+                txtCustomerName.Text = carrier.RailCarrierName;
+            }
         }
 
         /// <summary>
@@ -104,7 +112,17 @@ namespace InterrailPPRS.Admin
         protected void btnSave_Click(object sender, EventArgs e)
         {
             var userId = Session["Username"].ToString();
-            var facilityId = (int)Session["FacilityID"];
+            var facilityId = 0;
+
+            if (Convert.ToInt32(Session["FacilityID"]) == 0)
+            {
+                facilityId = Convert.ToInt32(Request["FacilityID"]);
+            }
+            else
+            {
+                facilityId = Convert.ToInt32(Session["FacilityID"]);
+            }
+
             var customerId = Convert.ToInt32(Request.QueryString["Id"]);
 
             var facilityCustomerRepo = new InterrailFacilityCustomerRepository();

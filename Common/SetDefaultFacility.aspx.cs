@@ -34,6 +34,16 @@ namespace InterrailPPRS.Common
 
             base.Page_Load(sender, e);
 
+            if (Request["FacilityID"] != null)
+            {
+                var test1 = Request["FacilityID"].ToString();
+            }
+
+            if (Session["FacilityID"] != null)
+            {
+                var test2 = Session["FacilityID"].ToString();
+            }
+
            // Facility session variables && return to caller.;
            if(Request["goTo"] != null && Request["goTo"] != ""){
              Session["FacilityID"]   = Request["FacilityID"];

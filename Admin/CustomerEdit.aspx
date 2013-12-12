@@ -139,13 +139,13 @@
                         <tr valign="baseline"> 
                             <td nowrap align="right">Code:</td>
                             <td> 
-                                <asp:TextBox ID="txtCustomerCode" runat="server" ReadOnly="true" Width="250" />
+                                <asp:TextBox ID="txtCustomerCode" runat="server" ReadOnly="true" Width="250" ClientIDMode="Static" />
                             </td>
                         </tr>
                         <tr valign="baseline"> 
                             <td nowrap align="right">Name:</td>
                             <td> 
-                                <asp:TextBox ID="txtCustomerName" runat="server" ReadOnly="true" Width="250" />
+                                <asp:TextBox ID="txtCustomerName" runat="server" ReadOnly="true" Width="250" ClientIDMode="Static" />
                             </td>
                         </tr>
                         <tr valign="baseline"> 
@@ -167,7 +167,7 @@
                         <tr valign="baseline"> 
                             <td nowrap align="right">Contact Name:</td>
                             <td>
-                                <asp:TextBox ID="txtContactName" runat="server" Width="250" />
+                                <asp:TextBox ID="txtContactName" ClientIDMode="Static" runat="server" Width="250" />
                             </td>
                         </tr>
                         <tr valign="baseline"> 
@@ -206,14 +206,37 @@
                         </tr>
                         <tr nowrap align="right">&nbsp;
                             <td> 
-                                <asp:Button ID="btnSave" runat="server" OnClick="btnSave_Click" Text="Save" />
-                                <%--<input type="button" value="Save" onclick="goValidate();" />--%>
+                                <asp:Button ID="btnSave" runat="server" OnClick="btnSave_Click" Text="Save" ClientIDMode="Static" />
                                 <input type="button" name="btnCancel" value="Cancel" onclick="goCancel();" />
                             </td>
+                        </tr>
+                        <tr> 
+                            <td nowrap align="right">&nbsp;</td>
+                            <td>&nbsp;</td>
                         </tr>
                     </table>
                 </td>
             </tr>   
         </table>
     </form>
+
+    <script src="../Scripts/jquery-1.4.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#btnSave").click(function (e) {
+
+                if ($("#txtCustomerCode").val() == "") {
+                    alert("Please select a carrier");
+                    $("#lblErrorMsg").show();
+                    e.preventDefault();
+                }
+                else if ($("#txtContactName").val() == "") {
+                    alert("Please enter a contact name");
+                    $("#lblErrorMsg").show();
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
 </asp:Content>
