@@ -46,6 +46,11 @@ namespace InterrailPPRS.Admin
             grdAllCompanies.DataBind();
         }
 
+        /// <summary>
+        /// This responds to the page changing event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void grdAllCompanies_PageIndexChanging(Object sender, GridViewPageEventArgs e)
         {
             grdAllCompanies.PageIndex = e.NewPageIndex;
