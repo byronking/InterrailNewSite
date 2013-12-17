@@ -9,6 +9,10 @@ namespace InterrailPPRS.App_Code
 {
     public class InterrailFacilityCustomerRepository
     {
+        /// <summary>
+        /// This gets all facility customers.
+        /// </summary>
+        /// <returns></returns>
         public List<InterrailFacilityCustomer> GetAllInterrailFacilityCustomers()
         {
             var facilityCustomersList = new List<InterrailFacilityCustomer>();
@@ -46,6 +50,11 @@ namespace InterrailPPRS.App_Code
             return facilityCustomersList;
         }
 
+        /// <summary>
+        /// This gets a facility customer by id.
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
         public InterrailFacilityCustomer GetFacilityCustomerById(int customerId)
         {
             InterrailFacilityCustomer facilityCustomer = null;
@@ -82,6 +91,21 @@ namespace InterrailPPRS.App_Code
             return facilityCustomer;
         }
 
+        /// <summary>
+        /// This creates a new facility customer.
+        /// </summary>
+        /// <param name="facilityId"></param>
+        /// <param name="customerCode"></param>
+        /// <param name="customerName"></param>
+        /// <param name="contactName"></param>
+        /// <param name="contactAddress1"></param>
+        /// <param name="contactAddress2"></param>
+        /// <param name="contactAddress3"></param>
+        /// <param name="defaultCustomer"></param>
+        /// <param name="lastModifiedBy"></param>
+        /// <param name="lastModifiedOn"></param>
+        /// <param name="active"></param>
+        /// <returns></returns>
         public int CreateNewFacilityCustomer(int facilityId, string customerCode, string customerName, string contactName, string contactAddress1,
             string contactAddress2, string contactAddress3, bool defaultCustomer, string lastModifiedBy, DateTime lastModifiedOn, bool active)
         {
@@ -114,6 +138,22 @@ namespace InterrailPPRS.App_Code
             return newId;
         }
 
+        /// <summary>
+        /// This updates an existing facility customer.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="facilityId"></param>
+        /// <param name="customerCode"></param>
+        /// <param name="customerName"></param>
+        /// <param name="contactName"></param>
+        /// <param name="contactAddress1"></param>
+        /// <param name="contactAddress2"></param>
+        /// <param name="contactAddress3"></param>
+        /// <param name="defaultCustomer"></param>
+        /// <param name="lastModifiedBy"></param>
+        /// <param name="lastModifiedOn"></param>
+        /// <param name="active"></param>
+        /// <returns></returns>
         public int UpdateFacilityCustomer(int id, int facilityId, string customerCode, string customerName, string contactName, string contactAddress1,
             string contactAddress2, string contactAddress3, bool defaultCustomer, string lastModifiedBy, DateTime lastModifiedOn, bool active)
         {
@@ -139,6 +179,93 @@ namespace InterrailPPRS.App_Code
             }
 
             return id;
+        }
+
+        /// <summary>
+        /// This searches all facility users by search criteria.
+        /// </summary>
+        /// <param name="searchCriteria"></param>
+        /// <returns></returns>
+        public List<InterrailFacilityCustomer> SearchInterrailFacilityCustomers(string searchCriteria, int facilityId)
+        {
+            var facilityCustomersList = new List<InterrailFacilityCustomer>();
+
+            using (SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.AppSettings["MM_Main_STRING"]))
+            using (SqlCommand cmd = new SqlCommand("SearchInterrailFacilityCustomers", conn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@searchCriteria", SqlDbType.VarChar, 50).Value = searchCriteria;
+                cmd.Parameters.Add("@facilityId", SqlDbType.Int).Value = facilityId;
+                cmd.Connection.Open();
+
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var facilityCustomer = new InterrailFacilityCustomer()
+                    {
+                        Id = reader.GetInt32(0),
+                        FacilityId = reader.GetInt32(1),
+                        CustomerCode = reader.GetString(2),
+                        CustomerName = reader.GetString(3),
+                        ContactName = reader.GetString(4),
+                        ContactAddress1 = reader.GetString(5),
+                        ContactAddress2 = reader.GetString(6),
+                        ContactAddress3 = reader.GetString(7),
+                        DefaultCustomer = reader.GetBoolean(8),
+                        LastModifiedBy = reader.GetString(9),
+                        LastModifiedOn = reader.GetDateTime(10),
+                        Active = reader.GetBoolean(11)
+                    };
+
+                    facilityCustomersList.Add(facilityCustomer);
+                }
+            }
+
+            return facilityCustomersList;
+        }
+
+        /// <summary>
+        /// This gets facility customers by facility id.
+        /// </summary>
+        /// <param name="facilityId"></param>
+        /// <returns></returns>
+        public List<InterrailFacilityCustomer> GetFacilityCustomersByFacilityId(int facilityId)
+        {
+            var facilityCustomersList = new List<InterrailFacilityCustomer>();
+
+            using (SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.AppSettings["MM_Main_STRING"]))
+            using (SqlCommand cmd = new SqlCommand("GetFacilityCustomersByFacilityId", conn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@facilityId", SqlDbType.VarChar, 50).Value = facilityId;
+                cmd.Connection.Open();
+
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var facilityCustomer = new InterrailFacilityCustomer()
+                    {
+                        Id = reader.GetInt32(0),
+                        FacilityId = reader.GetInt32(1),
+                        CustomerCode = reader.GetString(2),
+                        CustomerName = reader.GetString(3),
+                        ContactName = reader.GetString(4),
+                        ContactAddress1 = reader.GetString(5),
+                        ContactAddress2 = reader.GetString(6),
+                        ContactAddress3 = reader.GetString(7),
+                        DefaultCustomer = reader.GetBoolean(8),
+                        LastModifiedBy = reader.GetString(9),
+                        LastModifiedOn = reader.GetDateTime(10),
+                        Active = reader.GetBoolean(11)
+                    };
+
+                    facilityCustomersList.Add(facilityCustomer);
+                }
+            }
+
+            return facilityCustomersList;
         }
     }
 }

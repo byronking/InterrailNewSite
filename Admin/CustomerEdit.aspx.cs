@@ -138,7 +138,7 @@ namespace InterrailPPRS.Admin
                     txtContactAddress1.Text, txtContactAddress2.Text, txtContactAddress3.Text, chkDefaultCustomer.Checked, userId, DateTime.Now, chkActive.Checked);
             }
 
-            GetFacilityCustomerById(customerId);
+            Response.Redirect("~/Admin/CustomerEdit.aspx?id=" + customerId);
         }
     }
 }
