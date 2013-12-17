@@ -45,7 +45,6 @@ namespace InterrailPPRS.Payroll
 
         protected override void Page_Load(object sender, EventArgs e)
         {
-
             base.Page_Load(sender, e);
 
             GrantAccess("Super, Admin, User");
@@ -82,12 +81,8 @@ namespace InterrailPPRS.Payroll
                   rbSubTaskID = System.Convert.ToInt32(localRS.Item("RebillSubTasksId"));
                }
    
-
-   
-               rbReturnTo = "payroll.aspx?workdate=" + Request["WorkDate"] + "&shift=" + Request["Shift"];
-   
+               rbReturnTo = "payroll.aspx?workdate=" + Request["WorkDate"] + "&shift=" + Request["Shift"];   
             }
-
 
             if(Request["Delete"] != null && System.Convert.ToString(Request["Delete"]).ToUpper() == "YES"){
 
@@ -99,18 +94,28 @@ namespace InterrailPPRS.Payroll
                   MM_editRedirectUrl = "TaskWorkedEdit.aspx";
                 }
 
+                var dateWorked = Request["dateworked"].ToString();
+                var taskId = Convert.ToInt32(Request["TaskID"]);
+                var selShift = Request["selShift"].ToString();
+                var facilityId = Convert.ToInt32(Session["FacilityID"]);
+                var testy = Request["RebillDetailID"];
 
-                    UpdateUPM(System.Convert.ToString(Request["dateworked"]), System.Convert.ToInt32(Request["TaskID"]), System.Convert.ToString(Request["selShift"]), System.Convert.ToInt32(Session["FacilityID"]) , System.Convert.ToInt32(Request["RebillDetailID"]));
+                // Set the RebillDetailID to 0, unless there is a value for RebillDetailID in the request object.
+                var rebillDetailId = 0;
+
+                if (Request["RebillDetailID"] != string.Empty)
+                {
+                    rebillDetailId = Convert.ToInt32(Request["RebillDetailID"]);
+                }
+
+                UpdateUPM(dateWorked, taskId, selShift, facilityId, rebillDetailId);
         
-                    if(cStr(Request["RebillDetailID"]) != "" ){
-                       UpdateRebillHours(System.Convert.ToInt32(Request["RebillDetailID"]));
-                    }
+                if(cStr(Request["RebillDetailID"]) != "" ){
+                    UpdateRebillHours(System.Convert.ToInt32(Request["RebillDetailID"]));
+                }
 
-
-                Response.Redirect(MM_editRedirectUrl) ;
-
+                Response.Redirect(MM_editRedirectUrl);
             }
-
 
         // *** Edit Operations: declare variables;
 
@@ -121,8 +126,6 @@ namespace InterrailPPRS.Payroll
 
         // query string to execute;
         MM_editQuery = "";
-
-
 
         // *** Update Record:  variables;
 
