@@ -1,6 +1,6 @@
 ﻿USE [PPRS1]
 GO
-/****** Object:  StoredProcedure [dbo].[CreateFacilityCustomer]    Script Date: 12/10/2013 10:44:12 PM ******/
+/****** Object:  StoredProcedure [dbo].[CreateFacilityCustomer]    Script Date: 12/12/2013 15:16:31 ******/
 SET ANSI_NULLS OFF
 GO
 SET QUOTED_IDENTIFIER OFF
