@@ -275,6 +275,7 @@
     <Content Include="Scripts\sql scripts\sp_UpdateFacilityCustomer.txt" />
     <Content Include="Scripts\Validation.js" />
     <Content Include="Styles\styles.css" />
+    <Content Include="UserControls\LeftNavMenu.ascx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1224,6 +1225,13 @@
     </Compile>
     <Compile Include="Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\LeftNavMenu.ascx.cs">
+      <DependentUpon>LeftNavMenu.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\LeftNavMenu.ascx.designer.cs">
+      <DependentUpon>LeftNavMenu.ascx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

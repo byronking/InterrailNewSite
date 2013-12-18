@@ -24,21 +24,15 @@ namespace InterrailPPRS.Admin
 {
     public class PageBase : System.Web.UI.Page
     {
-
-
         public int PayPeriodEnd = 0;
 
         protected virtual void Page_Load(object sender, EventArgs e)
         {
-
-            GrantAccess("Super, Admin, User");
-
-           
+            GrantAccess("Super, Admin, User");           
         }
 
         public string ChangeFacilityLink()
         {
-
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("<!-- Start Change Default Facility - Include -->");
             if ((int)Session["Facilities"] > 1)
@@ -131,7 +125,6 @@ namespace InterrailPPRS.Admin
         // Returns a disconnected recordset.
         public DataTableReader getRS(string strSQL)
         {
-
             SqlConnection sc = new SqlConnection(HttpContext.Current.Session["dbPath"].ToString());
             sc.Open();
             SqlCommand scom = new SqlCommand(strSQL, sc);
@@ -143,24 +136,20 @@ namespace InterrailPPRS.Admin
             DataTableReader dr = ds.Tables[0].CreateDataReader();
             
             return dr;
-
         }
         
         public void Execute(string strSQL)
         {
-
             SqlConnection sc = new SqlConnection(HttpContext.Current.Session["dbPath"].ToString());
             sc.Open();
             SqlCommand scom = new SqlCommand(strSQL, sc);
             scom.ExecuteNonQuery();
             sc.Close();
-
         }
                 
         // Returns a disconnected recordset with Shape Connection String.
         public SqlDataReader getShapeRS(string strSQL)
         {
-
             SqlConnection sc = new SqlConnection(ConfigurationManager.AppSettings["MM_Shape_STRING"]);
             SqlCommand scom = new SqlCommand(strSQL, sc);
             sc.Open();
@@ -171,7 +160,6 @@ namespace InterrailPPRS.Admin
                
         public void GrantAccess(string AccessType)
         {
-
             string currentapppath = "";
             string authorizedUsers = "";
             string authFailedURL = "";
@@ -232,10 +220,8 @@ namespace InterrailPPRS.Admin
                         authFailedURL = authFailedURL + qsChar + WhyNoAccess + "accessdenied=" + Server.UrlEncode(referrer);
                         Response.Redirect(authFailedURL);
                     }
-
                 }
             }
-
         }
 
         public string IIf(bool condition, string value1, string value2)
@@ -257,7 +243,6 @@ namespace InterrailPPRS.Admin
 
         public string Right(string val, int start )
         {
-
             int len = 0;
 
             if (start != null)
@@ -284,9 +269,7 @@ namespace InterrailPPRS.Admin
             else
             {
                 return val;
-            }
-
- 
+            } 
         }
 
         public int? InStr(int start, string val, string find, int compareType){
@@ -296,12 +279,10 @@ namespace InterrailPPRS.Admin
             if (val.Length > 0 && find == "") { return 1; }
 
             int position = val.IndexOf(find, start);
-            return (position + 1);
-
+            return (position + 1);            
         }
 
-        public string[] Split(string val,string schar){
-
+        public string[] Split(string val, string schar){
             return val.Split(new char[] { System.Convert.ToChar(schar) });
         }
 
@@ -394,21 +375,19 @@ namespace InterrailPPRS.Admin
             }
         }
 
-
         public string Month(DateTime val)
         {
             return val.Month.ToString();
         }
+
         public string Day(DateTime val)
         {
             return val.Day.ToString();
         }
+
         public string Year(DateTime val)
         {
             return val.Year.ToString();
         }
-       
-
-
     }
 }

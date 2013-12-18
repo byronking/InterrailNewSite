@@ -23,9 +23,7 @@ using SD.LLBLGen.Pro.DQE.SqlServer;
 namespace InterrailPPRS.Rebilling
 {
     public partial class RebillEdit : PageBase
-    {
-
-        
+    {        
         public string MM_editAction = "";
         public bool MM_abortEdit = false;
         public string MM_editQuery = "";
@@ -57,12 +55,10 @@ namespace InterrailPPRS.Rebilling
         public string SubTaskID = "";
         public string strSQL = "";
 
-
         public string MM_keepURL = "";
         public string MM_keepForm = "";
         public string MM_keepBoth = "";
         public string MM_keepNone = "";
-
 
         public int Repeat1__index;
         public int Repeat1__numRows;
@@ -74,15 +70,11 @@ namespace InterrailPPRS.Rebilling
 
         public string nUnits = "";
 
-
         protected override void Page_Load(object sender, EventArgs e)
         {
-
             base.Page_Load(sender, e);
 
-
             GrantAccess("Super, Admin, User");
-
 
             // *** Edit Operations: declare variables;
 
@@ -446,15 +438,28 @@ namespace InterrailPPRS.Rebilling
         rsEmp__PFACID = "2";
         if(Session["FacilityID"] != null && cStr(Session["FacilityID"]) != ""){rsEmp__PFACID = cStr(Session["FacilityID"]);}
 
-
         strSQL = "";
-        strSQL +=  "SELECT ( Case When ( FacilityID = " + Replace(rsEmp__PFACID, "'", "''") + " ) THEN 0 ELSE 1 End  ), FacilityID, Employee.Id,  LastName, FirstName, EmployeeNumber = Case When TempEmployee=0 THEN EmployeeNumber ELSE TempNumber End  FROM Employee   WHERE ( (FacilityID = " + Replace(rsEmp__PFACID, "'", "''") + " )  OR  ( FacilityID IN ( Select AssociatedFacilityID from AssociatedFacility where FacilityID = " + rsEmp__PFACID + "))) AND (Employee.Active=1) ";
+        strSQL = "SELECT ( Case When ( FacilityID = " + Replace(rsEmp__PFACID, "'", "''") + " ) THEN 0 ELSE 1 End  ), " +
+        "FacilityID, Employee.Id,  LastName, FirstName, EmployeeNumber = Case When TempEmployee=0 THEN EmployeeNumber ELSE " +
+        "TempNumber End  FROM Employee   WHERE ( (FacilityID = " + Replace(rsEmp__PFACID, "'", "''") + " )  OR  ( FacilityID IN " +
+        "( Select AssociatedFacilityID from AssociatedFacility where FacilityID = " + rsEmp__PFACID + "))) AND (Employee.Active=1) ";
         strSQL +=  "UNION ";
-        strSQL +=  "SELECT Distinct ( Case When ( FacilityID = " + Replace(rsEmp__PFACID, "'", "''") + " ) THEN 0 ELSE 1 End  ), FacilityID, Employee.Id,  LastName, FirstName, EmployeeNumber = Case When TempEmployee=0 THEN EmployeeNumber ELSE TempNumber End  FROM Employee  WHERE (Employee.Active=1 and employee.id in ";
-        strSQL +=  "( ";
-        strSQL = strSQL + AllTeamMembers;
-        strSQL +=  ") ";
-        strSQL +=  ")  ORDER BY ( Case When ( FacilityID = " + Replace(rsEmp__PFACID, "'", "''") + " ) THEN 0 ELSE 1 End  ), FacilityID, LastName, FirstName, EmployeeNumber ";
+        strSQL +=  "SELECT Distinct ( Case When ( FacilityID = " + Replace(rsEmp__PFACID, "'", "''") + " ) THEN 0 ELSE 1 End  ), " +
+        "FacilityID, Employee.Id,  LastName, FirstName, EmployeeNumber = Case When TempEmployee=0 THEN EmployeeNumber ELSE " +
+        "TempNumber End  FROM Employee  WHERE ";
+        if (AllTeamMembers != string.Empty)
+        {
+            strSQL += "(Employee.Active=1 and employee.id in ";
+            strSQL += "( ";
+            strSQL = strSQL + AllTeamMembers;
+            strSQL += "))";
+        }
+        else
+        {
+            strSQL += "(Employee.Active=1)";
+        }
+        strSQL +=  " ORDER BY ( Case When ( FacilityID = " + Replace(rsEmp__PFACID, "'", "''") + " ) THEN 0 ELSE 1 End  ), " +
+        "FacilityID, LastName, FirstName, EmployeeNumber ";
 
         rsEmp =  new DataReader(strSQL);
         rsEmp.Open();
