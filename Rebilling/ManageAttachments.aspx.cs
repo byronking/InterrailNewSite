@@ -197,9 +197,8 @@ namespace InterrailPPRS.Rebilling
 					lbMessage.Text = "Pick a file";
 					return;
 				}
+
 				lbMessage.Text = "";
-
-
 
 				string sql1;
 				string FacilityAlphaCode = "Other";
@@ -218,6 +217,7 @@ namespace InterrailPPRS.Rebilling
 					FacilityAlphaCode = (string) myReader1["AlphaCode"];
 					FacilityAlphaCode = FacilityAlphaCode.Trim();
 				}
+
 				myConnection1.Close();
 
 				string FacPath = Server.MapPath("RebillAttachments" );
@@ -239,8 +239,7 @@ namespace InterrailPPRS.Rebilling
 					Directory.CreateDirectory(FacPath);
 				}
 
-
-
+                var testy = Request.Files[0].FileName;
 					
 				string newfilename = FacPath + @"\" + RebillID + "-" + Path.GetFileName(Request.Files[0].FileName);
                 string relpathfile = relpath + "/" + RebillID + "-" + Path.GetFileName(Request.Files[0].FileName);
@@ -275,7 +274,7 @@ namespace InterrailPPRS.Rebilling
 				myCommand.ExecuteNonQuery();
 				myConnection.Close();
 
-				tbTitle.Text = "";
+				//tbTitle.Text = "";
 
 				//Rebind the DataGrid
 				DataGrid1.EditItemIndex = -1;

@@ -70,7 +70,6 @@ namespace InterrailPPRS.Payroll
 		{
              Parent = p;
 
-
 			 Id            =   (int)     reader["Id"];            
 			 TaskID        =   (int)     reader["TaskID"];
 			 OtherTaskID   =   (int)     reader["OtherTaskID"];   
@@ -78,8 +77,16 @@ namespace InterrailPPRS.Payroll
 			 EmployeeId    =   (int)     reader["EmployeeId"];    
 			 WorkDate      =   System.DateTime.Parse(reader["WorkDate"].ToString());      
 			 ShiftID       =   (string)     reader["ShiftID"];       
-             Rebillable    =   (int)     reader["Rebillable"];    
-             UPM           =   (double)     System.Convert.ToDouble(reader["UPM"]);           
+             Rebillable    =   (int)     reader["Rebillable"];
+             
+            if (reader["UPM"].ToString() == string.Empty)
+             {
+                 UPM = 0.0;
+             }
+             else
+             {
+                 UPM = (double)System.Convert.ToDouble(reader["UPM"]);
+             }
 			 HoursWorked   =   (double)   System.Convert.ToDouble(reader["HoursWorked"]);   
 			 OutOfTownType =   (string)  reader["OutOfTownType"]; 
 			 PayrollStatus =   (string)  reader["PayrollStatus"]; 

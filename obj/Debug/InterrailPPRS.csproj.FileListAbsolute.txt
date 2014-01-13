@@ -54,4 +54,3 @@ C:\Development\GitHub\InterrailNewSite\bin\InterrailPPRS.dll
 C:\Development\GitHub\InterrailNewSite\bin\InterrailPPRS.pdb
 C:\Development\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.dll
 C:\Development\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.pdb
-C:\Development\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.csprojResolveAssemblyReference.cache
