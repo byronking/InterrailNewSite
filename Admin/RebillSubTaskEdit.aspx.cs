@@ -63,7 +63,7 @@ namespace InterrailPPRS.Admin
           string MM_editTable = "dbo.RebillSubTasks";
           string MM_editColumn = "Id";
           string MM_recordId = "" + Request.Form["MM_recordId"] + "";
-          string MM_editRedirectUrl = "RebillSubTask.aspx";
+          string MM_editRedirectUrl = "RebillSubTaskEdit.aspx?id=0"; //"RebillSubTask.aspx";
           string MM_fieldsStr  = "Description|value|selTasks|value|Customer|value|selHoursOrUnits|value|checkbox|value|LastModifiedOn|value|LastModifiedBy|value";
           string MM_columnsStr = "Description|',none,''|TaskID|none,none,NULL|FacilityCustomerId|none,none,NULL|HoursOrUnits|',none,'H'|Active|none,1,0|LastModifiedOn|',none,''|LastModifiedBy|',none,''";
 
