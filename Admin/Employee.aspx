@@ -149,8 +149,7 @@
         <td align="default" width="31%"> </td>
         <td align="default" width="3%"></td>
         <td align="default" width="25%"> 
-            <div align="right"><a href="EmployeeEdit.aspx?ID=0">Add 
-            New Employee</a></div>
+            <div align="right"><a href="EmployeeEdit.aspx?ID=0">Add New Employee</a></div>
         </td>
         </tr>
         <tr> 
