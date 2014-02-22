@@ -79,6 +79,7 @@
   <ItemGroup>
     <Content Include="Admin\Company.aspx" />
     <Content Include="Admin\CompanyEdit.aspx" />
+    <Content Include="Admin\EmployeeEdit.aspx" />
     <Content Include="Admin\Settings.aspx" />
     <Content Include="Admin\UserFacilityMonitor.aspx" />
     <Content Include="Admin\UserFacilityAccess.aspx" />
@@ -111,7 +112,6 @@
     <Content Include="Admin\EmployeeTransfer.aspx" />
     <Content Include="Admin\EmployeeRebillRates.aspx" />
     <Content Include="Admin\EmployeeRates.aspx" />
-    <Content Include="Admin\EmployeeEdit.aspx" />
     <Content Include="Admin\Employee.aspx" />
     <Content Include="Admin\Default.aspx" />
     <Content Include="Admin\CustomerEdit.aspx" />
@@ -267,12 +267,17 @@
     <Content Include="Scripts\sql scripts\sp_GetAllInterrailCompanies.txt" />
     <Content Include="Scripts\sql scripts\sp_GetAllInterrailUsers.txt" />
     <Content Include="Scripts\sql scripts\sp_GetAllInterrailUsers2.txt" />
+    <Content Include="Scripts\sql scripts\sp_GetEmployeeById.txt" />
+    <Content Include="Scripts\sql scripts\sp_GetEmployeesHiredThisWeek.txt" />
+    <Content Include="Scripts\sql scripts\sp_GetEmploymentSourcesByFacilityId.txt" />
     <Content Include="Scripts\sql scripts\sp_GetFacilityCustomerById.txt" />
+    <Content Include="Scripts\sql scripts\sp_SaveInterrailEmployee.txt" />
     <Content Include="Scripts\sql scripts\sp_SearchInterrailCompanies.txt" />
     <Content Include="Scripts\sql scripts\sp_GetInterrailCarrierByCode.txt" />
     <Content Include="Scripts\sql scripts\sp_SearchInterrailUsers.txt" />
     <Content Include="Scripts\sql scripts\sp_GetAllInterrailCarriers.txt" />
     <Content Include="Scripts\sql scripts\sp_UpdateFacilityCustomer.txt" />
+    <Content Include="Scripts\sql scripts\sp_UpdateInterrailEmployee.txt" />
     <Content Include="Scripts\Validation.js" />
     <Content Include="Styles\styles.css" />
     <Content Include="UserControls\LeftNavMenu.ascx" />
@@ -307,6 +312,13 @@
     </Compile>
     <Compile Include="Admin\CompanyEdit.aspx.designer.cs">
       <DependentUpon>CompanyEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\EmployeeEdit.aspx.cs">
+      <DependentUpon>EmployeeEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\EmployeeEdit.aspx.designer.cs">
+      <DependentUpon>EmployeeEdit.aspx</DependentUpon>
     </Compile>
     <Compile Include="Admin\Settings.aspx.cs">
       <DependentUpon>Settings.aspx</DependentUpon>
@@ -533,13 +545,6 @@
     <Compile Include="Admin\EmployeeRates.aspx.designer.cs">
       <DependentUpon>EmployeeRates.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Admin\EmployeeEdit.aspx.cs">
-      <DependentUpon>EmployeeEdit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Admin\EmployeeEdit.aspx.designer.cs">
-      <DependentUpon>EmployeeEdit.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Admin\Employee.aspx.cs">
       <DependentUpon>Employee.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -571,9 +576,14 @@
     <Compile Include="Admin\PageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="App_Code\EmployeeNumber.cs" />
+    <Compile Include="App_Code\EmploymentSource.cs" />
+    <Compile Include="App_Code\GenericHelper.cs" />
     <Compile Include="App_Code\InterrailCompany.cs" />
     <Compile Include="App_Code\InterrailCompanyRepository.cs" />
     <Compile Include="App_Code\InterrailCustomer.cs" />
+    <Compile Include="App_Code\InterrailEmployee.cs" />
+    <Compile Include="App_Code\InterrailEmployeeRepository.cs" />
     <Compile Include="App_Code\InterrailFacilityCustomer.cs" />
     <Compile Include="App_Code\InterrailFacilityCustomerRepository.cs" />
     <Compile Include="App_Code\InterrailUser.cs" />
@@ -1286,7 +1296,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>49414</DevelopmentServerPort>
+          <DevelopmentServerPort>1263</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

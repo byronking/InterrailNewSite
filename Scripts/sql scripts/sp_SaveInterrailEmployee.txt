@@ -1,0 +1,68 @@
+﻿USE [PPRS1]
+GO
+
+/****** Object:  StoredProcedure [dbo].[SaveInterrailEmployee]    Script Date: 02/18/2014 22:26:57 ******/
+SET ANSI_NULLS OFF
+GO
+
+SET QUOTED_IDENTIFIER OFF
+GO
+
+
+ALTER PROCEDURE [dbo].[SaveInterrailEmployee]
+
+@employeenumber char(6), 
+@tempnumber char(4), 
+@lastname varchar(30), 
+@firstname varchar(30), 
+@middleinitial varchar(1),
+@hiredate smalldatetime, 
+@inactivedate smalldatetime,
+@tempstartdate smalldatetime, 
+@terminationdate smalldatetime, 
+@address1 varchar(30), 
+@address2 varchar(30), 
+@city varchar(30), 
+@state char(2), 
+@zip varchar(14), 
+@ssn varchar(11), 
+@birthdate smalldatetime, 
+@employeephone varchar(20),
+@emergencycontact varchar(30), 
+@contactphone varchar(20), 
+@tempemployee bit, 
+@salaried bit, 
+@employmentsourceid int, 
+@facilityid int, 
+@lastmodifiedby varchar(50),
+@lastmodifiedon smalldatetime, 
+@active bit
+
+as 
+
+begin
+
+set nocount on;
+declare @id int 
+
+	begin
+
+	insert into Employee (employeenumber, tempnumber, lastname, firstname, middleinitial,hiredate, inactivedate,
+	tempstartdate, terminationdate, address1, address2, city, state, zip, ssn, birthdate, employeephone,
+	emergencycontact, contactphone, tempemployee, salaried, employmentsourceid, facilityid, lastmodifiedby,
+	lastmodifiedon, active) values (@employeenumber, @tempnumber, @lastname, @firstname, @middleinitial,@hiredate, @inactivedate,
+	@tempstartdate, @terminationdate, @address1, @address2, @city, @state, @zip, @ssn, @birthdate, @employeephone,
+	@emergencycontact, @contactphone, @tempemployee, @salaried, @employmentsourceid, @facilityid, @lastmodifiedby,
+	@lastmodifiedon, @active);
+	
+	set @id = SCOPE_IDENTITY();
+
+	return (@id);
+
+	end
+	
+end
+
+GO
+
+
