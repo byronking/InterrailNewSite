@@ -50,8 +50,6 @@ namespace InterrailPPRS.Admin
                     var repository = new InterrailEmployeeRepository();
                     var employee = repository.GetEmployeeById(Convert.ToInt32(Request["Id"]));
 
-                    //LoadEmploymentSourcesByFacility(employee.FacilityId);
-
                     txtFirstName.Text = employee.FirstName;
                     txtMiddleInitial.Text = employee.MiddleInitial;
                     txtLastName.Text = employee.LastName;
@@ -164,6 +162,23 @@ namespace InterrailPPRS.Admin
                 // Increment the number.
                 EmployeeNumber = Convert.ToString(Convert.ToInt32(EmployeeNumber) + 1);
                 txtEmployeeNumber.Text = EmployeeNumber;
+            }
+
+            // Do the employee number check 50 add'l times to make sure the new emp number is unique.
+            for (var i = 0; i <= 50; i++)
+            {
+                existingEmployeeNumbersList = employeeNumbersList.Find(e => e.Number.Contains(EmployeeNumber));
+
+                if (existingEmployeeNumbersList == null)
+                {
+                    txtEmployeeNumber.Text = EmployeeNumber;
+                }
+                else
+                {
+                    // Increment the number.
+                    EmployeeNumber = Convert.ToString(Convert.ToInt32(EmployeeNumber) + 1);
+                    txtEmployeeNumber.Text = EmployeeNumber;
+                }
             }
         }
 

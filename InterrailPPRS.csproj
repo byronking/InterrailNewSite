@@ -264,6 +264,7 @@
     <Content Include="Scripts\jquery-1.4.1.js" />
     <Content Include="Scripts\jquery-1.4.1.min.js" />
     <Content Include="Scripts\sql scripts\sp_CreateFacilityCustomer.txt" />
+    <Content Include="Scripts\sql scripts\sp_GetAllEmployeeNumbers.txt" />
     <Content Include="Scripts\sql scripts\sp_GetAllInterrailCompanies.txt" />
     <Content Include="Scripts\sql scripts\sp_GetAllInterrailUsers.txt" />
     <Content Include="Scripts\sql scripts\sp_GetAllInterrailUsers2.txt" />
