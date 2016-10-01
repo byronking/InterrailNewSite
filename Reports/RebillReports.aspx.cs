@@ -61,7 +61,7 @@ namespace InterrailPPRS.Reports
 
 
 
-            string rsSubTaskSource =  " SELECT Distinct dbo.RebillSubTasks.Id, dbo.RebillSubTasks.Description, dboFacility.Name, dbo.Tasks.TaskCode  ";
+            string rsSubTaskSource =  " SELECT Distinct dbo.RebillSubTasks.Id, dbo.RebillSubTasks.Description, dbo.Facility.Name, dbo.Tasks.TaskCode  ";
             rsSubTaskSource += " FROM dbo.RebillSubTasks ";
             rsSubTaskSource += " INNER JOIN  dbo.FacilityCustomer ON dbo.FacilityCustomer.Id = dbo.RebillSubTasks.FacilityCustomerId ";
             rsSubTaskSource += " Inner Join  dbo.Facility on dbo.Facility.Id = dbo.FacilityCustomer.FacilityId  ";

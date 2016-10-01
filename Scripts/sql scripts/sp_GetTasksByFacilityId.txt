@@ -1,0 +1,20 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[GetTasksByFacilityId]    Script Date: 05/11/2014 22:11:52 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+CREATE PROCEDURE [dbo].[GetTasksByFacilityId]
+
+@facilityId int
+
+as 
+
+begin
+	
+	SELECT TaskID=dbo.Tasks.Id, OtherTaskID=0,dbo.Tasks.TaskCode, dbo.Tasks.TaskDescription  FROM dbo.Tasks INNER JOIN dbo.FacilityTasks ON dbo.Tasks.Id = dbo.FacilityTasks.TaskId  
+	WHERE dbo.FacilityTasks.FacilityID = @facilityId UNION  SELECT TaskID=0, OtherTaskID=Id, TaskCode, TaskDescription=' * '+TaskDescription  FROM dbo.OtherTasks  ORDER BY OtherTaskID, TaskDescription
+	
+end

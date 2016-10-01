@@ -1,0 +1,32 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[UpdateFacilityCustomer]    Script Date: 12/10/2013 10:45:56 PM ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+CREATE PROCEDURE [dbo].[UpdateFacilityCustomer]
+
+@id int,
+@facilityId int, 
+@customerCode varchar(10), 
+@customerName varchar(30), 
+@contactName varchar(250), 
+@contactAddress1 varchar(250), 
+@contactAddress2 varchar(250), 
+@contactAddress3 varchar(250),
+@defaultCustomer bit, 
+@lastModifiedBy varchar(50), 
+@lastModifiedOn datetime, 
+@active bit
+
+as 
+
+begin
+
+update FacilityCustomer set FacilityId = @facilityId, CustomerCode = @customerCode, CustomerName = @customerName, ContactName = @contactName, ContactAddress1 = @contactAddress1, 
+ContactAddress2 = @contactAddress2, ContactAddress3 = @contactAddress3, DefaultCustomer = @defaultCustomer, LastModifiedBy = @lastModifiedBy, 
+LastModifiedOn = @lastModifiedOn, Active = @active where Id = @id;
+	
+end

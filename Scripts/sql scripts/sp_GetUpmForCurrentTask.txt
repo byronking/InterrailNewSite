@@ -1,0 +1,20 @@
+﻿USE [PPRS1_TEST]
+GO
+/****** Object:  StoredProcedure [dbo].[GetUpmForCurrentTask]    Script Date: 05/15/2014 10:52:11 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+CREATE PROCEDURE [dbo].[GetUpmForCurrentTask]
+
+@rebillDetailId int,
+@facilityId int
+
+as 
+
+begin
+	
+	select UPM from EmployeeTaskWorked where RebillDetailId = @rebillDetailId and FacilityID = @facilityId
+	
+end

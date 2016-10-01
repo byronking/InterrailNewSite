@@ -1,0 +1,10 @@
+C:\Projects\InterrailPPRS\bin\InterrailPPRS.dll
+C:\Projects\InterrailPPRS\bin\InterrailPPRS.pdb
+C:\Projects\InterrailPPRS\obj\Release\InterrailPPRS.Rebilling.ManageAttachments.resources
+C:\Projects\InterrailPPRS\obj\Release\InterrailPPRS.Reports.WebForm1.resources
+C:\Projects\InterrailPPRS\obj\Release\InterrailPPRS.Reports.WebForm2.resources
+C:\Projects\InterrailPPRS\obj\Release\InterrailPPRS.Reports.AdminReport.resources
+C:\Projects\InterrailPPRS\obj\Release\InterrailPPRS.csproj.GenerateResource.Cache
+C:\Projects\InterrailPPRS\obj\Release\InterrailPPRS.dll
+C:\Projects\InterrailPPRS\obj\Release\InterrailPPRS.pdb
+C:\Projects\InterrailPPRS\obj\Release\InterrailPPRS.csprojResolveAssemblyReference.cache

@@ -1,0 +1,18 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[GetAllInterrailFacilityCustomers]    Script Date: 12/12/2013 15:05:32 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+CREATE PROCEDURE [dbo].[GetAllInterrailFacilityCustomers]
+
+as 
+
+begin
+
+	select Id, FacilityId, CustomerCode, CustomerName, ContactName, ContactAddress1, ContactAddress2, ContactAddress3, DefaultCustomer, LastModifiedBy, LastModifiedOn, Active from FacilityCustomer
+	order by CustomerCode
+	
+end

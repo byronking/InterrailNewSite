@@ -536,54 +536,54 @@ namespace InterrailPPRS.Rebilling
         if(MM_keepForm != ""){MM_keepForm = Right(MM_keepForm, Len(MM_keepForm) - 1);}
 
 
-        if(cStr(Request["ID"]) != "0"){
-          rsAttach = new DataReader("SELECT path, title FROM RebillAttachments WHERE RebillDetailId = " + Request["ID"] + "");
-          rsAttach.Open();
-          rsAttach_numRows = rsAttach.RecordCount;
+            if(cStr(Request["ID"]) != "0")
+            {
+              rsAttach = new DataReader("SELECT path, title FROM RebillAttachments WHERE RebillDetailId = " + Request["ID"] + "");
+              rsAttach.Open();
+              rsAttach_numRows = rsAttach.RecordCount;
+            }
         }
 
-
-
-
-        }
-
-        public string InsertTeamMembers(string TM,int FPDID){
-
-              string Insert_Query = "";
-              string outoftowntype = "";
+        public string InsertTeamMembers(string TM,int FPDID)
+        {
+            string Insert_Query = "";
+            string outoftowntype = "";
  
-              if(TM == "0"){
+            if(TM == "0")
+            {
                 // Employee task worked records will !be generated;
-              }else{
-
+            }
+            else
+            {
                 string[] arEmp;
                 double nHours;
 
                 arEmp = Split(TM, ",");
                 nHours =  cDbl(Request["TotalHours"]) / (UBound(arEmp));
+                //nHours = cDbl(Request["TotalHours"]);
 
-                for( int I=0; I < UBound(arEmp);I ++){
-
-                     if (isOutofTown(arEmp[I], cStr(Session["FacilityID"]))){
+                for( int I=0; I < UBound(arEmp);I ++)
+                {
+                    if (isOutofTown(arEmp[I], cStr(Session["FacilityID"])))
+                    {
                         outoftowntype = "O";
-                     }else{
+                    }
+                    else
+                    {
                         outoftowntype = "N";
                     }
 
-                  Insert_Query = Insert_Query +  " Insert Into EmployeeTaskWorked ";
-                  Insert_Query = Insert_Query +  "   (TaskID, RebillSubTaskID, FacilityID, EmployeeID, RebillDetailID, WorkDate, ShiftID,  OutOfTownType,  " ;
-                  Insert_Query = Insert_Query +  "    HoursWorked, PayrollStatus, LastModifiedBy, LastModifiedOn, Notes ) ";
-                  Insert_Query = Insert_Query +  "    VALUES ( " ;
-                  Insert_Query = Insert_Query +  "      " + Request["allTasks"] + " , " + Request["select"] + " , " + cStr(Session["FacilityID"]) + " , " + cStr(arEmp[I]) + ",  " + cStr(FPDID)  + ", ";
-                  Insert_Query = Insert_Query +  "     '" + Request["WorkDate"] + "','" + Request["selShift"] + "', '" + outoftowntype + "', "  +  cStr(nHours) + ", " ;
-                  Insert_Query = Insert_Query +  "     'OPEN', '" +  Request["LastModifiedBy"] + "', '" + Request["LastModifiedOn"]  + "', 'Rebill Detail - Generated')" ;
-
+                    Insert_Query = Insert_Query +  " Insert Into EmployeeTaskWorked ";
+                    Insert_Query = Insert_Query +  "   (TaskID, RebillSubTaskID, FacilityID, EmployeeID, RebillDetailID, WorkDate, ShiftID,  OutOfTownType,  " ;
+                    Insert_Query = Insert_Query +  "    HoursWorked, PayrollStatus, LastModifiedBy, LastModifiedOn, Notes ) ";
+                    Insert_Query = Insert_Query +  "    VALUES ( " ;
+                    Insert_Query = Insert_Query +  "      " + Request["allTasks"] + " , " + Request["select"] + " , " + cStr(Session["FacilityID"]) + " , " + cStr(arEmp[I]) + ",  " + cStr(FPDID)  + ", ";
+                    Insert_Query = Insert_Query +  "     '" + Request["WorkDate"] + "','" + Request["selShift"] + "', '" + outoftowntype + "', "  +  cStr(nHours) + ", " ;
+                    Insert_Query = Insert_Query +  "     'OPEN', '" +  Request["LastModifiedBy"] + "', '" + Request["LastModifiedOn"]  + "', 'Rebill Detail - Generated')" ;
                 }
-             }
+            }
 
-              return Insert_Query;
-
+            return Insert_Query;
        }
-
     }
 }

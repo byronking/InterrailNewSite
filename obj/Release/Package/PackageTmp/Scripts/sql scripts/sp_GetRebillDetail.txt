@@ -1,0 +1,20 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[GetRebillDetail]    Script Date: 05/11/2014 22:09:48 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+CREATE PROCEDURE [dbo].[GetRebillDetail]
+
+@rebillDetailId int
+
+as 
+
+begin
+	
+	select dbo.RebillSubTasks.Description, dbo.RebillSubTasks.TaskID, dbo.RebillDetail.RebillSubTasksId FROM dbo.RebillDetail INNER JOIN dbo.RebillSubTasks ON dbo.RebillDetail.RebillSubTasksId = dbo.RebillSubTasks.Id
+	where dbo.RebillDetail.Id = @rebillDetailId
+	
+end

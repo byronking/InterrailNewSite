@@ -108,6 +108,4 @@ namespace InterrailPPRS.Payroll
             return _dr;
         }
     }
-  
-
 }

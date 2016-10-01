@@ -1,0 +1,19 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[GetTeamById]    Script Date: 09/04/2014 21:38:34 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+CREATE PROCEDURE [dbo].[GetTeamById]
+
+@teamId int
+
+as 
+
+begin
+
+	select Id, TeamName, FacilityId, TeamMembers, LastModifiedBy, LastModifiedOn, Active from teams where Id = @teamId
+	
+end

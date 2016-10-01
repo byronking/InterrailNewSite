@@ -1,0 +1,20 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[GetEmployeesByFacilityId]    Script Date: 05/15/2014 10:42:50 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+CREATE PROCEDURE [dbo].[GetEmployeesByFacilityId]
+
+@facilityId int
+
+as 
+
+begin
+
+	select Id, IsNull(EmployeeNumber,'') as EmployeeNumber, TempNumber, LastName=Case When FacilityID = @facilityId Then ' '+LastName Else '*'+LastName End, FirstName, MiddleInitial, FacilityID 
+	FROM dbo.Employee Where Active <> 0 ORDER BY LastName, FirstName, EmployeeNumber
+	
+end

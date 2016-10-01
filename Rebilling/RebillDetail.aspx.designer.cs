@@ -10,6 +10,24 @@
 namespace InterrailPPRS.Rebilling {
     
     
-    public partial class RebillDetail {
+    public partial class RebillDetail2 {
+        
+        /// <summary>
+        /// leftNavMenu control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::InterrailPPRS.UserControls.LeftNavMenu leftNavMenu;
+        
+        /// <summary>
+        /// grdRebillData control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grdRebillData;
     }
 }

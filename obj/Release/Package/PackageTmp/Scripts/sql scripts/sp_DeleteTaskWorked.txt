@@ -1,0 +1,19 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[DeleteTaskWorked]    Script Date: 05/14/2014 23:13:58 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+CREATE PROCEDURE [dbo].[DeleteTaskWorked]
+
+@taskWorkedId int
+
+as 
+
+begin
+	
+	delete from EmployeeTaskWorked where id = @taskWorkedId
+	
+end

@@ -1,0 +1,22 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[SearchInterrailUsers]    Script Date: 12/05/2013 18:43:34 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+ALTER PROCEDURE [dbo].[SearchInterrailUsers]
+
+@searchCriteria varchar(50)
+
+as 
+
+begin
+
+	select Id, UserID, UserName, Password, UserType, UserLongName, LastModifiedBy, LastModifiedOn from UserProfile
+	where UserID like '%'+@searchCriteria+'%' or UserName like '%'+@searchCriteria+'%' or UserType like '%'+@searchCriteria+'%'
+	or UserLongName like '%'+@searchCriteria+'%'
+	order by userid
+	
+end

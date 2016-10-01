@@ -147,9 +147,7 @@ namespace InterrailPPRS.Rebilling
         }
         
         public void Execute(string strSQL)
-        {
-
-            SqlConnection sc = new SqlConnection(HttpContext.Current.Session["dbPath"].ToString());
+        {           SqlConnection sc = new SqlConnection(HttpContext.Current.Session["dbPath"].ToString());
             sc.Open();
             SqlCommand scom = new SqlCommand(strSQL, sc);
             scom.ExecuteNonQuery();
@@ -171,7 +169,6 @@ namespace InterrailPPRS.Rebilling
                
         public void GrantAccess(string AccessType)
         {
-
             string currentapppath = "";
             string authorizedUsers = "";
             string authFailedURL = "";
@@ -701,7 +698,7 @@ namespace InterrailPPRS.Rebilling
 
         }
 
-        public void  UpdateUPM(string dw,string  taskId,string Shift, string FacilityID,int  RebillDetailId){
+        public void UpdateUPM(string dw,string  taskId,string Shift, string FacilityID,int  RebillDetailId){
 
                 //  sum units from production detail where dw taskid shift and facility
                 //  sum hours from etw where dw taskid shift and facility

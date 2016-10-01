@@ -20,6 +20,17 @@ namespace InterrailPPRS.Admin
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["EmployeeId"] != null)
+            {
+                var saveEmployeeId = Convert.ToInt32(Session["EmployeeId"]);
+                var employeeId = Convert.ToInt32(Request.QueryString["id"]);
+                if (saveEmployeeId == employeeId)
+                {
+                    lblRecordSaved.Visible = true;
+                    //txtEmployeeNumber.Enabled = false;
+                }
+            }
+
             if (Session["FacilityId"] != null)
             {
                 FacilityId = Convert.ToInt32(Session["FacilityId"]);
@@ -43,6 +54,7 @@ namespace InterrailPPRS.Admin
                 {
                     lblTitleLabel.Text = "Create New Employee";
                     GenerateNewEmployeeNumber();
+                    txtTemporaryNumber.Text =  GenerateNewTempNumber().ToString();
                 }
                 else
                 {
@@ -75,8 +87,26 @@ namespace InterrailPPRS.Admin
                     }
 
                     radioTemporary.Checked = employee.TempEmployee;
-                    txtEmployeeNumber.Text = employee.EmployeeNumber;
-                    txtTemporaryNumber.Text = employee.TempNumber;
+
+                    if (employee.EmployeeNumber == string.Empty)
+                    {
+                        GenerateNewEmployeeNumber();
+                    }
+                    else
+                    {
+                        txtEmployeeNumber.Text = employee.EmployeeNumber;
+                    }
+
+                    //txtEmployeeNumber.Enabled = false;
+
+                    if (employee.TempNumber == string.Empty)
+                    {
+                        txtTemporaryNumber.Text = GenerateNewTempNumber().ToString();
+                    }
+                    else
+                    {
+                        txtTemporaryNumber.Text = employee.TempNumber;
+                    }
 
                     if (employee.HireDate != null)
                     {
@@ -100,7 +130,7 @@ namespace InterrailPPRS.Admin
 
                     if (employee.LastModifiedOn != null)
                     {
-                        lblLastModifiedDate.Text = Convert.ToDateTime(employee.LastModifiedOn).ToShortDateString();
+                        lblLastModifiedDate.Text = Convert.ToDateTime(employee.LastModifiedOn).ToString();
                     }
 
                     lblModifiedByUser.Text = employee.LastModifiedBy;
@@ -151,35 +181,29 @@ namespace InterrailPPRS.Admin
 
             var employeeNumbersList = repository.GetAllEmployeeNumbers();
 
-            var existingEmployeeNumbersList = employeeNumbersList.Find(e => e.Number.Contains(EmployeeNumber));
+            // Return the index of the employee number, if it exists.
+            var existingEmployeeNumbersList = employeeNumbersList.FindIndex(e => e.Number == EmployeeNumber);
 
-            if (existingEmployeeNumbersList == null)
+            while (existingEmployeeNumbersList > 0)
             {
-                txtEmployeeNumber.Text = EmployeeNumber;
-            }
-            else
-            {
-                // Increment the number.
+                // Existing number! Increment!
                 EmployeeNumber = Convert.ToString(Convert.ToInt32(EmployeeNumber) + 1);
-                txtEmployeeNumber.Text = EmployeeNumber;
+
+                // Check against the list again.
+                existingEmployeeNumbersList = employeeNumbersList.FindIndex(e => e.Number == EmployeeNumber);                
             }
 
-            // Do the employee number check 50 add'l times to make sure the new emp number is unique.
-            for (var i = 0; i <= 50; i++)
-            {
-                existingEmployeeNumbersList = employeeNumbersList.Find(e => e.Number.Contains(EmployeeNumber));
+            txtEmployeeNumber.Text = EmployeeNumber;
+        }
 
-                if (existingEmployeeNumbersList == null)
-                {
-                    txtEmployeeNumber.Text = EmployeeNumber;
-                }
-                else
-                {
-                    // Increment the number.
-                    EmployeeNumber = Convert.ToString(Convert.ToInt32(EmployeeNumber) + 1);
-                    txtEmployeeNumber.Text = EmployeeNumber;
-                }
-            }
+        private int GenerateNewTempNumber()
+        {
+            var tempNumber = 0;
+
+            var repository = new InterrailEmployeeRepository();
+            tempNumber = repository.GetNewTempNumber();
+
+            return tempNumber;
         }
 
         /// <summary>
@@ -187,7 +211,7 @@ namespace InterrailPPRS.Admin
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected void btnSave_Click(object sender, EventArgs e)
+        protected void btnSaveEmployee_Click(object sender, EventArgs e)
         {
             try
             {
@@ -203,6 +227,7 @@ namespace InterrailPPRS.Admin
                 employee.City = txtCity.Text;
                 employee.EmergencyContact = txtEmergencyContact.Text;
                 employee.EmergencyContactPhone = txtEmergencyContactPhone.Text;
+                employee.Salaried = radioPermanent.Checked;
                 employee.EmployeeNumber = txtEmployeeNumber.Text;
                 employee.EmployeePhone = txtEmployeePhone.Text;
                 employee.EmploymentSourceId = Convert.ToInt32(ddlEmploymentSource.SelectedItem.Value);
@@ -215,25 +240,63 @@ namespace InterrailPPRS.Admin
                 employee.FirstName = txtFirstName.Text;
                 employee.HireDate = string.IsNullOrEmpty(txtHireDate.Text) ? (DateTime?)null : DateTime.Parse(txtHireDate.Text);
                 employee.InactiveDate = string.IsNullOrEmpty(txtInactiveDate.Text) ? (DateTime?)null : DateTime.Parse(txtInactiveDate.Text);
-                employee.LastModifiedBy = GenericHelper.GetLoggedOnUser();
+                if (Session["UserId"] != null)
+                {
+                    employee.LastModifiedBy = Session["Username"].ToString();
+                }
+                else
+                {
+                    employee.LastModifiedBy = GenericHelper.GetLoggedOnUser();
+                }
+
                 employee.LastModifiedOn = DateTime.Now;
                 employee.LastName = txtLastName.Text;
                 employee.MiddleInitial = txtMiddleInitial.Text;
                 employee.Salaried = chkBoxSalaried.Checked;
                 employee.SSN = txtSSN.Text;
                 employee.State = txtState.Text;
+
                 employee.TempEmployee = radioTemporary.Checked;
-                employee.TempNumber = txtTemporaryNumber.Text;
+                if (radioTemporary.Checked)
+                {
+                    employee.TempNumber = txtTemporaryNumber.Text;
+                }
+                else
+                {
+                    employee.TempNumber = null;
+                }
+                
                 employee.TempStartDate = string.IsNullOrEmpty(txtStartDate.Text) ? (DateTime?)null : DateTime.Parse(txtStartDate.Text);
                 employee.TerminationDate = string.IsNullOrEmpty(txtTerminationDate.Text) ? (DateTime?)null : DateTime.Parse(txtTerminationDate.Text);
                 employee.ZipCode = txtZipCode.Text;
 
-                // Save the employee.
-                employeeId = repository.SaveInterrailEmployee(employee).ToString();
+                // Validate employee number
+                if (employee.EmployeeId == 0 && radioPermanent.Checked)
+                {
+                    var validEmployeeNumber = repository.ValidateEmployeeNumber(Convert.ToInt32(employee.EmployeeNumber));
 
-                lblRecordSaved.Visible = true;
-
-                Response.Redirect("~/Admin/EmployeeEdit.aspx?id=" + employeeId);
+                    if (validEmployeeNumber)
+                    {
+                        // Save the employee.
+                        employeeId = repository.SaveInterrailEmployee(employee).ToString();
+                        Session["EmployeeId"] = employeeId;
+                        Response.Redirect("~/Admin/EmployeeEdit.aspx?id=" + employeeId, false);
+                    }
+                    else
+                    {
+                        // Stop processing and let the user know the number is not unique.
+                        lblValidationMessage.Text = employee.EmployeeNumber + " has already been assigned to an employee. Please increment " +
+                        employee.EmployeeNumber + " by 1 and try again.";
+                        lblValidationMessage.Visible = true;
+                    }
+                }
+                else
+                {
+                    // Save the employee.
+                    employeeId = repository.SaveInterrailEmployee(employee).ToString();
+                    Session["EmployeeId"] = employeeId;
+                    Response.Redirect("~/Admin/EmployeeEdit.aspx?id=" + employeeId, false);
+                }                
             }
             catch (Exception ex)
             {

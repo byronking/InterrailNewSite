@@ -1,0 +1,18 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[GetAllInterrailUsers]    Script Date: 12/05/2013 18:41:52 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+ALTER PROCEDURE [dbo].[GetAllInterrailUsers]
+
+as 
+
+begin
+
+	select Id, UserID, UserName, Password, UserType, UserLongName, LastModifiedBy, LastModifiedOn from UserProfile
+	order by userid
+	
+end

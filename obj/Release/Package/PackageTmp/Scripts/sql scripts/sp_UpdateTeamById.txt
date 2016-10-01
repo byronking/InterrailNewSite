@@ -1,0 +1,24 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[UpdateTeamById]    Script Date: 09/05/2014 20:42:54 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+CREATE PROCEDURE [dbo].[UpdateTeamById]
+
+@id int,
+@teamName varchar,
+@teamMembers varchar,
+@lastModifiedBy varchar,
+@lastModifiedOn datetime,
+@active bit
+
+as 
+
+begin
+
+	update teams set TeamName = @teamName, TeamMembers = @teamMembers, LastModifiedBy = @lastModifiedBy, LastModifiedOn = @lastModifiedOn, Active = @active where ID = @id
+	
+end

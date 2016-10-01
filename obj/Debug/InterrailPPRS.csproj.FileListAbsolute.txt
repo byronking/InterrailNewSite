@@ -1,57 +1,11 @@
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\bin\InterrailPPRS.dll
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\bin\InterrailPPRS.pdb
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\bin\Interrial.PPRS.Dal.dll
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\bin\SD.LLBLGen.Pro.DQE.SqlServer.NET20.dll
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\bin\SD.LLBLGen.Pro.LinqSupportClasses.NET35.dll
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\bin\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\bin\Interrial.PPRS.Dal.pdb
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\bin\SD.LLBLGen.Pro.DQE.SqlServer.NET20.xml
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\bin\SD.LLBLGen.Pro.LinqSupportClasses.NET35.xml
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\obj\Debug\ResolveAssemblyReference.cache
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\obj\Debug\InterrailPPRS.Rebilling.ManageAttachments.resources
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\obj\Debug\GenerateResource.read.1.tlog
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\obj\Debug\GenerateResource.write.1.tlog
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\obj\Debug\InterrailPPRS.dll
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\obj\Debug\InterrailPPRS.pdb
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\obj\Debug\InterrailPPRS.Reports.WebForm1.resources
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\obj\Debug\InterrailPPRS.Reports.WebForm2.resources
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\bin\SD.LLBLGen.Pro.ORMSupportClasses.NET20.xml
-C:\ManchesterData\Customers\G1440\InterrailPPRS\Website 4.0\InterrailPPRS\obj\Debug\InterrailPPRS.Reports.AdminReport.resources
-C:\development\ProductionWebSiteNew\bin\InterrailPPRS.dll
-C:\development\ProductionWebSiteNew\bin\InterrailPPRS.pdb
-C:\development\ProductionWebSiteNew\obj\Debug\InterrailPPRS.Rebilling.ManageAttachments.resources
-C:\development\ProductionWebSiteNew\obj\Debug\InterrailPPRS.Reports.WebForm1.resources
-C:\development\ProductionWebSiteNew\obj\Debug\InterrailPPRS.Reports.WebForm2.resources
-C:\development\ProductionWebSiteNew\obj\Debug\InterrailPPRS.Reports.AdminReport.resources
-C:\development\ProductionWebSiteNew\obj\Debug\InterrailPPRS.csproj.GenerateResource.Cache
-C:\development\ProductionWebSiteNew\obj\Debug\InterrailPPRS.dll
-C:\development\ProductionWebSiteNew\obj\Debug\InterrailPPRS.pdb
-C:\Development\InterrailNewSite\bin\InterrailPPRS.dll
-C:\Development\InterrailNewSite\bin\InterrailPPRS.pdb
-C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.Rebilling.ManageAttachments.resources
-C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.Reports.WebForm1.resources
-C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.Reports.WebForm2.resources
-C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.Reports.AdminReport.resources
-C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.csproj.GenerateResource.Cache
-C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.dll
-C:\Development\InterrailNewSite\obj\Debug\InterrailPPRS.pdb
-C:\Users\Byron\Documents\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.Rebilling.ManageAttachments.resources
-C:\Users\Byron\Documents\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.Reports.WebForm1.resources
-C:\Users\Byron\Documents\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.Reports.WebForm2.resources
-C:\Users\Byron\Documents\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.Reports.AdminReport.resources
-C:\Users\Byron\Documents\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.csproj.GenerateResource.Cache
-C:\Users\Byron\Documents\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.dll
-C:\Users\Byron\Documents\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.pdb
-C:\Users\Byron\Documents\GitHub\InterrailNewSite\bin\InterrailPPRS.dll
-C:\Users\Byron\Documents\GitHub\InterrailNewSite\bin\InterrailPPRS.pdb
-C:\Users\Byron\Documents\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.csprojResolveAssemblyReference.cache
-C:\Development\GitHub\InterrailNewSite\bin\InterrailPPRS.dll
-C:\Development\GitHub\InterrailNewSite\bin\InterrailPPRS.pdb
-C:\Development\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.Rebilling.ManageAttachments.resources
-C:\Development\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.Reports.WebForm1.resources
-C:\Development\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.Reports.WebForm2.resources
-C:\Development\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.Reports.AdminReport.resources
-C:\Development\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.csproj.GenerateResource.Cache
-C:\Development\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.dll
-C:\Development\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.pdb
-C:\Development\GitHub\InterrailNewSite\obj\Debug\InterrailPPRS.csprojResolveAssemblyReference.cache
+C:\Projects\InterrailPPRS\bin\InterrailPPRS.dll
+C:\Projects\InterrailPPRS\bin\InterrailPPRS.pdb
+C:\Projects\InterrailPPRS\obj\Debug\InterrailPPRS.csprojResolveAssemblyReference.cache
+C:\Projects\InterrailPPRS\obj\Debug\InterrailPPRS.Rebilling.ManageAttachments.resources
+C:\Projects\InterrailPPRS\obj\Debug\InterrailPPRS.Reports.WebForm1.resources
+C:\Projects\InterrailPPRS\obj\Debug\InterrailPPRS.Reports.WebForm2.resources
+C:\Projects\InterrailPPRS\obj\Debug\InterrailPPRS.Reports.AdminReport.resources
+C:\Projects\InterrailPPRS\obj\Debug\InterrailPPRS.csproj.GenerateResource.Cache
+C:\Projects\InterrailPPRS\obj\Debug\InterrailPPRS.dll
+C:\Projects\InterrailPPRS\obj\Debug\InterrailPPRS.pdb
+C:\Projects\InterrailPPRS\bin\InterrailPPRS.dll.config

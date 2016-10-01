@@ -378,12 +378,10 @@ namespace InterrailPPRS.Reports
             strSQL += " ORDER BY Month ";
 
             return strSQL;
-
         }
 
         public string getSelfAuditSQL(string sFac, string sYear)
         {
-
             string strSQL = "";
 
             for (int I = 1; I <= 12; I++)
@@ -394,10 +392,10 @@ namespace InterrailPPRS.Reports
                 strSQL += "                (SELECT ISNULL(COUNT(DataValue),0) FROM FacilityMonitoringDataEntry ";
                 strSQL += "                        WHERE FacilityID = " + sFac + " AND DatePart(m,WorkDate) = " + cStr(I) + " AND DatePart(yyyy,WorkDate) = ";
                 strSQL += "                        " + cStr(sYear) + " AND DataValue <> '' AND DataValue <> '0' AND DataValue IS NOT NULL AND FieldName = 'FACILITY') AS FAC,     ";
-                strSQL += "                (SELECT IsNULL(AVG(Cast(DataValue as decimal(5,2))),0) FROM FacilityMonitoringDataEntry ";
+                strSQL += "                (SELECT IsNULL(AVG(Cast(DataValue as decimal(6,2))),0) FROM FacilityMonitoringDataEntry ";
                 strSQL += "                        WHERE FacilityID = " + sFac + " AND DatePart(m,WorkDate) = " + cStr(I) + " AND DatePart(yyyy,WorkDate) = ";
                 strSQL += "                        " + cStr(sYear) + " AND DataValue <> '' AND FieldName = 'BAY') AS IN_BAY_AVG,     ";
-                strSQL += "                (SELECT IsNULL(AVG(Cast(DataValue as decimal(5,2))),0) FROM FacilityMonitoringDataEntry ";
+                strSQL += "                (SELECT IsNULL(AVG(Cast(DataValue as decimal(6,2))),0) FROM FacilityMonitoringDataEntry ";
                 strSQL += "                        WHERE FacilityID = " + sFac + " AND DatePart(m,WorkDate) = " + cStr(I) + " AND DatePart(yyyy,WorkDate) = ";
                 strSQL += "                        " + cStr(sYear) + " AND DataValue <> '' AND FieldName = 'FACILITY') AS FAC_AVG, ";
                 strSQL += "                        IsNULL(SUM(CASE FieldName WHEN 'BAY'   Then Cast(DataValue as float) Else 0 END), 0) AS TOTAL_BAY,    ";
@@ -416,7 +414,6 @@ namespace InterrailPPRS.Reports
             strSQL += "ORDER BY Mon ";
 
             return strSQL;
-
         }
 
         public string getKPISQL(string sFac, string sYear)
@@ -436,19 +433,17 @@ namespace InterrailPPRS.Reports
             strSQL += " ORDER BY Month ";
 
             return strSQL;
-
         }
 
         //Returns Last Day of Month;
         public DateTime LastDayOfMonth(DateTime mydate){
 
-                    DateTime LastDayOfMonth = mydate;
-                    while (LastDayOfMonth.Month ==  mydate.Month){
-                            LastDayOfMonth = LastDayOfMonth.AddDays(1);
-                    }
+                DateTime LastDayOfMonth = mydate;
+                while (LastDayOfMonth.Month ==  mydate.Month){
+                        LastDayOfMonth = LastDayOfMonth.AddDays(1);
+                }
 
-                    return LastDayOfMonth.AddDays(-1);
-
+                return LastDayOfMonth.AddDays(-1);
             }
 
         public void WriteTopRows(){
@@ -493,7 +488,8 @@ namespace InterrailPPRS.Reports
                    }
 
                   Response.Write ("  <td class=xl5520928 style='border-top:none;border-left:none' align='right'>" +  FNum(cStr(SafeDbl(UnLoadHours)), 2) + "</td>");
-                  Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none' align='right'>" +  FNum(cStr(SafeDbl(UnLoadUnits)), 0) + "</td>");
+                  Response.Write("  <td class=xl5620928 style='border-top:none;border-left:none' align='right'>" + cStr(SafeDbl(UnLoadUnits)) + "</td>");
+                  //Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none' align='right'>" +  FNum(cStr(SafeDbl(UnLoadUnits)), 0) + "</td>");
                   if(SafeDbl(UnLoadHours) != 0 && SafeDbl(UnLoadUnits) != 0){
                     Response.Write ("  <td class=xl4620928 style='border-top:none;border-left:none' align='right'>" +  FNum(cStr(SafeDiv(cStr(SafeDbl(cStr(UnLoadUnits))) , cStr(SafeDbl(cStr(UnLoadHours))))), 2)  + "</td>");
                   }else{
@@ -574,7 +570,8 @@ namespace InterrailPPRS.Reports
                     sUM = cStr(SafeDbl(cStr(sUM1)) / SafeDbl(cStr(sUM2))  / SafeDbl(cStr(sUM3)));
                     UMTotals = SafeDbl(cStr(UMTotals)) + SafeDbl(sUM);
                     nUMTotals = nUMTotals + 1;
-                    Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none' >" +  FNum(sUM, 0) + "</td>");
+                    //Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none' >" +  FNum(sUM, 0) + "</td>");
+                    Response.Write("  <td class=xl5620928 style='border-top:none;border-left:none' >" + sUM + "</td>");
                 }else{
                     Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none' >&nbsp;</td>");
                }
@@ -786,7 +783,7 @@ namespace InterrailPPRS.Reports
             // UnLoading;
             //;
             Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(unLoadTotalHours), 2) + "</td>");
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(unLoadTotalUnits), 0) + "</td>");
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + cStr(unLoadTotalUnits) + "</td>");
             if (SafeDbl(cStr(unLoadTotalHours)) != 0 && SafeDbl(cStr(unLoadTotalUnits)) != 0)
             {
                 Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;' >" + FNum(cStr(SafeDiv(cStr(unLoadTotalUnits), cStr(unLoadTotalHours))), 2) + "</td>");
@@ -799,7 +796,7 @@ namespace InterrailPPRS.Reports
             // Loading;
             //;
             Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(LoadTotalHours), 2) + "</td>");
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(LoadTotalUnits), 0) + "</td>");
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + cStr(LoadTotalUnits) + "</td>");
             if (SafeDbl(cStr(LoadTotalHours)) != 0 && SafeDbl(cStr(LoadTotalUnits)) != 0)
             {
                 Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;' >" + FNum(cStr(SafeDiv(cStr(LoadTotalUnits), cStr(LoadTotalHours))), 2) + "</td>");
@@ -945,7 +942,8 @@ namespace InterrailPPRS.Reports
     double TotalLabor = 0.0;
     string CPU = "";
     if(bBudgetCPU){
-      Response.Write("  <td class=xl11020928 style='border-right:.5pt solid black; border-left:none' colspan=2 align='right'>" +  FNum(rsBudgetCPU.Fields(0), 0) + "</td>");
+      Response.Write("  <td class=xl11020928 style='border-right:.5pt solid black; border-left:none' colspan=2 align='right'>" + rsBudgetCPU.Fields(0) + "</td>");
+      //Response.Write("  <td class=xl11020928 style='border-right:.5pt solid black; border-left:none' colspan=2 align='right'>" +  FNum(rsBudgetCPU.Fields(0), 0) + "</td>");
       Response.Write("  <td class=xl11020928 style='border-right:.5pt solid black; border-left:none' colspan=2 align='right'>" +  FCur(rsBudgetCPU.Fields(1), 2) + "</td>");
       Response.Write("  <td class=xl11020928 style='border-right:.5pt solid black; border-left:none' colspan=2 align='right'>" +  FCur(rsBudgetCPU.Fields(2), 2) + "</td>");
 
@@ -964,7 +962,7 @@ namespace InterrailPPRS.Reports
 
    }
 
-    Response.Write("  <td class=xl11020928 style='border-right:.5pt solid black; border-left:none' colspan=2 align='right'>" +  FCur(cStr(TotalLabor), 2) + "</td>");
+    Response.Write("  <td class=xl11020928 style='border-right:.5pt solid black; border-left:none' colspan=2 align='right'>" +  cStr(TotalLabor) + "</td>");
     Response.Write("  <td class=xl11020928 style='border-right:.5pt solid black; border-left:none' colspan=2 align='right'>" +  CPU + "</td>");
 
 
@@ -1078,7 +1076,7 @@ namespace InterrailPPRS.Reports
           //Response.Write("  <td class=xl9120928 >" +  FNum(Ave(arrTotalNonMed),2) + "</td>";
           Response.Write("  <td class=xl9120928 >" + FNum(cStr(SafeDiv(FNum(cStr(Total_NonMed), 0),(FNum(cStr(BudgetTotalUnits), 0)))*10000),2) + "</td>");
 
-          Response.Write("  <td class=xl9120928 colspan=2 >" + FNum(cStr(BudgetTotalUnits), 0) + "</td>");
+          Response.Write("  <td class=xl9120928 colspan=2 >" + cStr(BudgetTotalUnits) + "</td>");
           Response.Write("  <td class=xl9120928 colspan=2 >" + FCur(cStr(BudgetTotalHours), 2) + "</td>");
           Response.Write("  <td class=xl9120928 colspan=2 >" + FCur(cStr(BudgetTotalOTHrs), 2) + "</td>");
           double BudgetTotalLabor = BudgetTotalHours+BudgetTotalOTHrs;

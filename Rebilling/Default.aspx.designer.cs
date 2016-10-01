@@ -11,5 +11,32 @@ namespace InterrailPPRS.Rebilling {
     
     
     public partial class Default {
+        
+        /// <summary>
+        /// lblDateRange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDateRange;
+        
+        /// <summary>
+        /// ddlDateRange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlDateRange;
+        
+        /// <summary>
+        /// ddlDateRange2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlDateRange2;
     }
 }

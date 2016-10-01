@@ -1,0 +1,30 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[GetEmployeesHiredThisWeek]    Script Date: 02/19/2014 14:35:01 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+CREATE PROCEDURE [dbo].[GetEmployeesHiredThisWeek]
+
+@startDate date,
+@endDate date
+
+as 
+
+begin
+
+set nocount on;
+
+	begin
+
+	select id, employeenumber, tempnumber, lastname, firstname, middleinitial,hiredate, inactivedate,
+	tempstartdate, terminationdate, address1, address2, city, state, zip, ssn, birthdate, employeephone,
+	emergencycontact, contactphone, tempemployee, salaried, employmentsourceid, facilityid, lastmodifiedby,
+	lastmodifiedon, active from employee
+	where hiredate between @startDate and @endDate
+	
+	end
+	
+end

@@ -13,6 +13,15 @@ namespace InterrailPPRS.Admin {
     public partial class EmployeeEdit {
         
         /// <summary>
+        /// leftNavMenu control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::InterrailPPRS.UserControls.LeftNavMenu leftNavMenu;
+        
+        /// <summary>
         /// lblTitleLabel control.
         /// </summary>
         /// <remarks>
@@ -20,6 +29,24 @@ namespace InterrailPPRS.Admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblTitleLabel;
+        
+        /// <summary>
+        /// lblValidationMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblValidationMessage;
+        
+        /// <summary>
+        /// validateEmployee control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary validateEmployee;
         
         /// <summary>
         /// lblFirstName control.
@@ -38,6 +65,15 @@ namespace InterrailPPRS.Admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFirstName;
+        
+        /// <summary>
+        /// valFirstName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator valFirstName;
         
         /// <summary>
         /// lblMiddleInitial control.
@@ -76,6 +112,15 @@ namespace InterrailPPRS.Admin {
         protected global::System.Web.UI.WebControls.TextBox txtLastName;
         
         /// <summary>
+        /// valLastName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator valLastName;
+        
+        /// <summary>
         /// lblSSN control.
         /// </summary>
         /// <remarks>
@@ -92,6 +137,15 @@ namespace InterrailPPRS.Admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtSSN;
+        
+        /// <summary>
+        /// valSsn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator valSsn;
         
         /// <summary>
         /// lblDOB control.
@@ -112,6 +166,15 @@ namespace InterrailPPRS.Admin {
         protected global::System.Web.UI.WebControls.TextBox txtDOB;
         
         /// <summary>
+        /// valDoB control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator valDoB;
+        
+        /// <summary>
         /// lblEmployeePhone control.
         /// </summary>
         /// <remarks>
@@ -130,6 +193,15 @@ namespace InterrailPPRS.Admin {
         protected global::System.Web.UI.WebControls.TextBox txtEmployeePhone;
         
         /// <summary>
+        /// valPhone control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator valPhone;
+        
+        /// <summary>
         /// lblAddress1 control.
         /// </summary>
         /// <remarks>
@@ -146,6 +218,15 @@ namespace InterrailPPRS.Admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtAddress1;
+        
+        /// <summary>
+        /// valAddress1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator valAddress1;
         
         /// <summary>
         /// lblAddress2 control.
@@ -184,6 +265,15 @@ namespace InterrailPPRS.Admin {
         protected global::System.Web.UI.WebControls.TextBox txtCity;
         
         /// <summary>
+        /// valCity control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator valCity;
+        
+        /// <summary>
         /// lblState control.
         /// </summary>
         /// <remarks>
@@ -202,6 +292,15 @@ namespace InterrailPPRS.Admin {
         protected global::System.Web.UI.WebControls.TextBox txtState;
         
         /// <summary>
+        /// valState control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator valState;
+        
+        /// <summary>
         /// lblZipCode control.
         /// </summary>
         /// <remarks>
@@ -218,6 +317,15 @@ namespace InterrailPPRS.Admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtZipCode;
+        
+        /// <summary>
+        /// valZipCode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator valZipCode;
         
         /// <summary>
         /// lblEmergencyContact control.
@@ -310,6 +418,15 @@ namespace InterrailPPRS.Admin {
         protected global::System.Web.UI.WebControls.TextBox txtEmployeeNumber;
         
         /// <summary>
+        /// valEmployeeNumber control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator valEmployeeNumber;
+        
+        /// <summary>
         /// lblTemporaryNumber control.
         /// </summary>
         /// <remarks>
@@ -344,6 +461,15 @@ namespace InterrailPPRS.Admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtHireDate;
+        
+        /// <summary>
+        /// valHireDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator valHireDate;
         
         /// <summary>
         /// lblStartDate control.
@@ -490,13 +616,13 @@ namespace InterrailPPRS.Admin {
         protected global::System.Web.UI.WebControls.Label lblModifiedByUser;
         
         /// <summary>
-        /// btnSave control.
+        /// btnSaveEmployee control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSave;
+        protected global::System.Web.UI.WebControls.Button btnSaveEmployee;
         
         /// <summary>
         /// btnCancel control.

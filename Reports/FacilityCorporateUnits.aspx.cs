@@ -115,11 +115,16 @@ namespace InterrailPPRS.Reports
 		            Response.Write(" <tr class='" + sumrowColor + "'>");
 		
 		            if (count == 0.0) {
+
+                        var field5 = rsUnits.Fields(5);
+                        var field6 = rsUnits.Fields(6);
+
 			            Response.Write("<td class='cellTopLine' align='left' width='35%'>" + rsUnits.Fields(1) + "</td>");
 			            Response.Write("<td class='cellTopLine' align='left' width='22%'>" + rsUnits.Fields(4) + "</td>");
 			            Response.Write("<td class='cellTopLine' align='right' width='14%'>" + FNum(cStr(SafeDbl(rsUnits.Fields(5))),0) + "</td>");
 			            Response.Write("<td class='cellTopLine' align='right' width='14%'>" + FNum(cStr(SafeDbl(rsUnits.Fields(6))),0) + "</td>");
-			            FacilityTotal = cDbl(FNum(cStr(SafeDbl(cStr(cDbl(rsUnits.Fields(5)) + cDbl(rsUnits.Fields(6))))), 0));
+			            //FacilityTotal = cDbl(FNum(cStr(SafeDbl(cStr(cDbl(rsUnits.Fields(5)) + cDbl(rsUnits.Fields(6))))), 0));
+                        FacilityTotal = Convert.ToDouble(rsUnits.Fields(5)) + Convert.ToDouble(rsUnits.Fields(6));
 			            Response.Write("<td class='cellTopLine' align='right' width='14%'>" + FNum(cStr(SafeDbl(cStr(FacilityTotal))),0) + "</td>");
 			            Response.Write("</tr>");
 		
@@ -128,7 +133,8 @@ namespace InterrailPPRS.Reports
 			            Response.Write("<td align='left' width='22%'>" + rsUnits.Fields(4) + "</td>");
 			            Response.Write("<td align='right' width='14%'>" + FNum(cStr(SafeDbl(rsUnits.Fields(5))),0) + "</td>");
 			            Response.Write("<td align='right' width='14%'>" + FNum(cStr(SafeDbl(rsUnits.Fields(6))),0) + "</td>");
-			            FacilityTotal = cDbl(FNum(cStr(SafeDbl(cStr(cDbl(rsUnits.Fields(5)) + cDbl(rsUnits.Fields(6))))), 0));
+			            //FacilityTotal = cDbl(FNum(cStr(SafeDbl(cStr(cDbl(rsUnits.Fields(5)) + cDbl(rsUnits.Fields(6))))), 0));
+                        FacilityTotal = Convert.ToDouble(rsUnits.Fields(5)) + Convert.ToDouble(rsUnits.Fields(6));
 			            Response.Write("<td align='right' width='14%'>" + FNum(cStr(SafeDbl(cStr(FacilityTotal))),0) + "</td>");
 			            Response.Write("</tr>");
 		            }

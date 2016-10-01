@@ -1,0 +1,33 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[SaveNewTeam]    Script Date: 09/07/2014 22:54:50 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+CREATE PROCEDURE [dbo].[SaveNewTeam]
+
+@facilityId int,
+@teamName varchar(30),
+@teamMembers varchar(500),
+@lastModifiedBy varchar(50),
+@lastModifiedOn datetime,
+@active bit
+
+as 
+
+begin
+
+set nocount on;
+declare @newId int 
+
+	begin
+	
+	insert into teams (TeamName, FacilityId, TeamMembers, LastModifiedBy, LastModifiedOn, Active) values (@teamName, @facilityId, @teamMembers, @lastModifiedBy, @lastModifiedOn, @active)
+	
+	set @newId = SCOPE_IDENTITY();
+	return (@newId);
+	end
+	
+end

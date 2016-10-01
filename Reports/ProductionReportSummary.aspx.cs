@@ -368,8 +368,8 @@ namespace InterrailPPRS.Reports
 
                     Response.Write("     <tr>");
                     Response.Write("       <td colspan='3' align='Left'> " + rstMan.Item("ManufacturerName") + ", " + rstMan.Item("NU") + "</td>");
-                    Response.Write("       <td             align='right'>" + cStr(FormatNumber(rstMan.Item("TU"),0))  + "</td>");
-                    Response.Write("       <td             align='right'>" + cStr(FormatNumber(rstMan.Item("RCs"),0)) + "</td>");
+                    Response.Write("       <td             align='right'>" + cStr(rstMan.Item("TU"))  + "</td>");
+                    Response.Write("       <td             align='right'>" + cStr(rstMan.Item("RCs")) + "</td>");
                     Response.Write("     </tr>");
                     nVeh = nVeh + cDbl(rstMan.Item("TU"));
                     nRCs = nRCs + cDbl(rstMan.Item("RCs"));
@@ -378,8 +378,9 @@ namespace InterrailPPRS.Reports
 
                   Response.Write("     <tr class='reportTotalLine'>");
                   Response.Write("       <td colspan='3' class='cellTopBottomBorder' align='center'>Totals:&nbsp;</td>");
-                  Response.Write("       <td             class='cellTopBottomBorder' align='right'>" + cStr(FormatNumber(cStr(nVeh),0)) + "</td>");
-                  Response.Write("       <td             class='cellTopBottomBorder' align='right'>" + cStr(FormatNumber(cStr(nRCs),0)) + "</td>");
+                  //Response.Write("       <td             class='cellTopBottomBorder' align='right'>" + cStr(FormatNumber(cStr(nVeh),0)) + "</td>");
+                  Response.Write("       <td             class='cellTopBottomBorder' align='right'>" + cStr(cStr(nVeh)) + "</td>");
+                  Response.Write("       <td             class='cellTopBottomBorder' align='right'>" + cStr(cStr(nRCs)) + "</td>");
                   Response.Write("     </tr>");
                   Response.Write("   </table>");
                   Response.Write("  </td></tr>");

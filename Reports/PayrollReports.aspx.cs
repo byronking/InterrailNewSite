@@ -24,35 +24,25 @@ namespace InterrailPPRS.Reports
 {
     public partial class PayrollReports : PageBase
     {
-
         public DataReader rsFac;
         public int rsFac_numRows;
 
         protected override void Page_Load(object sender, EventArgs e)
         {
-
             base.Page_Load(sender, e);
-
-
-              GrantAccess("Super, Admin, User");
-
+            GrantAccess("Super, Admin, User");
 
             string rsFac__PUserID;
             rsFac__PUserID = "17";
             if(Session["UserID"] != null && cStr(Session["UserID"]) != ""){rsFac__PUserID = cStr(Session["UserID"]);}
 
-
             string rsFac__PUserType;
             rsFac__PUserType = "super";
             if(Session["UserType"] != null && cStr(Session["UserType"]) != ""){rsFac__PUserType = cStr(Session["UserType"]);}
 
-
-
             rsFac = new DataReader("SELECT Distinct f.Id, f.Name, f.AlphaCode  FROM dbo.UserRights r RIGHT OUTER JOIN  dbo.Facility f ON r.FacilityId = f.Id  WHERE f.Active=1 AND (r.UserProfileId = " + Replace(rsFac__PUserID, "'", "''") + "  OR '" + Replace(rsFac__PUserType, "'", "''") + "' = 'Admin' OR '" + Replace(rsFac__PUserType, "'", "''") + "'='Super')  Order By Name");
             rsFac.Open();
             rsFac_numRows = 0;
-
-
         }
     }
 }

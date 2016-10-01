@@ -48,446 +48,502 @@ namespace InterrailPPRS.Reports
 
         protected override void Page_Load(object sender, EventArgs e)
         {
+            try
+            {
+                base.Page_Load(sender, e);
 
-            base.Page_Load(sender, e);
+                GrantAccess("Super, Admin, User");
 
-           GrantAccess("Super, Admin, User");
-
-
-          selYear  = Request["selYear2"];
-          selMonth = Request["selMonth"];
-          sFac  = System.Convert.ToString(Session["FacilityID"]);
-
-
- 
-          // Get Total Hours for( UNLOAD;
-          rsUnLoadHours = new DataReader(getSQL(sFac, selMonth, selYear,"UL", "HOURS"));
-          rsUnLoadHours.Open();
-          bUnLoadHours = rsUnLoadHours.Read();
-        
-            
- 
-          // Get Total Units for( UNLOAD;
-          rsUnLoadUnits = new DataReader(getSQL(sFac, selMonth, selYear,"UL", "UNITS"));
-          rsUnLoadUnits.Open();
-          bUnLoadUnits = rsUnLoadUnits.Read();
-
-          // Get Total Hours for( LOAD;
-          rsLoadHours = new DataReader(getSQL(sFac, selMonth, selYear,"LO", "HOURS"));
-          rsLoadHours.Open();
-          bLoadHours = rsLoadHours.Read();
+                selYear = Request["selYear2"];
+                selMonth = Request["selMonth"];
+                sFac = System.Convert.ToString(Session["FacilityID"]);
 
 
-          // Get Total Units for( LOAD;
-          rsLoadUnits = new DataReader(getSQL(sFac, selMonth, selYear,"LO", "UNITS"));
-          rsLoadUnits.Open();
-          bLoadUnits = rsLoadUnits.Read();
+                // Get Total Hours for( UNLOAD;
+                rsUnLoadHours = new DataReader(getSQL(sFac, selMonth, selYear, "UL", "HOURS"));
+                rsUnLoadHours.Open();
+                bUnLoadHours = rsUnLoadHours.Read();
 
 
-           // Get Total Hours for( SHUTTLING;
-           rsShuttlingHours = new DataReader(getSQL(sFac, selMonth, selYear,"SH", "HOURS"));
-           rsShuttlingHours.Open();
-           bShuttlingHours = rsShuttlingHours.Read();
+                // Get Total Units for( UNLOAD;
+                rsUnLoadUnits = new DataReader(getSQL(sFac, selMonth, selYear, "UL", "UNITS"));
+                rsUnLoadUnits.Open();
+                bUnLoadUnits = rsUnLoadUnits.Read();
 
-           // Get Total Units for( SHUTTLING;
-           rsShuttlingUnits = new DataReader(getSQL(sFac, selMonth, selYear,"SH", "UNITS"));
-           rsShuttlingUnits.Open();
-           bShuttlingUnits = rsShuttlingUnits.Read();
-  
-           // Get SPOTTING RC//s IN/OUT && Down Time;
-           rsSpottingTime = new DataReader(getSpotSQL(sFac, selMonth, selYear, "SPOTTIME"));
-           rsSpottingTime.Open();
-           bSpottingTime = rsSpottingTime.Read();
-
-           rsSpottingRCIn = new DataReader(getSpotSQL(sFac, selMonth, selYear, "RC_IN"));
-           rsSpottingRCIn.Open();
-           bSpottingRCIn = rsSpottingRCIn.Read();
-
-           rsSpottingRCOut = new DataReader(getSpotSQL(sFac, selMonth, selYear, "RC_OUT"));
-           rsSpottingRCOut.Open();
-           bSpottingRCOut = rsSpottingRCOut.Read();
- 
-           rsSpottingDOWN_TIME = new DataReader(getSpotSQL(sFac, selMonth, selYear, "DOWN_TIME"));
-           rsSpottingDOWN_TIME.Open();
-           bSpottingDOWN_TIME = rsSpottingDOWN_TIME.Read();
-
-           rsSpottingHOURS = new DataReader(getSpotTimeSQL(sFac,  selMonth, selYear));
-           rsSpottingHOURS.Open();
-           bSpottingHOURS = rsSpottingHOURS.Read();
+                // Get Total Hours for( LOAD;
+                rsLoadHours = new DataReader(getSQL(sFac, selMonth, selYear, "LO", "HOURS"));
+                rsLoadHours.Open();
+                bLoadHours = rsLoadHours.Read();
 
 
-         // Get Total Hours for( Training;
-
-         rsTrainingHours = new DataReader(getSQL(sFac, selMonth, selYear,"TR", "HOURS"));
-         rsTrainingHours.Open();
-         bTrainingHours = rsTrainingHours.Read();
-
-         // Get Total Hours for( Clerical;
-
-         rsClericalHours = new DataReader(getSQL(sFac, selMonth, selYear,"CL", "HOURS"));
-         rsClericalHours.Open();
-         bClericalHours = rsClericalHours.Read();
-
-         // Get Total Hours for( Misc. (Rebilling);
-
-         rsRBHours = new DataReader(getSQL(sFac, selMonth, selYear,"RB", "HOURS"));
-         rsRBHours.Open();
-         bRBHours = rsRBHours.Read();
-
-         // Get Total Hours for( UA;
-
-         rsUAHours = new DataReader(getSQL(sFac, selMonth, selYear,"UA", "HOURS"));
-         rsUAHours.Open();
-         bUAHours = rsUAHours.Read();
-
-         // Get Total Units/Man for( UL;
-
-         rsUM = new DataReader(getUMSQL(sFac, selMonth, selYear, "UL"));
-         rsUM.Open();
-         bUM = rsUM.Read();
-
-         // Get Total Units/Man for( UL;
-         rsUMLO = new DataReader(getUMSQL(sFac, selMonth, selYear, "LO"));
-         rsUMLO.Open();
-         bUMLO = rsUMLO.Read();
-
-         // Get Self Audit;
-         rsSelfAudit = new DataReader(getSelfAuditSQL(sFac, selMonth, selYear));
-         rsSelfAudit.Open();
-         bSelfAudit = rsSelfAudit.Read();
-
-         // Get KPIs;
-         rsKPI = new DataReader(getKPISQL(sFac, selMonth, selYear));
-         rsKPI.Open();
-         bKPI = rsKPI.Read();
-
-         // Get Budget/Cost Per Unit;
-         rsBudgetCPU = new DataReader(getBCPUSQL(sFac, selMonth, selYear));
-         rsBudgetCPU.Open();
-         //rsBudgetCPU.Read();
-
-         // Get Total Hours for( Air Test;
-         rsATHours = new DataReader(getSQL(sFac, selMonth, selYear,"AT", "HOURS"));
-         rsATHours.Open();
-         bATHours = rsATHours.Read();
-
-         // Get Total Units for( Air Test;
-         rsATUnits = new DataReader(getSQL(sFac, selMonth, selYear,"AT", "UNITS"));
-         rsATUnits.Open();
-         bATUnits = rsATUnits.Read();
-
-         // Get Total Hours for( Prepping;
-         rsPrepHours = new DataReader(getSQL(sFac, selMonth, selYear,"RP", "HOURS"));
-         rsPrepHours.Open();
-         bPrepHours = rsPrepHours.Read();
-
-         // Get Total Units for( Prepping;
-         rsPrepUnits = new DataReader(getSQL(sFac, selMonth, selYear,"RP", "UNITS"));
-         rsPrepUnits.Open();
-         bPrepUnits = rsPrepUnits.Read();
+                // Get Total Units for( LOAD;
+                rsLoadUnits = new DataReader(getSQL(sFac, selMonth, selYear, "LO", "UNITS"));
+                rsLoadUnits.Open();
+                bLoadUnits = rsLoadUnits.Read();
 
 
-          for(int i = 0 ; i < 31; i ++){
-             for( int j = 0; j < 21; j++){
-                arData[i,j] = "";
+                // Get Total Hours for( SHUTTLING;
+                rsShuttlingHours = new DataReader(getSQL(sFac, selMonth, selYear, "SH", "HOURS"));
+                rsShuttlingHours.Open();
+                bShuttlingHours = rsShuttlingHours.Read();
+
+                // Get Total Units for( SHUTTLING;
+                rsShuttlingUnits = new DataReader(getSQL(sFac, selMonth, selYear, "SH", "UNITS"));
+                rsShuttlingUnits.Open();
+                bShuttlingUnits = rsShuttlingUnits.Read();
+
+                // Get SPOTTING RC//s IN/OUT && Down Time;
+                rsSpottingTime = new DataReader(getSpotSQL(sFac, selMonth, selYear, "SPOTTIME"));
+                rsSpottingTime.Open();
+                bSpottingTime = rsSpottingTime.Read();
+
+                rsSpottingRCIn = new DataReader(getSpotSQL(sFac, selMonth, selYear, "RC_IN"));
+                rsSpottingRCIn.Open();
+                bSpottingRCIn = rsSpottingRCIn.Read();
+
+                rsSpottingRCOut = new DataReader(getSpotSQL(sFac, selMonth, selYear, "RC_OUT"));
+                rsSpottingRCOut.Open();
+                bSpottingRCOut = rsSpottingRCOut.Read();
+
+                rsSpottingDOWN_TIME = new DataReader(getSpotSQL(sFac, selMonth, selYear, "DOWN_TIME"));
+                rsSpottingDOWN_TIME.Open();
+                bSpottingDOWN_TIME = rsSpottingDOWN_TIME.Read();
+
+                rsSpottingHOURS = new DataReader(getSpotTimeSQL(sFac, selMonth, selYear));
+                rsSpottingHOURS.Open();
+                bSpottingHOURS = rsSpottingHOURS.Read();
+
+
+                // Get Total Hours for( Training;
+
+                rsTrainingHours = new DataReader(getSQL(sFac, selMonth, selYear, "TR", "HOURS"));
+                rsTrainingHours.Open();
+                bTrainingHours = rsTrainingHours.Read();
+
+                // Get Total Hours for( Clerical;
+
+                rsClericalHours = new DataReader(getSQL(sFac, selMonth, selYear, "CL", "HOURS"));
+                rsClericalHours.Open();
+                bClericalHours = rsClericalHours.Read();
+
+                // Get Total Hours for( Misc. (Rebilling);
+
+                rsRBHours = new DataReader(getSQL(sFac, selMonth, selYear, "RB", "HOURS"));
+                rsRBHours.Open();
+                bRBHours = rsRBHours.Read();
+
+                // Get Total Hours for( UA;
+
+                rsUAHours = new DataReader(getSQL(sFac, selMonth, selYear, "UA", "HOURS"));
+                rsUAHours.Open();
+                bUAHours = rsUAHours.Read();
+
+                // Get Total Units/Man for( UL;
+
+                rsUM = new DataReader(getUMSQL(sFac, selMonth, selYear, "UL"));
+                rsUM.Open();
+                bUM = rsUM.Read();
+
+                // Get Total Units/Man for( UL;
+                rsUMLO = new DataReader(getUMSQL(sFac, selMonth, selYear, "LO"));
+                rsUMLO.Open();
+                bUMLO = rsUMLO.Read();
+
+                // Get Self Audit;
+                rsSelfAudit = new DataReader(getSelfAuditSQL(sFac, selMonth, selYear));
+                rsSelfAudit.Open();
+                bSelfAudit = rsSelfAudit.Read();
+
+                // Get KPIs;
+                rsKPI = new DataReader(getKPISQL(sFac, selMonth, selYear));
+                rsKPI.Open();
+                bKPI = rsKPI.Read();
+
+                // Get Budget/Cost Per Unit;
+                rsBudgetCPU = new DataReader(getBCPUSQL(sFac, selMonth, selYear));
+                rsBudgetCPU.Open();
+                //rsBudgetCPU.Read();
+
+                // Get Total Hours for( Air Test;
+                rsATHours = new DataReader(getSQL(sFac, selMonth, selYear, "AT", "HOURS"));
+                rsATHours.Open();
+                bATHours = rsATHours.Read();
+
+                // Get Total Units for( Air Test;
+                rsATUnits = new DataReader(getSQL(sFac, selMonth, selYear, "AT", "UNITS"));
+                rsATUnits.Open();
+                bATUnits = rsATUnits.Read();
+
+                // Get Total Hours for( Prepping;
+                rsPrepHours = new DataReader(getSQL(sFac, selMonth, selYear, "RP", "HOURS"));
+                rsPrepHours.Open();
+                bPrepHours = rsPrepHours.Read();
+
+                // Get Total Units for( Prepping;
+                rsPrepUnits = new DataReader(getSQL(sFac, selMonth, selYear, "RP", "UNITS"));
+                rsPrepUnits.Open();
+                bPrepUnits = rsPrepUnits.Read();
+
+
+                for (int i = 0; i < 31; i++)
+                {
+                    for (int j = 0; j < 21; j++)
+                    {
+                        arData[i, j] = "";
+                    }
+                }
+
+                for (int i = 0; i < 31; i++)
+                {
+                    for (int j = 0; j < 22; j++)
+                    {
+                        ar2Data[i, j] = "";
+                    }
+                }
+
+                // Unloading;
+                // Total Hours && Total Units;
+
+                for (int i = 0; i < (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear))))); i++)
+                {
+
+                    arData[i, 0] = (i + 1) + "-" + Left(MonthName(cInt(selMonth)), 3) + "  ";
+                    ar2Data[i, 0] = arData[i, 0];
+                    arData[i, 2] = FNumSP(rsUM.Fields(1), 0);
+
+                    if (bUnLoadUnits)
+                    {
+                        if ((cInt(Day(cDate(rsUnLoadUnits.Fields(1)))) - 1) == i)
+                        {
+                            arData[i, 3] = FNumSP(rsUnLoadUnits.Fields(0), 0);
+                            bUnLoadUnits = rsUnLoadUnits.Read();
+                        }
+                    }
+
+                    if (bUnLoadHours)
+                    {
+                        if ((cInt(Day(cDate(rsUnLoadHours.Fields(1)))) - 1) == i)
+                        {
+                            arData[i, 1] = FNumSP(rsUnLoadHours.Fields(0), 2);
+                            arData[i, 4] = FNumSP(cStr(SafeDbl(arData[i, 3]) / SafeDbl(arData[i, 1])), 2);
+                            bUnLoadHours = rsUnLoadHours.Read();
+                        }
+                    }
+
+                    if (SafeDbl(rsUM.Fields(1)) != 0)
+                    {
+                        arData[i, 5] = FNumSP(cStr(SafeDbl(arData[i, 3]) / SafeDbl(rsUM.Fields(1))), 0);
+                    }
+
+                    bUM = rsUM.Read();
+                }
+
+
+                //////// Loading;
+                //////// Total Hours && Total Units;
+
+                for (int i = 0; i < (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear))))); i++)
+                {
+
+                    arData[i, 7] = FNumSP(rsUMLO.Fields(1), 0);
+
+                    if (bLoadUnits)
+                    {
+                        if ((cInt(Day(cDate(rsLoadUnits.Fields(1)))) - 1) == i)
+                        {
+                            arData[i, 8] = FNumSP(rsLoadUnits.Fields(0), 0);
+                            bLoadUnits = rsLoadUnits.Read();
+
+                        }
+                    }
+
+                    if (bLoadHours)
+                    {
+                        if ((cInt(Day(cDate(rsLoadHours.Fields(1)))) - 1) == i)
+                        {
+                            arData[i, 6] = FNumSP(rsLoadHours.Fields(0), 2);
+                            arData[i, 9] = FNumSP(cStr(SafeDbl(arData[i, 8]) / SafeDbl(arData[i, 6])), 2);
+                            bLoadHours = rsLoadHours.Read();
+
+                        }
+                    }
+
+                    if (SafeDbl(rsUMLO.Fields(1)) != 0)
+                    {
+                        arData[i, 10] = FNumSP(cStr(SafeDbl(arData[i, 8]) / SafeDbl(rsUMLO.Fields(1))), 0);
+                    }
+
+                    arData[i, 11] = cStr(SafeDbl(arData[i, 5]) + SafeDbl(arData[i, 10]));
+
+                    bUMLO = rsUMLO.Read();
+                }
+
+
+                // Shuttling;
+
+                // Total Hours && Total Units;
+
+                for (int i = 0; i < (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear))))); i++)
+                {
+
+                    if (bShuttlingUnits)
+                    {
+                        if ((cInt(Day(cDate(rsShuttlingUnits.Fields(1)))) - 1) == i)
+                        {
+                            arData[i, 13] = FNumSP(rsShuttlingUnits.Fields(0), 0);
+                            bShuttlingUnits = rsShuttlingUnits.Read();
+                        }
+                    }
+
+                    if (bShuttlingHours)
+                    {
+                        if ((cInt(Day(cDate(rsShuttlingHours.Fields(1)))) - 1) == i)
+                        {
+                            arData[i, 12] = FNumSP(rsShuttlingHours.Fields(0), 2);
+                            arData[i, 14] = FNumSP(cStr(SafeDbl(arData[i, 13]) / SafeDbl(arData[i, 12])), 2);
+                            bShuttlingHours = rsShuttlingHours.Read();
+                        }
+                    }
+
+                }
+
+
+                // Soptting;
+                for (int i = 0; i < (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear))))); i++)
+                {
+
+                    if (bSpottingTime)
+                    {
+                        if ((cInt(Day(cDate(rsSpottingTime.Fields(1)))) - 1) == i)
+                        {
+                            arData[i, 15] = rsSpottingTime.Fields(0);
+                            bSpottingTime = rsSpottingTime.Read();
+                        }
+                    }
+
+                    if (bSpottingRCIn)
+                    {
+                        if ((cInt(Day(cDate(rsSpottingRCIn.Fields(1)))) - 1) == i)
+                        {
+                            arData[i, 16] = rsSpottingRCIn.Fields(0);
+                            bSpottingRCIn = rsSpottingRCIn.Read();
+
+                        }
+                    }
+
+                    if (bSpottingRCOut)
+                    {
+                        if ((cInt(Day(cDate(rsSpottingRCOut.Fields(1)))) - 1) == i)
+                        {
+                            arData[i, 17] = rsSpottingRCOut.Fields(0);
+                            bSpottingRCOut = rsSpottingRCOut.Read();
+
+                        }
+                    }
+
+                    if (bSpottingDOWN_TIME)
+                    {
+                        if ((cInt(Day(cDate(rsSpottingDOWN_TIME.Fields(1)))) - 1) == i)
+                        {
+                            arData[i, 18] = rsSpottingDOWN_TIME.Fields(0);
+                            bSpottingDOWN_TIME = rsSpottingDOWN_TIME.Read();
+
+                        }
+                    }
+
+                    if (bSpottingHOURS)
+                    {
+                        if ((cInt(Day(cDate(rsSpottingHOURS.Fields(1)))) - 1) == i)
+                        {
+                            arData[i, 19] = rsSpottingHOURS.Fields(0);
+                            if (SafeDbl(arData[i, 19]) != 0)
+                            {
+                                arData[i, 20] = cStr((SafeDbl(arData[i, 16]) + SafeDbl(arData[i, 17])) / SafeDbl(arData[i, 19]));
+                            }
+                            bSpottingHOURS = rsSpottingHOURS.Read();
+
+                        }
+                    }
+
+                }
+
+                // Training  Total Hours;
+
+
+                for (int i = 0; i < (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear))))); i++)
+                {
+
+                    if (bTrainingHours)
+                    {
+                        if ((cInt(Day(cDate(rsTrainingHours.Fields(1)))) - 1) == i)
+                        {
+                            ar2Data[i, 1] = FNumSP(rsTrainingHours.Fields(0), 2);
+                            bTrainingHours = rsTrainingHours.Read();
+
+                        }
+                    }
+
+                    if (bClericalHours)
+                    {
+                        if ((cInt(Day(cDate(rsClericalHours.Fields(1)))) - 1) == i)
+                        {
+                            ar2Data[i, 2] = FNumSP(rsClericalHours.Fields(0), 2);
+                            bClericalHours = rsClericalHours.Read();
+
+                        }
+                    }
+
+                    if (bRBHours)
+                    {
+                        if ((cInt(Day(cDate(rsRBHours.Fields(1)))) - 1) == i)
+                        {
+                            ar2Data[i, 3] = FNumSP(rsRBHours.Fields(0), 2);
+                            bRBHours = rsRBHours.Read();
+
+                        }
+                    }
+
+                    if (bUAHours)
+                    {
+                        if ((cInt(Day(cDate(rsUAHours.Fields(1)))) - 1) == i)
+                        {
+                            ar2Data[i, 4] = FNumSP(rsUAHours.Fields(0), 2);
+                            bUAHours = rsUAHours.Read();
+
+                        }
+                    }
+
+                }
+
+
+                // KPI here;
+
+
+                for (int i = 0; i < (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear))))); i++)
+                {
+
+                    if (bKPI)
+                    {
+                        if ((cInt(Day(cDate(rsKPI.Fields(4)))) - 1) == i)
+                        {
+                            ar2Data[i, 5] = FNumSP(rsKPI.Fields(0), 0);
+                            ar2Data[i, 6] = FNumSP(rsKPI.Fields(1), 2);
+                            ar2Data[i, 7] = FNumSP(rsKPI.Fields(2), 2);
+                            ar2Data[i, 8] = FNumSP(rsKPI.Fields(3), 2);
+
+                            bKPI = rsKPI.Read();
+                        }
+                    }
+
+                }
+
+
+
+                for (int i = 0; i < (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear))))); i++)
+                {
+
+                    if (bSelfAudit)
+                    {
+                        if ((cInt(Day(cDate(rsSelfAudit.Fields(2)))) - 1) == i)
+                        {
+                            ar2Data[i, 9] = FPerc(SafeDbl(rsSelfAudit.Fields(0)));
+                            ar2Data[i, 10] = FPerc(SafeDbl(rsSelfAudit.Fields(1)));
+                            bSelfAudit = rsSelfAudit.Read();
+
+                        }
+                    }
+
+                }
+
+
+
+                // Budget / Cost Per Unit;
+                int x = 0;
+                while (rsBudgetCPU.Read())
+                {
+
+                    ar2Data[x, 11] = FNumSP(rsBudgetCPU.Fields(0), 0);
+                    ar2Data[x, 12] = FNumSP(rsBudgetCPU.Fields(1), 2);
+                    ar2Data[x, 13] = FNumSP(rsBudgetCPU.Fields(2), 2);
+
+                    ar2Data[x, 14] = FNumSP(cStr(SafeDbl(rsBudgetCPU.Fields(1)) + SafeDbl(rsBudgetCPU.Fields(2))), 2);
+                    if (SafeDbl(rsBudgetCPU.Fields(0)) != 0)
+                    {
+                        ar2Data[x, 15] = FNumSP(cStr(SafeDbl(ar2Data[x, 14]) / SafeDbl(ar2Data[x, 11])), 2);
+                    }
+
+                    x = x + 1;
+
+                } //End Loop
+
+
+                // Air Test Total Hours && Total Units;
+
+                for (int i = 0; i < (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear))))); i++)
+                {
+
+                    if (bATUnits)
+                    {
+                        if ((cInt(Day(cDate(rsATUnits.Fields(1)))) - 1) == i)
+                        {
+                            ar2Data[i, 16] = FNumSP(rsATUnits.Fields(0), 0);
+                            bATUnits = rsATUnits.Read();
+
+                        }
+                    }
+
+                    if (bATHours)
+                    {
+                        if ((cInt(Day(cDate(rsATHours.Fields(1)))) - 1) == i)
+                        {
+                            ar2Data[i, 17] = FNumSP(rsATHours.Fields(0), 2);
+                            if (SafeDbl(ar2Data[i, 17]) != 0)
+                            {
+                                ar2Data[i, 18] = FNumSP(cStr(SafeDbl(ar2Data[i, 16]) / SafeDbl(ar2Data[i, 17])), 2);
+                            }
+                            bATHours = rsATHours.Read();
+
+                        }
+                    }
+
+                }
+
+
+
+                // Prepping Total Hours && Total Units;
+                for (int i = 0; i < (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear))))); i++)
+                {
+
+                    if (bPrepUnits)
+                    {
+                        if ((cInt(Day(cDate(rsPrepUnits.Fields(1)))) - 1) == i)
+                        {
+                            ar2Data[i, 19] = rsPrepUnits.Fields(0);
+                            bPrepUnits = rsPrepUnits.Read();
+
+                        }
+                    }
+
+                    if (bPrepHours)
+                    {
+                        if ((cInt(Day(cDate(rsPrepHours.Fields(1)))) - 1) == i)
+                        {
+                            ar2Data[i, 20] = rsPrepHours.Fields(0);
+                            if (SafeDbl(ar2Data[i, 20]) != 0)
+                            {
+                                ar2Data[i, 21] = cStr(SafeDbl(ar2Data[i, 19]) / SafeDbl(ar2Data[i, 20]));
+                            }
+                            bPrepHours = rsPrepHours.Read();
+
+                        }
+                    }
+
+                }
             }
-          }
-
-          for( int i = 0 ; i < 31; i++){
-             for( int j = 0; j < 22;j++){
-                ar2Data[i,j] = "";
-             }
-         }
-
-          // Unloading;
-          // Total Hours && Total Units;
-
-          for( int i = 0 ; i < (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear))))); i++){
-
-                        arData[i, 0] = (i+1) + "-" + Left(MonthName(cInt(selMonth)), 3) + "  ";
-                        ar2Data[i, 0] = arData[i, 0];
-                        arData[i, 2] = FNumSP(rsUM.Fields(1), 0);
-
-                        if (bUnLoadUnits ){
-                                if((cInt(Day(cDate(rsUnLoadUnits.Fields(1))))-1) == i){
-                                        arData[i, 3] = FNumSP(rsUnLoadUnits.Fields(0), 0);
-                                        bUnLoadUnits = rsUnLoadUnits.Read();
-
-                               }
-                       }
-
-                        if (bUnLoadHours ){
-                                if((cInt(Day(cDate(rsUnLoadHours.Fields(1))))-1) == i){
-                                        arData[i, 1] = FNumSP(rsUnLoadHours.Fields(0),2);
-                                        arData[i, 4] = FNumSP(cStr(SafeDbl(arData[i, 3]) / SafeDbl(arData[i, 1])), 2);
-                                        bUnLoadHours = rsUnLoadHours.Read();
-
-                               }
-                       }
-
-                        if( SafeDbl(rsUM.Fields(1)) != 0){
-                                arData[i, 5] =  FNumSP(cStr(SafeDbl(arData[i, 3]) / SafeDbl(rsUM.Fields(1))), 0);
-                        }
-
-                        bUM = rsUM.Read();
-          }
-
-
-
-         //////// Loading;
-         //////// Total Hours && Total Units;
-
-         for(int i = 0 ; i < (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear))))); i++){
-
-                        arData[i, 7]= FNumSP(rsUMLO.Fields(1),0);
-
-                        if (bLoadUnits ){
-                                if((cInt(Day(cDate(rsLoadUnits.Fields(1))))-1) == i){
-                                        arData[i, 8] = FNumSP(rsLoadUnits.Fields(0),0);
-                                        bLoadUnits = rsLoadUnits.Read();
-
-                               }
-                       }
-
-                        if (bLoadHours ){
-                                if((cInt(Day(cDate(rsLoadHours.Fields(1))))-1) == i){
-                                        arData[i, 6]= FNumSP(rsLoadHours.Fields(0),2);
-                                        arData[i, 9] =   FNumSP(cStr(SafeDbl(arData[i, 8])  /  SafeDbl(arData[i, 6])), 2);
-                                        bLoadHours = rsLoadHours.Read();
-
-                               }
-                       }
-
-                        if (SafeDbl(rsUMLO.Fields(1)) != 0){
-                                arData[i,10] =  FNumSP(cStr(SafeDbl(arData[i, 8])   /  SafeDbl(rsUMLO.Fields(1))), 0);
-                       }
-
-                        arData[i,11] =  cStr(SafeDbl(arData[i,5]) + SafeDbl(arData[i,10]));
-
-                        bUMLO = rsUMLO.Read();
-
-
-         }
-
-
-         // Shuttling;
-
-         // Total Hours && Total Units;
- 
-         for(int i = 0 ; i < (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear)))));i++){
-
-                        if (bShuttlingUnits ){
-                                if((cInt(Day(cDate(rsShuttlingUnits.Fields(1))))-1) == i){
-                                        arData[i, 13] = FNumSP(rsShuttlingUnits.Fields(0), 0);
-                                        bShuttlingUnits = rsShuttlingUnits.Read();
-
-                               }
-                       }
-
-                        if (bShuttlingHours ){
-                                if((cInt(Day(cDate(rsShuttlingHours.Fields(1))))-1) == i){
-                                        arData[i, 12] = FNumSP(rsShuttlingHours.Fields(0), 2);
-                                        arData[i, 14] = FNumSP(cStr(SafeDbl(arData[i, 13])  /  SafeDbl(arData[i, 12])), 2);
-                                        bShuttlingHours = rsShuttlingHours.Read();
-
-                               }
-                       }
-
-         }
-
-
-          // Soptting;
-          for( int i = 0 ; i <  (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear))))); i++){
-
-                        if (bSpottingTime ){
-                                if((cInt(Day(cDate(rsSpottingTime.Fields(1))))-1) == i){
-                                        arData[i, 15] = rsSpottingTime.Fields(0);
-                                        bSpottingTime = rsSpottingTime.Read();
-
-                               }
-                       }
-
-                        if (bSpottingRCIn ){
-                                if((cInt(Day(cDate(rsSpottingRCIn.Fields(1))))-1) == i){
-                                        arData[i, 16] = rsSpottingRCIn.Fields(0);
-                                        bSpottingRCIn = rsSpottingRCIn.Read();
-
-                               }
-                       }
-
-                        if (bSpottingRCOut ){
-                                if((cInt(Day(cDate(rsSpottingRCOut.Fields(1))))-1) == i){
-                                        arData[i, 17] = rsSpottingRCOut.Fields(0);
-                                        bSpottingRCOut = rsSpottingRCOut.Read();
-
-                               }
-                       }
-
-                        if (bSpottingDOWN_TIME ){
-                                if((cInt(Day(cDate(rsSpottingDOWN_TIME.Fields(1))))-1) == i){
-                                        arData[i, 18] = rsSpottingDOWN_TIME.Fields(0);
-                                        bSpottingDOWN_TIME = rsSpottingDOWN_TIME.Read();
-
-                               }
-                       }
-
-                        if (bSpottingHOURS ){
-                                if((cInt(Day(cDate(rsSpottingHOURS.Fields(1))))-1) == i){
-                                        arData[i, 19] = rsSpottingHOURS.Fields(0);
-                                        if (SafeDbl(arData[i, 19]) != 0){
-                                                arData[i, 20] = cStr((SafeDbl(arData[i, 16]) + SafeDbl(arData[i, 17])) / SafeDbl(arData[i, 19]));
-                                       }
-                                       bSpottingHOURS = rsSpottingHOURS.Read();
-
-                               }
-                       }
-
-          }
-
-         // Training  Total Hours;
-
-
-         for(int i = 0 ; i< (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear))))); i++){
-
-                if(bTrainingHours){
-                        if((cInt(Day(cDate(rsTrainingHours.Fields(1))))-1) == i){
-                                ar2Data[i,  1] = FNumSP(rsTrainingHours.Fields(0), 2);
-                                bTrainingHours = rsTrainingHours.Read();
-
-                       }
-               }
-
-                if(bClericalHours){
-                        if((cInt(Day(cDate(rsClericalHours.Fields(1))))-1) == i){
-                                ar2Data[i,  2] = FNumSP(rsClericalHours.Fields(0), 2);
-                                bClericalHours = rsClericalHours.Read();
-
-                       }
-               }
-
-                if( bRBHours){
-                        if((cInt(Day(cDate(rsRBHours.Fields(1))))-1) == i){
-                                ar2Data[i,  3] = FNumSP(rsRBHours.Fields(0), 2);
-                                bRBHours = rsRBHours.Read();
-
-                       }
-               }
-
-                if( bUAHours){
-                        if((cInt(Day(cDate(rsUAHours.Fields(1))))-1) == i){
-                                ar2Data[i,  4] = FNumSP(rsUAHours.Fields(0), 2);
-                                bUAHours = rsUAHours.Read();
-
-                       }
-               }
-
-         }
-
-
-        // KPI here;
-
-
-         for( int i = 0 ; i < (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear))))); i++){
-
-                if( bKPI) {
-                        if((cInt(Day(cDate(rsKPI.Fields(4))))-1) == i){
-                           ar2Data[i, 5] = FNumSP(rsKPI.Fields(0),0);
-                           ar2Data[i, 6] = FNumSP(rsKPI.Fields(1),2);
-                           ar2Data[i, 7] = FNumSP(rsKPI.Fields(2),2);
-                           ar2Data[i, 8] = FNumSP(rsKPI.Fields(3),2);
-
-                           bKPI = rsKPI.Read();
-                        }
-               }
-
-         }
-
-
-
-         for( int i = 0 ; i < (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear))))); i++){
-
-                 if (bSelfAudit ){
-                        if((cInt(Day(cDate(rsSelfAudit.Fields(2))))-1) == i){
-                           ar2Data[i, 9] = FPerc(SafeDbl(rsSelfAudit.Fields(0)));
-                           ar2Data[i, 10] = FPerc(SafeDbl(rsSelfAudit.Fields(1)));
-                           bSelfAudit = rsSelfAudit.Read();
-
-                       }
-                }
-
-         }
-
-
-
-         // Budget / Cost Per Unit;
-         int x = 0;
-         while (rsBudgetCPU.Read()){
-             
-                   ar2Data[x, 11] = FNumSP(rsBudgetCPU.Fields(0),0);
-                   ar2Data[x, 12] = FNumSP(rsBudgetCPU.Fields(1),2);
-                   ar2Data[x, 13] = FNumSP(rsBudgetCPU.Fields(2),2);
-
-                   ar2Data[x, 14] = FNumSP(cStr(SafeDbl(rsBudgetCPU.Fields(1)) + SafeDbl(rsBudgetCPU.Fields(2))),2);
-                   if (SafeDbl(rsBudgetCPU.Fields(0)) != 0) {
-                          ar2Data[x, 15] = FNumSP(cStr(SafeDbl(ar2Data[x, 14]) / SafeDbl(ar2Data[x, 11])),2);
-                  }
-
-                   x = x + 1;
-
-         } //End Loop
-
-
-         // Air Test Total Hours && Total Units;
-
-         for( int i = 0 ; i < (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear)))));i++){
-
-                 if (bATUnits ){
-                        if((cInt(Day(cDate(rsATUnits.Fields(1))))-1) == i){
-                           ar2Data[i, 16] = FNumSP(rsATUnits.Fields(0),0);
-                           bATUnits = rsATUnits.Read();
-
-                       }
-                }
-
-                 if (bATHours ){
-                        if((cInt(Day(cDate(rsATHours.Fields(1))))-1) == i){
-                                ar2Data[i, 17] = FNumSP(rsATHours.Fields(0),2);
-                                        if( SafeDbl(ar2Data[i, 17]) != 0){
-                                                ar2Data[i, 18] = FNumSP(cStr(SafeDbl(ar2Data[i, 16]) / SafeDbl(ar2Data[i, 17])),2);
-                                        }
-                                        bATHours = rsATHours.Read();
-
-                       }
-                }
-
-         }
-
-
-
-         // Prepping Total Hours && Total Units;
-         for(int i = 0; i < (cInt(Day(LastDayOfMonth(cDate(selMonth + "/1/" + selYear))))); i ++){
-
-                  if (bPrepUnits ){
-                                if((cInt(Day(cDate(rsPrepUnits.Fields(1))))-1) == i){
-                                   ar2Data[i, 19] = rsPrepUnits.Fields(0);
-                                   bPrepUnits = rsPrepUnits.Read();
-
-                               }
-                 }
-
-                  if (bPrepHours ){
-                                if((cInt(Day(cDate(rsPrepHours.Fields(1))))-1) == i){
-                                        ar2Data[i, 20] = rsPrepHours.Fields(0);
-                                                if(SafeDbl(ar2Data[i, 20]) != 0){
-                                                        ar2Data[i, 21] = cStr(SafeDbl(ar2Data[i, 19]) / SafeDbl(ar2Data[i, 20]));
-                                               }
-                                                bPrepHours = rsPrepHours.Read();
-
-                               }
-                 }
-
-         }
-
+            catch (Exception ex)
+            {
+                Response.Write(ex.ToString());
+            }
         }
 
 
@@ -709,18 +765,30 @@ namespace InterrailPPRS.Reports
         
         public string FNumSP(string num, int dec){
 
-            string FNumSP = "";
+            string FNumSP = string.Empty;
+            decimal reportValue;
 
-            if(! (num == null) ){
-                if (isNumeric(cStr(num))){
-                  if  (cDbl(num) != 0){
-                     FNumSP = FormatNumber(cStr(num), dec);
-                 }
-               }
-           }
+            if (Decimal.TryParse(num, out reportValue))
+            {
+                FNumSP = Math.Round(reportValue, dec).ToString();
+            }
+            else
+            {
+                FNumSP = num;
+            }
+
+            //if(num != null) 
+            //{
+            //    if (isNumeric(cStr(num)))
+            //    {
+            //      if  (cDbl(num) != 0)
+            //      {
+            //          FNumSP = FormatNumber(cStr(num), dec);
+            //      }
+            //   }
+            //}
 
             return FNumSP;
-
         }
 
         public string FCurSP(string num){
@@ -804,43 +872,79 @@ namespace InterrailPPRS.Reports
            Response.Write(PageOneData);
         }
 
-        public void  CreatePageOneData(){
+        public void CreatePageOneData()
+        {
+            try
+            {
+                string rc;
 
-          string rc;
+                for (int i = 0; i < 31; i++)
+                {
+                    if (i % 2 == 0)
+                    {
+                        rc = "#DEDFFF";
+                    }
+                    else
+                    {
+                        rc = "#FFFFFF";
+                    }
+                    #region old code
+                    PageOneData = PageOneData + "<tr height=17 style='height:11.00pt' bgcolor='" + rc + "'>";
+                    PageOneData = PageOneData + "<td height=17 class=xl71 style='height:11.00pt' align='right'>" + arData[i, 0] + "</td>";
+                    PageOneData = PageOneData + "<td class=xl65 style='border-top:none' align='right'>" + FNumSP(arData[i, 1], 2) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl67 style='border-top:none' align='right'>" + FNumSP(arData[i, 2], 0) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl67 style='border-top:none' align='right'>" + FNumSP(arData[i, 3], 0) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl72 style='border-top:none' align='right'>" + FNumSP(arData[i, 4], 2) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl81 style='border-top:none' align='right'>" + FNumSP(arData[i, 5], 0) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl103 align='right'>" + FNumSP(arData[i, 6], 2) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl67 style='border-top:none' align='right'>" + FNumSP(arData[i, 7], 0) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl67 style='border-top:none' align='right'>" + FNumSP(arData[i, 8], 0) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl73 align='right'>" + FNumSP(arData[i, 9], 0) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl81 style='border-top:none;border-left:none' align='right'>" + FNumSP(arData[i, 10], 0) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl83 style='border-top:none' align='right'>" + FNumSP(arData[i, 11], 0) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl87 style='border-left:none' align='right'>" + FNumSP(arData[i, 12], 2) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl86 align='right'>" + FNumSP(arData[i, 13], 0) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl73 align='right'>" + FNumSP(arData[i, 14], 2) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl39 style='border-top:none' align='right'>" + arData[i, 15] + "</td>";
+                    PageOneData = PageOneData + "<td class=xl32 style='border-top:none' align='right'>" + FNumSP(arData[i, 16], 0) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl32 style='border-top:none' align='right'>" + FNumSP(arData[i, 17], 0) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl32 style='border-top:none' align='right'>" + FNumSP(arData[i, 18], 2) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl32 style='border-top:none' align='right'>" + FNumSP(arData[i, 19], 2) + "</td>";
+                    PageOneData = PageOneData + "<td class=xl47 style='border-top:none' align='right'>" + FNumSP(arData[i, 20], 2) + "</td>";
+                    PageOneData = PageOneData + "</tr>";
+                    #endregion
 
-          for( int i = 0 ; i < 31;i++){
+                    //PageOneData = PageOneData + "<tr height=17 style='height:11.00pt' bgcolor='" + rc + "'>";
+                    //PageOneData = PageOneData + "<td height=17 class=xl71 style='height:11.00pt' align='right'>" + arData[i, 0] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl65 style='border-top:none' align='right'>" + arData[i, 1] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl67 style='border-top:none' align='right'>" + arData[i, 2] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl67 style='border-top:none' align='right'>" + arData[i, 3] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl72 style='border-top:none' align='right'>" + arData[i, 4] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl81 style='border-top:none' align='right'>" + arData[i, 5] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl103 align='right'>" + arData[i, 6] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl67 style='border-top:none' align='right'>" + arData[i, 7] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl67 style='border-top:none' align='right'>" + arData[i, 8] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl73 align='right'>" + arData[i, 9] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl81 style='border-top:none;border-left:none' align='right'>" + arData[i, 10] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl83 style='border-top:none' align='right'>" + arData[i, 11] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl87 style='border-left:none' align='right'>" + arData[i, 12] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl86 align='right'>" + arData[i, 13] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl73 align='right'>" + arData[i, 14] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl39 style='border-top:none' align='right'>" + arData[i, 15] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl32 style='border-top:none' align='right'>" + arData[i, 16] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl32 style='border-top:none' align='right'>" + arData[i, 17] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl32 style='border-top:none' align='right'>" + arData[i, 18] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl32 style='border-top:none' align='right'>" + arData[i, 19] + "</td>";
+                    //PageOneData = PageOneData + "<td class=xl47 style='border-top:none' align='right'>" + arData[i, 20] + "</td>";
+                    //PageOneData = PageOneData + "</tr>";
 
-              if(i % 2 == 0){
-                rc = "#DEDFFF";
-              }else{
-                rc = "#FFFFFF";
-             }
-                  PageOneData =    PageOneData + "<tr height=17 style='height:11.00pt' bgcolor='" + rc + "'>";
-                  PageOneData =    PageOneData + "<td height=17 class=xl71 style='height:11.00pt' align='right'>" + arData[i,0] + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl65 style='border-top:none' align='right'>" + FNumSP(arData[i,1], 2) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl67 style='border-top:none' align='right'>" + FNumSP(arData[i,2], 0) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl67 style='border-top:none' align='right'>" + FNumSP(arData[i,3], 0) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl72 style='border-top:none' align='right'>" + FNumSP(arData[i,4], 2) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl81 style='border-top:none' align='right'>" + FNumSP(arData[i,5], 0) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl103 align='right'>" + FNumSP(arData[i,6], 2) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl67 style='border-top:none' align='right'>" + FNumSP(arData[i,7], 0) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl67 style='border-top:none' align='right'>" + FNumSP(arData[i,8], 0) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl73 align='right'>" + FNumSP(arData[i,9], 0) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl81 style='border-top:none;border-left:none' align='right'>" + FNumSP(arData[i,10], 0) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl83 style='border-top:none' align='right'>" + FNumSP(arData[i,11], 0) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl87 style='border-left:none' align='right'>" + FNumSP(arData[i,12], 2) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl86 align='right'>" + FNumSP(arData[i,13], 0) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl73 align='right'>" + FNumSP(arData[i,14], 2) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl39 style='border-top:none' align='right'>" + arData[i,15] + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl32 style='border-top:none' align='right'>" + FNumSP(arData[i,16], 0) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl32 style='border-top:none' align='right'>" + FNumSP(arData[i,17], 0) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl32 style='border-top:none' align='right'>" + FNumSP(arData[i,18], 2) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl32 style='border-top:none' align='right'>" + FNumSP(arData[i,19], 2) + "</td>";
-                  PageOneData =    PageOneData + "<td class=xl47 style='border-top:none' align='right'>" + FNumSP(arData[i,20], 2) + "</td>";
-                  PageOneData =    PageOneData + "</tr>";
-          } //Next
-        } //End Function
-
+                } //Next
+            } //End Function
+            catch (Exception ex)
+            {
+                Console.Write(ex.ToString());
+            }
+        }
 
         public void  WritePageOneTotals(){
 

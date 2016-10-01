@@ -19,6 +19,7 @@ using Interrial.PPRS.Dal;
 
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.DQE.SqlServer;
+using InterrailPPRS.App_Code;
 
 namespace InterrailPPRS.Reports
 {
@@ -29,7 +30,9 @@ namespace InterrailPPRS.Reports
         public DataReader rsTotalValue;
         public string rc;
         public string PageOneLines = "";
-        public string selDateWeeklySummary;
+        public DateTime selDateWeeklySummary;
+        public double TotalPay { get; set; }
+        public int TotalUnits { get; set; }
 
         protected override void Page_Load(object sender, EventArgs e)
         {
@@ -38,21 +41,53 @@ namespace InterrailPPRS.Reports
 
             GrantAccess("Super, Admin, User");
 
-            selDateWeeklySummary = Request["selDate"];
+            selDateWeeklySummary = Convert.ToDateTime(Request["selDate"]);
+            //var workDate = selDateWeeklySummary.ToShortDateString();
 
-            // Get Total Pay for ALL Tasks;
+            //// Get Total Pay for ALL Tasks;
   
-            rsPay = new DataReader("EXECUTE WeeklyCPUSummary '" + selDateWeeklySummary + " '");
-            rsPay.Open();
+            //rsPay = new DataReader("EXECUTE WeeklyCPUSummary '" + selDateWeeklySummary + " '");
+            //rsPay.Open();
 
-            //-------- PAY WILL BE FOR "ALL".... UNITS FOR "SP"-----------------;
-            //**************** 6/14/2007 changed to statement below ************;
-            rsTotalValue = new DataReader("EXECUTE WeeklyCPUSummaryTotal '" + selDateWeeklySummary + " '");
-            rsTotalValue.Open();
+            ////-------- PAY WILL BE FOR "ALL".... UNITS FOR "SP"-----------------;
+            ////**************** 6/14/2007 changed to statement below ************;
+            //rsTotalValue = new DataReader("EXECUTE WeeklyCPUSummaryTotal '" + selDateWeeklySummary + " '");
+            //rsTotalValue.Open();
 
-            CreatePageOneLines();
+            //CreatePageOneLines();
 
+            ReportsRepository repository = new ReportsRepository();
+            var weeklyCpuSummaryList = repository.GetWeeklyCpuSummaryByDate(selDateWeeklySummary);
+
+            foreach (var weeklySummary in weeklyCpuSummaryList)
+            {
+                TotalPay = TotalPay + Convert.ToDouble(weeklySummary.TotalPay);
+                TotalUnits = TotalUnits + weeklySummary.TotalUnits;
+            }
+
+            //lblTotalPay.Text = TotalPay.ToString("C");
+            //lblTotalUnits.Text = TotalUnits.ToString();
+
+            grdWeeklyCpuSummary.DataSource = weeklyCpuSummaryList;
+            grdWeeklyCpuSummary.DataBind();
        }
+
+        protected void grdWeeklyCpuSummary_OnRowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            DataRowView drv = e.Row.DataItem as DataRowView;
+            if (e.Row.RowType == DataControlRowType.Footer)
+            {
+                Label lblTotalPayValue = (Label)e.Row.FindControl("lblTotalPayValue");
+                lblTotalPayValue.Text = TotalPay.ToString("C");
+
+                Label lblTotalUnitsValue = (Label)e.Row.FindControl("lblTotalUnitsValue");
+                lblTotalUnitsValue.Text = TotalUnits.ToString();
+
+                Label lblCostPerUnitValue = (Label)e.Row.FindControl("lblCostPerUnitValue");
+                var totalUnitsValue = TotalPay / Convert.ToDouble(TotalUnits);
+                lblCostPerUnitValue.Text = totalUnitsValue.ToString("C");
+            }
+        }
 
         public string FCurSP(string num)
         {
@@ -166,7 +201,5 @@ namespace InterrailPPRS.Reports
   
   
         }
-
-
     }
 }

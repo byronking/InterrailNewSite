@@ -22,10 +22,8 @@ using SD.LLBLGen.Pro.DQE.SqlServer;
 
 namespace InterrailPPRS.Reports
 {
-
     public partial class FacilityAnnualEntry : PageBase
     {
-
         public string sField, sValue, i;
         public string[] facilityId = new string[100];
         public string[] facilityName = new string[100];
@@ -44,17 +42,12 @@ namespace InterrailPPRS.Reports
 
         protected override void Page_Load(object sender, EventArgs e)
         {
-
             base.Page_Load(sender, e);
-
-             GrantAccess("Super, Admin, User");
-
-   
-               sMode = Request["MODE"];
-               selYear = Request["selYear4"];
-               sFac = System.Convert.ToString(Session["FacilityID"]);
-               Session["Year"] = selYear;
-
+            GrantAccess("Super, Admin, User");   
+            sMode = Request["MODE"];
+            selYear = Request["selYear"];
+            sFac = System.Convert.ToString(Session["FacilityID"]);
+            Session["Year"] = selYear;
 
             if(sMode == "SAVE"){
 
@@ -128,49 +121,44 @@ namespace InterrailPPRS.Reports
 
               }
 
-
               this.Execute(strSQL);
-
               Response.Redirect("FacilityMonitor.aspx");
-
             }
-
-}
+        }   
         
-        public DataReader getData(string sDataSection){
+        public DataReader getData(string sDataSection)
+        {
+            DataReader rsData;
+            string strSQL = "";
 
-           DataReader rsData;
-           string strSQL = "";
-
-          if( sDataSection == "MONTHLYPERC" ){
-	          strSQL =        "SELECT * ";
-	          strSQL +=  " FROM MonthlyBudgetPerc ";
-	          strSQL +=  "WHERE ReportingYear = '" + selYear + "' ";
-
-          }else{
-              if( sDataSection == "FACILITYBUDGET" ){
+            if( sDataSection == "MONTHLYPERC" )
+            {
+                strSQL =    "SELECT * ";
+	            strSQL +=   "FROM MonthlyBudgetPerc ";
+	            strSQL +=   "WHERE ReportingYear = '" + selYear + "' ";
+            }
+            else
+            {
+                if( sDataSection == "FACILITYBUDGET" )
+                {
 
   		        strSQL = " Select Name As FacilityName, Id AS facilityId FROM Facility Order by Name";
-              }
-         }
+                }
+            }
+            
+            rsData = new DataReader(strSQL);
+            rsData.Open();
+            return rsData;
+        }
 
-          rsData = new DataReader(strSQL);
+        public string FormatTheDate(DateTime inDate)
+        {
+            string smDate, sdDate, syDate;
+            smDate = Right(cStr( inDate.Month + 100), 2);
+            sdDate = Right(cStr(inDate.Day + 100), 2);
+            syDate = cStr(inDate.Year);
 
-           rsData.Open();
-
-          return rsData;
-
-}
-
-        public string FormatTheDate(DateTime inDate){
-
-              string smDate, sdDate, syDate;
-
-              smDate = Right(cStr( inDate.Month + 100), 2);
-              sdDate = Right(cStr(inDate.Day + 100), 2);
-              syDate = cStr(inDate.Year);
-              return  smDate + "/" + sdDate + "/" + syDate;
-
+            return  smDate + "/" + sdDate + "/" + syDate;
         }
 
         public void ShowMonthlyPercentage(){
@@ -180,8 +168,7 @@ namespace InterrailPPRS.Reports
 
           Response.Write("<tr><td width='100%' colspan='4'>&nbsp;</td></tr>");
           Response.Write("<tr><td colspan='4' class='pageTitle' align='Left'><div class='cellBottomBorder'>Monthly Percentages</div>&nbsp;&nbsp;&nbsp;<font size=1>(Combined total of all months should !exceed 100%)</font></td></tr>");
-          Response.Write("<tr><td width='100%' colspan='4'>&nbsp;</td></tr>");
-  
+          Response.Write("<tr><td width='100%' colspan='4'>&nbsp;</td></tr>");  
 
           if (!rs.EOF){
             while (!rs.EOF){
@@ -307,7 +294,5 @@ namespace InterrailPPRS.Reports
               Response.Write("<tr><td  height='7'></td></tr>");
 
          }
-
-
     }
 }

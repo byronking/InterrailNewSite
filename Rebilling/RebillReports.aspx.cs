@@ -61,7 +61,7 @@ namespace InterrailPPRS.Rebilling
 
 
 
-                string strSQL = " SELECT Distinct dbo.RebillSubTasks.Id, dbo.RebillSubTasks.Description, dboFacility.Name, dbo.Tasks.TaskCode  ";
+                string strSQL = " SELECT Distinct dbo.RebillSubTasks.Id, dbo.RebillSubTasks.Description, dbo.Facility.Name, dbo.Tasks.TaskCode  ";
                 strSQL +=  "FROM dbo.RebillSubTasks ";
                 strSQL +=  "INNER JOIN  dbo.FacilityCustomer ON dbo.FacilityCustomer.Id = dbo.RebillSubTasks.FacilityCustomerId ";
                 strSQL +=  "Inner Join  dbo.Facility on dbo.Facility.Id = dbo.FacilityCustomer.FacilityId  ";

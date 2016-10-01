@@ -43,13 +43,17 @@ namespace InterrailPPRS.Payroll
 
             GrantAccess("Super, Admin, User");
            
-            if (InStr(0,Request["PayPeriod"] , ",",1) > 0 ){
+            if (InStr(0,Request["PayPeriod"] , ",",1) > 0 )
+            {
                arStartEnd = Split(Request["PayPeriod"] , ",", 2);
-            }else{
-               defpayperiodend = 5;  //Thursday
-               deflastend = System.DateTime.Now.AddDays(  - (WeekDay(System.DateTime.Now) + (7 - defpayperiodend) % 7));
-               deflaststart = deflastend.AddDays(-(6));
-               arStartEnd = Split(deflaststart + "," + deflastend , ",", 2);
+            }
+            else
+            {
+                defpayperiodend = 5;  //Thursday                
+                deflastend = System.DateTime.Now.AddDays(  - (WeekDay(System.DateTime.Now) + (7 - defpayperiodend) % 7));
+                deflastend = Convert.ToDateTime(deflastend.ToShortDateString()); // Set the time to midnight
+                deflaststart = deflastend.AddDays(-(6));
+                arStartEnd = Split(deflaststart + "," + deflastend , ",", 2);
             }
 
             if (isArray(arStartEnd) ){

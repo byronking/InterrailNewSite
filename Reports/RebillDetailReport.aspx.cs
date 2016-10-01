@@ -279,7 +279,7 @@ namespace InterrailPPRS.Reports
               Response.Write("<tr class='reportTotalLine'>");
               Response.Write("    <td align='right'  class='cellTopBottomBorder' width='7%'>&nbsp;</td>");
               Response.Write("    <td align='Left'  colspan='2'  class='cellTopBottomBorder' width='33%'>Total for " + lastTaskDescriptionPR  + "</td>");
-              Response.Write("    <td align='right'  class='cellTopBottomBorder' width='8%'>" + cStr(FormatNumber(subtotalHoursPR, 2, 0)) + "&nbsp;</td>");
+              Response.Write("    <td align='right'  class='cellTopBottomBorder' width='8%'>" + cStr(cDbl(subtotalHoursPR)) + "&nbsp;</td>");
               Response.Write("    <td align='right'  class='cellTopBottomBorder' width='4%'>&nbsp;&nbsp;</td>");
               Response.Write("    <td align='right'  class='cellTopBottomBorder' width='10%'>" + cStr(FormatNumber(subtotalAmountPR, 2, 0)) + "&nbsp;</td>");
               Response.Write("    <td align='right'  class='cellTopBottomBorder' colspan='1' >" + cStr(FormatNumber(subtotalMCPR, 2, 0)) + "&nbsp;</td>");
@@ -448,7 +448,7 @@ namespace InterrailPPRS.Reports
               Response.Write("<tr class='reportTotalLine'>");
               Response.Write("    <td align='right'  class='cellTopBottomBorder' width='7%'>&nbsp;</td>");
               Response.Write("    <td align='Left'   class='cellTopBottomBorder' width='33%'>Total for " + lastTaskDescription  + "</td>");
-              Response.Write("    <td align='right'  class='cellTopBottomBorder' width='8%'>" + cStr(FormatNumber(subtotalHours, 2, 0)) + "&nbsp;&nbsp;&nbsp;</td>");
+              Response.Write("    <td align='right'  class='cellTopBottomBorder' width='8%'>" + cStr(cDbl(subtotalHours)) + "&nbsp;&nbsp;&nbsp;</td>");
               Response.Write("    <td align='right'  class='cellTopBottomBorder' width='4%'>&nbsp;&nbsp;</td>");
               Response.Write("    <td align='right'  class='cellTopBottomBorder' width='10%'>" + cStr(FormatNumber(subtotalAmount, 2, 0)) + "&nbsp;&nbsp;</td>");
               Response.Write("    <td align='right'  class='cellTopBottomBorder' width='8%'>&nbsp;&nbsp;</td>");
@@ -518,7 +518,7 @@ namespace InterrailPPRS.Reports
 
               if(sFacility != rs.Item("FacilityID")){
                 if((System.Convert.ToString(Request["PrintPreview"]) == "0") ){
-                  Response.Write("  <tr><td colspan='8' align='center'><b>" + sPageBreak + sTitle + "</b></td></tr>");
+                  //Response.Write("  <tr><td colspan='8' align='center'><b>" + sPageBreak + sTitle + "</b></td></tr>");
                }
 
                 Response.Write("<tr><td align='left'   colspan=8><br><b><font color='green' size=-1>" + rs.Item("Name") + " - Labor Costs</td></tr>");
@@ -538,7 +538,8 @@ namespace InterrailPPRS.Reports
               Response.Write("    <td align='right'  width='7%'>" + FormatDate(rs.Item("WorkDate")) + "&nbsp;</td>");
               Response.Write("    <td align='Left'   width='33%'>" + rs.Item("Description")  + " (" + rs.Item("TaskCode") + ")</td>");
               if(rs.Item("HoursOrUnits") == "H"){
-                 Response.Write("    <td align='right'  width='8%'>" + cStr(FormatNumber(rs.Item("TotalHours"), 2, 0)) + "&nbsp;&nbsp;&nbsp;</td>");
+                 //Response.Write("    <td align='right'  width='8%'>" + cStr(FormatNumber(rs.Item("TotalHours"), 2, 0)) + "&nbsp;&nbsp;&nbsp;</td>");
+                  Response.Write("    <td align='right'  width='8%'>" + cStr(cDbl(rs.Item("TotalHours"))) + "&nbsp;&nbsp;&nbsp;</td>");
                  sAmount = cStr(cDbl(rs.Item("Rate")) * cDbl(rs.Item("TotalHours")));
                  subtotalHours = subtotalHours + cDbl(rs.Item("TotalHours"));
               }else{
@@ -600,7 +601,7 @@ namespace InterrailPPRS.Reports
                     Response.Write("<tr class='" + rowColor + "'>");
                     Response.Write("    <td align='right'  valign='top' width='7%' ><b>&nbsp;</b></td>");
                     Response.Write("    <td align='Left'   colspan='2'>" + rsEmp.Item("LastName") + ", " + rsEmp.Item("FirstName") + "</td>");
-                    Response.Write("    <td align='right'   colspan='2'>&nbsp;" + cStr(FormatNumber(rsEmp.Item("HoursWorked"), 2, 0)) + "</td>");
+                    Response.Write("    <td align='right'   colspan='2'>&nbsp;" + cStr(cDbl(rsEmp.Item("HoursWorked"))) + "</td>");
                     Response.Write("    <td align='left'   colspan='4' width='30%'>&nbsp;</td>");
                     Response.Write("</tr>");
 

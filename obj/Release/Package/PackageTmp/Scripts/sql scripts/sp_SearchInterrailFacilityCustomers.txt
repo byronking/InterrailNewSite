@@ -1,0 +1,32 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[SearchInterrailFacilityCustomers]    Script Date: 12/14/2013 14:46:07 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+ALTER PROCEDURE [dbo].[SearchInterrailFacilityCustomers]
+
+@searchCriteria varchar(50),
+@facilityId int
+
+as 
+
+begin
+	
+	select distinct a.* from 
+	(select Id, FacilityId, CustomerCode, CustomerName, ContactName, ContactAddress1, ContactAddress2, ContactAddress3, DefaultCustomer, LastModifiedBy, 
+	LastModifiedOn, Active from FacilityCustomer
+	where CustomerCode like '%'+@searchCriteria+'%' or CustomerName like '%'+@searchCriteria+'%' or ContactName like '%'+@searchCriteria+'%'
+	or ContactAddress1 like '%'+@searchCriteria+'%' or ContactAddress2 like '%'+@searchCriteria+'%' or ContactAddress3 like '%'+@searchCriteria+'%') a
+	inner join
+	(select Id, FacilityId, CustomerCode, CustomerName, ContactName, ContactAddress1, ContactAddress2, ContactAddress3, DefaultCustomer, LastModifiedBy, 
+	LastModifiedOn, Active from FacilityCustomer
+	where CustomerCode like '%'+@searchCriteria+'%' or CustomerName like '%'+@searchCriteria+'%' or ContactName like '%'+@searchCriteria+'%'
+	or ContactAddress1 like '%'+@searchCriteria+'%' or ContactAddress2 like '%'+@searchCriteria+'%' or ContactAddress3 like '%'+@searchCriteria+'%') b
+	on a.FacilityId=b.FacilityId
+	where  a.FacilityId = @facilityId
+	
+end
+

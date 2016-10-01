@@ -1,22 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
-
-using System.Data;
-using System.Data.Sql;
-using System.Data.SqlClient;
-using System.Configuration;
-
-using Interrial.PPRS.Dal.TypedListClasses;
-using Interrial.PPRS.Dal.EntityClasses;
-using Interrial.PPRS.Dal.FactoryClasses;
-using Interrial.PPRS.Dal.CollectionClasses;
-using Interrial.PPRS.Dal.HelperClasses;
-using Interrial.PPRS.Dal;
-
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using SD.LLBLGen.Pro.DQE.SqlServer;
 
 namespace InterrailPPRS.Rebilling
 {
@@ -94,16 +81,17 @@ namespace InterrailPPRS.Rebilling
             DataSet ds = new DataSet();
             da.Fill(ds, "Data");
 
-            this._Rows =  ds.Tables[0].Rows.Count;
-            this._pos = 0;
-            if (this._Rows > 0) { this._eof = false; } else { this._eof = true; }
+            if (ds.Tables.Count > 0)
+            {
+                this._Rows = ds.Tables[0].Rows.Count;
+                this._pos = 0;
+                if (this._Rows > 0) { this._eof = false; } else { this._eof = true; }
 
-            sc.Close();
+                sc.Close();
 
-            this._dr = ds.Tables[0].CreateDataReader();
+                this._dr = ds.Tables[0].CreateDataReader();
+            }
             return _dr;
         }
     }
-  
-
 }

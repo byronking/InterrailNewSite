@@ -38,7 +38,6 @@ namespace InterrailPPRS.Reports
 
         protected override void Page_Load(object sender, EventArgs e)
         {
-
             base.Page_Load(sender, e);
 
             GrantAccess("Super, Admin, User");
@@ -49,64 +48,79 @@ namespace InterrailPPRS.Reports
             sFac     		= Request["FID"];
             facilityname = Request["FNAME"];
 
+            if(sMode == "SAVE")
+            {
+                if (Session["Year"] != null)
+                {
+                    selYear = Session["Year"].ToString();
+                }
 
-            if(sMode == "SAVE"){
+                DataReader rsSave;
+                string strSQL, strLoad, strUnload, strBudgetedCPU, strMiscellaneousCPU;
 
-              DataReader rsSave;
-              string strSQL, strLoad, strUnload, strBudgetedCPU, strMiscellaneousCPU;
-
-              strSQL =   " DELETE FROM FacilityAnnualBudgetTask ";
-              strSQL +=  " WHERE ReportingYear = '" + Request["selYear"] + "' ";
-              strSQL +=  "   And FacilityID = " + sFac + "; ";
+                strSQL =   " DELETE FROM FacilityAnnualBudgetTask ";
+                strSQL +=  " WHERE ReportingYear = '" + Request["selYear"] + "' ";
+                strSQL +=  "   And FacilityID = " + sFac + "; ";
   
-              strSQL +=  " DELETE FROM FacilityAnnualBudget ";
-              strSQL +=  " WHERE ReportingYear = '" + Request["selYear"] + "' ";
-              strSQL +=  "   And FacilityID = " + sFac + "; ";
+                strSQL +=  " DELETE FROM FacilityAnnualBudget ";
+                strSQL +=  " WHERE ReportingYear = '" + Request["selYear"] + "' ";
+                strSQL +=  "   And FacilityID = " + sFac + "; ";
 
+                strLoad = Request["LoadTotal"] + "";
+                string strUnLoad = Request["UnloadTotal"] + "";
+                string strSpotting = Request["SpottingTotal"] + "";
 
-              strLoad = Request["LoadTotal"] + "";
-              string strUnLoad = Request["UnloadTotal"] + "";
-              string strSpotting = Request["SpottingTotal"] + "";
+                if (strLoad == ""){strLoad = "NULL";}
+                if (strUnLoad == ""){strUnLoad = "NULL";}
+                if (strSpotting == ""){strSpotting = "NULL";}
 
-              if (strLoad == ""){strLoad = "NULL";}
-              if (strUnLoad == ""){strUnLoad = "NULL";}
-              if (strSpotting == ""){strSpotting = "NULL";}
+                strSQL +=  "";
+                strSQL +=  " INSERT INTO FacilityAnnualBudget ";
+                strSQL +=  "   (FacilityId, LoadTotal, UnloadTotal, ReportingYear, SpottingTotal ) ";
+                strSQL +=  " VALUES (";
+                strSQL +=  " " + sFac + ", " + strLoad + ", " + strUnLoad + ", '" + selYear + "', " + strSpotting + " ";
+                strSQL +=  ");  ";
 
-              strSQL +=  "";
-              strSQL +=  " INSERT INTO FacilityAnnualBudget ";
-              strSQL +=  "   (FacilityId, LoadTotal, UnloadTotal, ReportingYear, SpottingTotal ) ";
-              strSQL +=  " VALUES (";
-              strSQL +=  " " + sFac + ", " + strLoad + ", " + strUnLoad + ", '" + selYear + "', " + strSpotting + " ";
-              strSQL +=  ");  ";
-
-
-
-
-              int intNumOfTasks = cInt(Request["NumOfTasks"]);
+                int intNumOfTasks = cInt(Request["NumOfTasks"]);
   
-              for( int x = 1; x < intNumOfTasks; x++){
+                for( int x = 1; x < intNumOfTasks; x++)
+                {
   
-                 string strCPU = Request["BudgetedCPU_" + cStr(x)] + "";
-                 if (! isNumeric(strCPU)){
+                    string strCPU = Request["BudgetedCPU_" + cStr(x)] + "";
+                    if (! isNumeric(strCPU)){
                     strCPU = "NULL";
-                 }
-                 strSQL +=  "";
-                 strSQL +=  "INSERT INTO FacilityAnnualBudgetTask ";
-                 strSQL +=  "   (FacilityId, ReportingYear, TaskID, BudgetedCPU ) ";
-                 strSQL +=  "VALUES (";
-                 strSQL +=  " " + sFac + ", '" + selYear + "', " + Request["TaskID_"] + cStr(x) + ", "  + strCPU +  " ";
-                 strSQL +=  ")  ";
-              }
+                    }
+                    strSQL +=  "";
+                    strSQL +=  "INSERT INTO FacilityAnnualBudgetTask ";
+                    strSQL +=  "   (FacilityId, ReportingYear, TaskID, BudgetedCPU ) ";
+                    strSQL +=  "VALUES (";
+                    strSQL +=  " " + sFac + ", '" + selYear + "', " + Request["TaskID_"] + cStr(x) + ", "  + strCPU +  " ";
+                    strSQL +=  ")  ";
+                }
 
+                using (SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.AppSettings["MM_Main_STRING"]))
+                using (SqlCommand cmd = new SqlCommand(strSQL, conn))
+                {
+                    try
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Connection.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Write(ex.ToString());
+                    }
+                }
 
-              rsSave = new DataReader(strSQL);
-              rsSave.Open();
+                //rsSave = new DataReader(strSQL);
+                //rsSave.Open();
 
-              Response.Redirect("FacilityAnnualEntry.aspx?selYear4=" + selYear);
+                Response.Redirect("FacilityAnnualEntry.aspx?selYear=" + selYear);
+            }
 
-         }
-
-       }
+            //Response.Redirect("FacilityAnnualEntry.aspx?selYear=" + selYear);
+        }
         
         public DataReader getData(string sDataSection) {
 
@@ -205,8 +219,78 @@ namespace InterrailPPRS.Reports
 
             }
 
+        protected void btnSave_Click(object sender, EventArgs e)
+        {
+            DataReader rsSave;
+            string strSQL, strLoad, strUnload, strBudgetedCPU, strMiscellaneousCPU;
+
+            strSQL = " DELETE FROM FacilityAnnualBudgetTask ";
+            strSQL += " WHERE ReportingYear = '" + Request["selYear"] + "' ";
+            strSQL += "   And FacilityID = " + sFac + "; ";
+
+            strSQL += " DELETE FROM FacilityAnnualBudget ";
+            strSQL += " WHERE ReportingYear = '" + Request["selYear"] + "' ";
+            strSQL += "   And FacilityID = " + sFac + "; ";
 
 
+            strLoad = Request["LoadTotal"] + "";
+            string strUnLoad = Request["UnloadTotal"] + "";
+            string strSpotting = Request["SpottingTotal"] + "";
 
+            if (strLoad == "") { strLoad = "NULL"; }
+            if (strUnLoad == "") { strUnLoad = "NULL"; }
+            if (strSpotting == "") { strSpotting = "NULL"; }
+
+            strSQL += "";
+            strSQL += " INSERT INTO FacilityAnnualBudget ";
+            strSQL += "   (FacilityId, LoadTotal, UnloadTotal, ReportingYear, SpottingTotal ) ";
+            strSQL += " VALUES (";
+            strSQL += " " + sFac + ", " + strLoad + ", " + strUnLoad + ", '" + selYear + "', " + strSpotting + " ";
+            strSQL += ");  ";
+
+            int intNumOfTasks = cInt(Request["NumOfTasks"]);
+
+            for (int x = 1; x < intNumOfTasks; x++)
+            {
+                string strCPU = Request["BudgetedCPU_" + cStr(x)] + "";
+                if (!isNumeric(strCPU))
+                {
+                    strCPU = "NULL";
+                }
+                strSQL += "";
+                strSQL += "INSERT INTO FacilityAnnualBudgetTask ";
+                strSQL += "   (FacilityId, ReportingYear, TaskID, BudgetedCPU ) ";
+                strSQL += "VALUES (";
+                strSQL += " " + sFac + ", '" + selYear + "', " + Request["TaskID_"] + cStr(x) + ", " + strCPU + " ";
+                strSQL += ")  ";
+            }
+
+            //using (SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.AppSettings["MM_Main_STRING"]))
+            //using (SqlCommand cmd = new SqlCommand(strSQL, conn))
+            //{
+            //    try
+            //    {
+            //        cmd.CommandType = CommandType.Text;
+            //        cmd.Connection.Open();
+            //        cmd.ExecuteNonQuery();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.Write(ex.ToString());
+            //    }
+            //}
+
+            try
+            {
+                rsSave = new DataReader(strSQL);
+                rsSave.Open();
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.ToString());
+            }
+
+            Response.Redirect("FacilityAnnualEntry.aspx?selYear=" + selYear);
+        }
     }
 }

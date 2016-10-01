@@ -126,7 +126,7 @@ namespace InterrailPPRS.Admin
                    if(Request["DELETE_" + cStr(I)] == "on"){
                      MM_editQuery = MM_editQuery + " Delete From EmployeeRebillRates Where ID = " + cStr(Request["RecID_" + cStr(I)]) + " AND ShiftID = " + sDefShiftID ;
                    }else{
-                     MM_editQuery = MM_editQuery + " Update EmployeeRebillRates " ;
+                     MM_editQuery = MM_editQuery + " Update EmployeeRebillRates set " ;
                          MM_editQuery = MM_editQuery + "     FacilityID = " + Session["FacilityID"]         + ", " ;
                          MM_editQuery = MM_editQuery + "            TaskID = " + cStr(Request["TID_"+cStr(I)]) + ", " ;
                          MM_editQuery = MM_editQuery + "           ShiftID = " + sDefShiftID                   + ", " ;

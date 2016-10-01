@@ -1,0 +1,45 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[SaveTaskWorked]    Script Date: 05/11/2014 21:53:24 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+
+CREATE PROCEDURE [dbo].[SaveTaskWorked]
+
+@taskID int, 
+@otherTaskID int, 
+@facilityID int, 
+@employeeId int, 
+@rebillDetailID int, 
+@workDate smalldatetime, 
+@shiftID char(10), 
+@upm decimal(8,3), 
+@hoursWorked decimal(4,2), 
+@payrollStatus char(10), 
+@outOfTownType char(1), 
+@lastModifiedBy varchar(50), 
+@lastModifiedOn datetime, 
+@notes varchar(3000)
+
+as 
+
+begin
+
+set nocount on;
+declare @id int 
+
+	begin
+
+	insert into EmployeeTaskWorked (TaskId, OtherTaskID, FacilityID, EmployeeId, RebillDetailID, WorkDate, ShiftID, UPM, HoursWorked, PayrollStatus, OutOfTownType, LastModifiedBy, LastModifiedOn, Notes) 
+	values (@taskID, @otherTaskID, @facilityID, @employeeId, @rebillDetailID, @workDate, @shiftID, @upm, @hoursWorked, @payrollStatus, @outOfTownType, @lastModifiedBy, @lastModifiedOn, @notes);
+	
+	set @id = SCOPE_IDENTITY();
+
+	return (@id);
+
+	end
+	
+end

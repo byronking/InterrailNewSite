@@ -31,8 +31,8 @@ namespace InterrailPPRS.App_Code
                         UserId = reader.GetString(1),
                         UserName = reader.GetString(2),
                         Password = reader.GetString(3),
-                        UserLongName = reader.GetString(4),
-                        UserType = reader.GetString(5),
+                        UserLongName = reader.GetString(5),
+                        UserType = reader.GetString(4),
                         LastModifiedBy = reader.GetString(6),
                         LastModifiedOn = reader.GetDateTime(7)
                     };
@@ -65,8 +65,8 @@ namespace InterrailPPRS.App_Code
                         UserId = reader.GetString(1),
                         UserName = reader.GetString(2),
                         Password = reader.GetString(3),
-                        UserLongName = reader.GetString(4),
-                        UserType = reader.GetString(5),
+                        UserLongName = reader.GetString(5),
+                        UserType = reader.GetString(4),
                         LastModifiedBy = reader.GetString(6),
                         LastModifiedOn = reader.GetDateTime(7)
                     };

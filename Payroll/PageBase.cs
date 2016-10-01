@@ -219,7 +219,6 @@ namespace InterrailPPRS.Payroll
 
         public DataTableReader UpdateUPM(string dw, int taskId, string Shift, int FacilityID, int RebillDetailId)
         {
-
             //  sum units from production detail where dw taskid shift and facility
             //  sum hours from etw where dw taskid shift and facility
             //  UMP = total units /  total hours
@@ -233,20 +232,15 @@ namespace InterrailPPRS.Payroll
             DataTableReader rsHourCount;
             string Update_Query;
 
-
             if (RebillDetailId == 0)
             {
-
                 sql = "SELECT isNull(SUM(Units), 0) as UnitCount from FacilityProductionDetail ";
                 sql = sql + " WHERE (TaskID = " + taskId + ") AND (FacilityID = " + FacilityID + ") AND (WorkDate = '" + dw + "') AND (ShiftID = '" + Shift + "') ";
-
             }
             else
             {
-
                 sql = "SELECT isNull(SUM(TotalUnits), 0) as UnitCount from RebillDetail ";
                 sql = sql + " WHERE (ID = " + RebillDetailId + ") ";
-
             }
 
             rsUnitCount = getRS(sql);
@@ -287,12 +281,76 @@ namespace InterrailPPRS.Payroll
             }
 
             return getRS(Update_Query);
+        }
 
+        public DataTableReader UpdateUPM(string dw, int taskId, string Shift, int FacilityID, int RebillDetailId, string lastModifiedBy, string lastModifiedOn)
+        {
+            //  sum units from production detail where dw taskid shift and facility
+            //  sum hours from etw where dw taskid shift and facility
+            //  UMP = total units /  total hours
+            //   update etw set UPM  where dw taskid shift and facility
+
+            double UPM;
+            double UnitCount;
+            double TotalHours;
+            string sql;
+            DataTableReader rsUnitCount;
+            DataTableReader rsHourCount;
+            string Update_Query;
+
+            if (RebillDetailId == 0)
+            {
+                sql = "SELECT isNull(SUM(Units), 0) as UnitCount from FacilityProductionDetail ";
+                sql = sql + " WHERE (TaskID = " + taskId + ") AND (FacilityID = " + FacilityID + ") AND (WorkDate = '" + dw + "') AND (ShiftID = '" + Shift + "') ";
+            }
+            else
+            {
+                sql = "SELECT isNull(SUM(TotalUnits), 0) as UnitCount from RebillDetail ";
+                sql = sql + " WHERE (ID = " + RebillDetailId + ") ";
+            }
+
+            rsUnitCount = getRS(sql);
+            UnitCount = 0.0;
+            if (rsUnitCount.Read())
+            {
+                UnitCount = System.Convert.ToDouble(rsUnitCount["UnitCount"]);
+            }
+
+            sql = "SELECT isNull(SUM(HoursWorked), 0) as TotalHours from EmployeeTaskWorked ";
+            sql = sql + " WHERE (TaskID = " + taskId + ") AND (FacilityID = " + FacilityID + ") AND (WorkDate = '" + dw + "') AND (ShiftID = '" + Shift + "') ";
+            if (RebillDetailId != 0)
+            {
+                sql = sql + " AND (RebillDetailId = " + RebillDetailId + ") ";
+            }
+
+            rsHourCount = getRS(sql);
+            TotalHours = 0.0;
+            if (rsHourCount.Read())
+            {
+                TotalHours = System.Convert.ToDouble(rsHourCount["TotalHours"]);
+            }
+
+            UPM = 0.0;
+            if (TotalHours > 0)
+            {
+                UPM = UnitCount / TotalHours;
+            }
+
+            Update_Query = "";
+            Update_Query = Update_Query + " Update EmployeeTaskWorked Set ";
+            Update_Query = Update_Query + "     UPM = " + System.Convert.ToString(UPM) + ", PayrollStatus = 'OPEN', LastModifiedBy = '" + lastModifiedBy + "', LastModifiedOn =  '" + lastModifiedOn + "'";
+            Update_Query = Update_Query + "  WHERE (PayrollStatus <> 'LOCKED')  AND (TaskID = " + taskId + ") AND (FacilityID = " + FacilityID + ") AND (WorkDate = '" + dw + "') AND (ShiftID = '" + Shift + "')  ";
+
+            if (RebillDetailId != 0)
+            {
+                Update_Query = Update_Query + " AND (RebillDetailId = " + RebillDetailId + ")";
+            }
+
+            return getRS(Update_Query);
         }
         
         public void UpdateRebillHours(int rbdID)
         {
-
             string sql;
             double TotalHours;
             DataTableReader rsHourCount;

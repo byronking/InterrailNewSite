@@ -1,0 +1,24 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[GetAllEmployeeNumbers]    Script Date: 02/22/2014 18:02:41 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+CREATE PROCEDURE [dbo].[GetAllEmployeeNumbers]
+
+as 
+
+begin
+
+set nocount on;
+
+	begin
+
+	select employeenumber from employee where EmployeeNumber is not null and EmployeeNumber <> '' 
+	order by EmployeeNumber
+	
+	end
+	
+end

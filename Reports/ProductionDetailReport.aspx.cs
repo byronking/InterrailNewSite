@@ -24,7 +24,6 @@ namespace InterrailPPRS.Reports
 {
     public partial class ProductionDetailReport : PageBase
     {
-
         public string sselFacilities, sfromDateDetail, stoDateDetail, sselTasks,sSelectedShifts,wDateRange, wTasks;
         public string sselCustomers, sselOrigins, sselManufacturers,wFacilities,wCustomers,wOrigins,wManufacturers;
 
@@ -42,10 +41,7 @@ namespace InterrailPPRS.Reports
 
         protected override void Page_Load(object sender, EventArgs e)
         {
-
             base.Page_Load(sender, e);
-
-
             GrantAccess("Super, Admin, User, Production");
 
             sselFacilities    = cStr(Request["selFacilities"]);
@@ -58,8 +54,6 @@ namespace InterrailPPRS.Reports
 
             sSelectedShifts = Request["SelectedShifts"];
             Session["LastShiftList"] = sSelectedShifts;
-
-
 
             if(sselFacilities != ""){
               wFacilities = "  AND (FacilityProductionDetail.FacilityID IN  (" + sselFacilities + ") ) ";
@@ -93,8 +87,7 @@ namespace InterrailPPRS.Reports
               wManufacturers = "   ";
             }
 
-            //This query does !have a server behavior ---;
-
+            // This query does !have a server behavior ---;
             string strSQL = " ";
             strSQL +=  "SELECT WorkDate, OriginName, Name, TaskCode, FacilityProductionDetail.FacilityID, ";
             strSQL +=  "       ManufacturerName, CarTypeCode,          ";
@@ -114,11 +107,9 @@ namespace InterrailPPRS.Reports
             strSQL +=  " ORDER BY FacilityProductionDetail.FacilityID, WorkDate, TaskCode,            ";
             strSQL +=  "           RailCarNumber, ManufacturerName, OriginName                        ";
 
-             rs = new DataReader(strSQL);
-             rs.Open();
-             rs_numRows = 0;
-
-
+            rs = new DataReader(strSQL);
+            rs.Open();
+            rs_numRows = 0;
 
             strSQL = " ";
             strSQL +=  "SELECT FacilityProductionDetail.TaskId, TaskCode, COUNT(*) AS RCs,        ";
@@ -144,10 +135,8 @@ namespace InterrailPPRS.Reports
             strSQL +=  "         NewUsed, WorkDate, FacilityTasks.FacilityID                      ";
             strSQL +=  "ORDER BY FacilityTasks.FacilityID, WorkDate, ManufacturerName, TaskCode, NewUsed ";
 
-             rsSumNU = new DataReader(strSQL);
-             rsSumNU.Open();
-
-
+            rsSumNU = new DataReader(strSQL);
+            rsSumNU.Open();
 
             strSQL = " ";
             strSQL +=  "SELECT FacilityProductionDetail.TaskId, TaskCode, COUNT(*) AS RCs,        ";
@@ -176,15 +165,12 @@ namespace InterrailPPRS.Reports
             rsSumLvl = new DataReader(strSQL);
             rsSumLvl.Open();
 
-
-
             wDateRange = " AND ((WorkDate Between '" + sfromDateDetail + "' AND '" + stoDateDetail + "'))";
             if(sselFacilities != ""){
               wFacilities = "  AND (FacilityTasks.FacilityID IN  (" + sselFacilities + ") ) ";
             }else{
               wFacilities = "  AND (FacilityTasks.FacilityID IN  (" + Session["FacilityID"] + ") ) ";
             }
-
 
             strSQL = " ";
             strSQL +=  "SELECT  FacilityProductionDetail.TaskId, TaskCode, TaskDescription,       ";
@@ -208,18 +194,16 @@ namespace InterrailPPRS.Reports
 
             //Response.Write(" All = " + rsSumAll.Source + "<br><br><br>";
             //Response.End;
-
         }
 
         public void ShowProductionDetailReport(){
 
-          string sFrom, sTo, sPageBreak, sSumFac, sSumDate, rowColor;
+        string sFrom, sTo, sPageBreak, sSumFac, sSumDate, rowColor;
+        string sPreviewLink = "javascript:document.form1.submit();";
+        string sTitle = "Detailed Production Report for Shifts " + sSelectedShifts + " <br>" + sfromDateDetail + " - " + stoDateDetail;
 
-          string sPreviewLink = "javascript:document.form1.submit();";
-          string sTitle = "Detailed Production Report for Shifts " + sSelectedShifts + " <br>" + sfromDateDetail + " - " + stoDateDetail;
-
-          double iTotalCars = 0;
-          double iTotalUnits = 0.0;
+        double iTotalCars = 0;
+        double iTotalUnits = 0.0;
 
           Response.Write("<table border='0' cellspacing='0' cellpadding='0' width='480' align='center'>");
           Response.Write("  <tr><td colspan='8'>&nbsp;</td></tr>");
@@ -235,10 +219,10 @@ namespace InterrailPPRS.Reports
             Response.Write("  <tr><td colspan='8'>&nbsp;</td></tr>");
          }
 
-          if(rs.EOF){
+        if(rs.EOF){
             Response.Write("  <tr><td colspan='4'>&nbsp;</td></tr>");
             Response.Write("  <tr><td colspan='4'>No records found.</td></tr>");
-          }else{
+        }else{
 
             string sFacility   = "";
             int sFacilityID = 0;
@@ -276,7 +260,6 @@ namespace InterrailPPRS.Reports
               }else{
                 rowColor = "reportEvenLine";
              }
-
 
               if(sDate != rs.Item("WorkDate")){
 
@@ -594,9 +577,9 @@ namespace InterrailPPRS.Reports
 
         }
 
-        public void  WriteTheRow(){
-
-              IRow =IRow + 1;
+        public void  WriteTheRow()
+        {
+            IRow =IRow + 1;
               string rowColor ;
 
               if(IRow % 2 == 0){
@@ -652,9 +635,5 @@ namespace InterrailPPRS.Reports
           Response.Write("      </tr>");
           Response.Write("    </table>");
         }
-
-
-
-
     }
 }

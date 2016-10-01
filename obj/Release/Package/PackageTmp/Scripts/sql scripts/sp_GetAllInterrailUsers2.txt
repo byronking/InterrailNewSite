@@ -1,0 +1,32 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[GetAllInterrailUsers2]    Script Date: 12/05/2013 18:42:54 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+ALTER PROCEDURE [dbo].[GetAllInterrailUsers2]
+
+@startRowIndex int,
+@pageSize int
+
+as 
+
+begin
+
+set nocount on;
+set @startRowIndex = @startRowIndex + 1
+
+	begin
+
+	select * from ( 
+	select Id, UserID, UserName, Password, UserType, UserLongName, LastModifiedBy, LastModifiedOn, ROW_NUMBER()
+	over (order by userid) as RowNumber 
+	from UserProfile
+	) as UserList 
+	where RowNumber between @startRowIndex and (@startRowIndex + @pageSize) - 1
+	
+	end
+	
+end

@@ -123,7 +123,19 @@ namespace InterrailPPRS.Reports
         
         public DateTime cDate(object val)
         {
-            return System.Convert.ToDateTime(val);
+            DateTime outDate = new DateTime();
+
+            if (DateTime.TryParse(val.ToString(), out outDate))
+            {
+                outDate = System.Convert.ToDateTime(val);
+            }
+            else
+            {
+                var error = val;
+            }
+
+            return outDate;
+            //return System.Convert.ToDateTime(val);
         }
 
         public bool isDate(string value)
@@ -139,7 +151,14 @@ namespace InterrailPPRS.Reports
 
         public double cDbl(object val)
         {
-            return System.Convert.ToDouble(val);
+            if (val == "")
+            {
+                return 0.0;
+            }
+            else
+            {
+                return System.Convert.ToDouble(val);
+            }
         }
 
         // Returns a disconnected recordset.
@@ -282,7 +301,7 @@ namespace InterrailPPRS.Reports
             return val.Substring(len);
         }
 
-        public string Left(string val,int? length)
+        public string Left(string val, int? length)
         {
             int len = 0;
 
@@ -299,8 +318,6 @@ namespace InterrailPPRS.Reports
             {
                 return val;
             }
-
- 
         }
 
         public int? InStr(int start, string val, string find, int compareType){
@@ -381,7 +398,7 @@ namespace InterrailPPRS.Reports
             if (val == "") { return val; }
             else
             {
-                return string.Format("{0:F" + decplaces + "}", System.Convert.ToDouble(val.Replace(",", "")));
+                return string.Format("{0:C" + decplaces + "}", System.Convert.ToDouble(val.Replace(",", "")));
             }
         }
 
@@ -940,11 +957,13 @@ namespace InterrailPPRS.Reports
         {
             if (cDbl(num) == 0)
             {
-                return "$0";
+                //return "$0";
+                return "0";
             }
             else
             {
-                return "$ " + cStr(FormatNumber(num, dec));
+                //return "$ " + cStr(FormatNumber(num, dec));
+                return cStr(FormatNumber(num, dec));
             }
         }
     }

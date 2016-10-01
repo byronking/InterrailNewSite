@@ -24,15 +24,9 @@ namespace InterrailPPRS.Payroll
 {
     public partial class Payroll : System.Web.UI.MasterPage
     {
-               
- 
         protected void Page_Load(object sender, EventArgs e)
         {
 
-        }
-
-
-
-        
+        }        
     }
 }

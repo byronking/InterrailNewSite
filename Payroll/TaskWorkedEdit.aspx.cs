@@ -4,327 +4,206 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
-using System.Data;
-using System.Data.Sql;
-using System.Data.SqlClient;
-using System.Configuration;
-
-using Interrial.PPRS.Dal.TypedListClasses;
-using Interrial.PPRS.Dal.EntityClasses;
-using Interrial.PPRS.Dal.FactoryClasses;
-using Interrial.PPRS.Dal.CollectionClasses;
-using Interrial.PPRS.Dal.HelperClasses;
-using Interrial.PPRS.Dal;
-
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using SD.LLBLGen.Pro.DQE.SqlServer;
+using InterrailPPRS.App_Code;
 
 namespace InterrailPPRS.Payroll
 {
-    public partial class TaskWorkedEdit : PageBase
+    public partial class TaskWorkedEdit : System.Web.UI.Page
     {
+        public int TaskWorkedId { get; set; }
+        public int TaskId { get; set; }
+        public string WorkDate { get; set; }
+        public int FacilityId { get; set; }
+        public int RebillDetailId { get; set; }
 
-        public string MM_editAction;
-        public bool MM_abortEdit;
-        public string MM_editQuery;
-        public string MM_editRedirectUrl;
-        public DataReader rs;
-        public DataReader rsEmp;
-        public DataReader rsTaskList;
-        public DataReader rsShifts;
-
-        public string rbDesc = "";
-        public int rbTaskID = 0;
-        public int rbSubTaskID = 0;
-        public bool Rebill = false;
-        public string sql;
-        public string rbReturnTo = "";
-        public DataReader localRS;
-        public string strStatus = "";
-
-        protected override void Page_Load(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
-            base.Page_Load(sender, e);
-
-            GrantAccess("Super, Admin, User");
-
-            MM_editAction = cStr(Request["URL"]);
-            if((Request.QueryString.Count > 0) ){
-              MM_editAction = MM_editAction + "?" + Request.QueryString;
-            }
-
-            // boolean to abort record edit;
-            MM_abortEdit = false;
-
-            // query string to execute;
-            MM_editQuery = "";
-
-            if(System.Convert.ToString(Request["Type"]) == "Rebill" ){
-
-               Rebill = true;
-               sql = "";
-               sql = sql + " SELECT  dbo.RebillSubTasks.Description, dbo.RebillSubTasks.TaskID, dbo.RebillDetail.RebillSubTasksId ";
-               sql = sql + " FROM    dbo.RebillDetail INNER JOIN ";
-               sql = sql + "   dbo.RebillSubTasks ON dbo.RebillDetail.RebillSubTasksId = dbo.RebillSubTasks.Id ";
-               sql = sql + " WHERE     dbo.RebillDetail.Id = " + Request["RebillDetailID"];
-   
-                localRS = new DataReader(sql);
-                localRS.Open();
-
-               rbDesc = "";
-               rbTaskID = 0;
-               rbSubTaskID = 0;
-               if(localRS.Read()){
-                  rbDesc = System.Convert.ToString(localRS.Item("Description"));
-                  rbTaskID = System.Convert.ToInt32(localRS.Item("TaskID"));
-                  rbSubTaskID = System.Convert.ToInt32(localRS.Item("RebillSubTasksId"));
-               }
-   
-               rbReturnTo = "payroll.aspx?workdate=" + Request["WorkDate"] + "&shift=" + Request["Shift"];   
-            }
-
-            if(Request["Delete"] != null && System.Convert.ToString(Request["Delete"]).ToUpper() == "YES"){
-
-                Execute("Delete EmployeeTaskWorked Where ID = " + System.Convert.ToString(Request["ID"]));
-     
-                if( System.Convert.ToString(Request["ReturnTo"]) != ""){
-                  MM_editRedirectUrl = Request["ReturnTo"];
-                }else{
-                  MM_editRedirectUrl = "TaskWorkedEdit.aspx";
-                }
-
-                var dateWorked = Request["dateworked"].ToString();
-                var taskId = Convert.ToInt32(Request["TaskID"]);
-                var selShift = Request["selShift"].ToString();
-                var facilityId = Convert.ToInt32(Session["FacilityID"]);
-                var testy = Request["RebillDetailID"];
-
-                // Set the RebillDetailID to 0, unless there is a value for RebillDetailID in the request object.
-                var rebillDetailId = 0;
-
-                if (Request["RebillDetailID"] != string.Empty)
-                {
-                    rebillDetailId = Convert.ToInt32(Request["RebillDetailID"]);
-                }
-
-                UpdateUPM(dateWorked, taskId, selShift, facilityId, rebillDetailId);
-        
-                if(cStr(Request["RebillDetailID"]) != "" ){
-                    UpdateRebillHours(System.Convert.ToInt32(Request["RebillDetailID"]));
-                }
-
-                Response.Redirect(MM_editRedirectUrl);
-            }
-
-        // *** Edit Operations: declare variables;
-
-        MM_editAction = MM_editRedirectUrl;
-
-        // boolean to abort record edit;
-        MM_abortEdit = false;
-
-        // query string to execute;
-        MM_editQuery = "";
-
-        // *** Update Record:  variables;
-
-          string MM_editColumn = "Id";
-          string MM_editTable = "dbo.EmployeeTaskWorked";
-          MM_editColumn = "Id";
-          string MM_recordId = "0";
-          MM_editRedirectUrl = "TaskWorked.aspx";
-          string MM_fieldsStr  = "dateworked|value|selShift|value|selEmp|value|TaskID|value|OtherTaskID|value|RebillDetailID|value|txtHours|value|txtUnits|value|selOutofTown|value|txtnotes|value|LastModifiedOn|value|LastModifiedBy|value|hFacilityID|value|SubTaskID|value";
-          string MM_columnsStr = "WorkDate|',none,''|ShiftID|none,none,NULL|EmployeeId|none,none,NULL|TaskID|none,none,NULL|OtherTaskID|none,none,NULL|RebillDetailID|none,none,NULL|HoursWorked|none,none,NULL|UPM|none,none,NULL|OutOfTownType|',none,''|Notes|',none,''|LastModifiedOn|',none,''|LastModifiedBy|',none,''|FacilityID|none,none,NULL|RebillSubTaskID|none,none,NULL";
-
-          if (Request.Form["MM_recordId"] != null) { MM_recordId = Request.Form["MM_recordId"].ToString(); }
-
-          // create the MM_fields && MM_columns arrays;
-          string[] MM_fields = Split(MM_fieldsStr, "|");
-          string[] MM_columns = Split(MM_columnsStr, "|");
-  
-          //  the form values;
-          for( int i = LBound(MM_fields); i < UBound(MM_fields); i += 2){
-            MM_fields[i+1] = cStr(Request.Form[MM_fields[i]]);
-          } 
-
-
-        // *** Update Record: construct a sql update statement and execute it;
-
-          if (Request["MM_update"] != null && Request["MM_recordId"] != null && (System.Convert.ToString(Request["MM_update"]) != "") && (System.Convert.ToString(Request["MM_recordId"]) != ""))
-          {
-
-          // create the sql update statement;
-          MM_editQuery = "update " + MM_editTable + " SET ";
-
-          for(int i = LBound(MM_fields); i < UBound(MM_fields); i += 2){
-
-            string FormVal = MM_fields[i+1];
-            string[] MM_typeArray = Split(MM_columns[i+1],",");
-            string Delim = MM_typeArray[0];
-
-            if(Delim == "none"){ Delim = "";}
-            string AltVal = MM_typeArray[1];
-            if(AltVal == "none"){ AltVal = "";}
-            string EmptyVal = MM_typeArray[2];
-            if(EmptyVal == "none"){ EmptyVal = "";}
-
-            if(FormVal == ""){
-              FormVal = EmptyVal;
-            }else{
-              if(AltVal != ""){
-                FormVal = AltVal;
-              }else{
-                  if(Delim == "'"){  // escape quotes;
-                      FormVal = "'" + Replace(FormVal,"'","''") + "'";
-                  }else{
-                      FormVal = Delim + FormVal + Delim;
-                  }
-              }
-            }
- 
-            if(i != LBound(MM_fields)){
-              MM_editQuery = MM_editQuery + ",";
-            }
-
-            MM_editQuery = MM_editQuery + MM_columns[i] + " = " + FormVal;
-          } //End For
-
-          MM_editQuery = MM_editQuery + " where " + MM_editColumn + " = " + MM_recordId;
-
-          if(!MM_abortEdit){
-
-              // execute the update;
-     
-              Execute(MM_editQuery);
-
-
-                if(System.Convert.ToString(Request["ReturnTo"]) != ""){
-                  MM_editRedirectUrl = System.Convert.ToString(Request["ReturnTo"]);
-                }else{
-                  MM_editRedirectUrl = "TaskWorked.aspx";
-                }
-    
-                UpdateUPM(System.Convert.ToString(Request["dateworked"]), System.Convert.ToInt32(Request["TaskID"]),System.Convert.ToString(Request["selShift"]),System.Convert.ToInt32(Session["FacilityID"]) ,System.Convert.ToInt32(Request["RebillDetailID"]));
-        
-                if(cStr(Request["RebillDetailID"]) != "" ){
-                   UpdateRebillHours(System.Convert.ToInt32(Request["RebillDetailID"]));
-                }
-        
-              Response.Redirect(MM_editRedirectUrl);
-          }
-
-        }else{
-
-            if (Request["MM_update"] != null  && (System.Convert.ToString(Request["MM_update"]) != "") && (System.Convert.ToString(Request["MM_recordId"]) == "" || Request["MM_recordId"] == null))
+            if (!Page.IsPostBack)
             {
-      
-               // create the sql insert statement;
-              string MM_tableValues = "";
-              string MM_dbValues = "";
-
-              for( int i = LBound(MM_fields); i< UBound(MM_fields); i += 2){
-
-                string FormVal = MM_fields[i+1];
-                string[] MM_typeArray = Split(MM_columns[i+1],",");
-                string Delim = MM_typeArray[0];
-                if(Delim == "none"){ Delim = "";}
-                string AltVal = MM_typeArray[1];
-                if(AltVal == "none"){ AltVal = "";}
-                string EmptyVal = MM_typeArray[2];
-                if(EmptyVal == "none"){ EmptyVal = "";}
-                if(FormVal == ""){
-                  FormVal = EmptyVal;
-                }else{
-                  if(AltVal != ""){
-                    FormVal = AltVal;
-                  }else{
-                      if(Delim == "'"){  // escape quotes;
-                         FormVal = "'" + Replace(FormVal,"'","''") + "'";
-                      }else{
-                         FormVal = Delim + FormVal + Delim;
-                      }
-                  }
-                }
-                if(i != LBound(MM_fields) ){
-                  MM_tableValues = MM_tableValues + ",";
-                  MM_dbValues = MM_dbValues + ",";
-                }
-                MM_tableValues = MM_tableValues + MM_columns[i];
-                MM_dbValues = MM_dbValues + FormVal;
-
-              } //End for
-
-               MM_editQuery = "insert into " + MM_editTable + " (" + MM_tableValues + ") values (" + MM_dbValues  + ")";
-
-
-              if(!MM_abortEdit){
-
-                 // execute the insert;
-
-                  Execute( MM_editQuery);
-
-                  UpdateUPM(System.Convert.ToString(Request["dateworked"]), System.Convert.ToInt32(Request["TaskID"]), System.Convert.ToString(Request["selShift"]), System.Convert.ToInt32(Session["FacilityID"]), System.Convert.ToInt32(Request["RebillDetailID"]) );
-
-                    if(cStr(Request["RebillDetailID"]) != "" ){
-                       UpdateRebillHours(System.Convert.ToInt32(Request["RebillDetailID"]));
-                    }
-
-                    if(Rebill ){
-                      Response.Redirect(rbReturnTo);
-                    }else{
-                      Response.Redirect(Request["ReturnTo"]);
-                    }
-              }
-
+                PopulateEmployeesDropdown();
             }
 
-
-            string rs__MMColParam;
-            rs__MMColParam = "30";
-            if(Request.QueryString["Id"]   != "") { rs__MMColParam = System.Convert.ToString(Request.QueryString["Id"] );}
-
-
-            if(cStr(Request["ID"]) == "0") {
-
-              string strSQL = "";
-              strSQL = "SELECT * FROM dbo.EmployeeTaskWorked WHERE Id =-1 ";
-
-              /* BRETT
-              rs.CursorLocation = 3;
-              rs.Open strSQL, MM_Main_STRING, 1, 3, 1;
-              rs.AddNew;
-              **/
-
-            }else{
-
-              rs = new DataReader("SELECT Id, TaskID, OtherTaskID, FacilityID, EmployeeId, RebillDetailID, WorkDate, ShiftID, UPM, HoursWorked, PayrollStatus,  OutOfTownType, LastModifiedBy, LastModifiedOn, Notes  FROM dbo.EmployeeTaskWorked  WHERE Id = " + Replace(rs__MMColParam, "'", "''") + "");
-              rs.Open();
-              rs.Read();
+            if (Request.QueryString["WorkDate"] != null)
+            {
+                WorkDate = Request.QueryString["WorkDate"].ToString();
+                lblDate.Text = Request.QueryString["WorkDate"].ToString();
             }
 
+            if (Request.QueryString["Shift"] != null)
+            {
+                lblShift.Text = Request.QueryString["Shift"].ToString();
+            }
 
-            string rsEmp__PFACID;
-            rsEmp__PFACID = "5";
-            if(cStr(Session["FacilityID"]) != ""){ rsEmp__PFACID = System.Convert.ToString(Session["FacilityID"]) ;}
+            if (Session["FacilityId"] != null)
+            {
+                FacilityId = Convert.ToInt32(Session["FacilityId"]);
+            }
 
-            rsEmp = new DataReader("SELECT Id, IsNull(EmployeeNumber,'') as EmployeeNumber, TempNumber, LastName=Case When FacilityID=" + Replace(rsEmp__PFACID, "'", "''") + " Then ' '+LastName Else '*'+LastName End, FirstName, MiddleInitial, FacilityID  FROM dbo.Employee Where Active <> 0 ORDER BY LastName, FirstName, EmployeeNumber");
-            rsEmp.Open();
-            
-            string rsTaskList__PFACID;
-            rsTaskList__PFACID = "5";
-            if(cStr(Session["FacilityID"]) != ""){ rsTaskList__PFACID = System.Convert.ToString(Session["FacilityID"]);}
+            if (Request.QueryString["RebillDetailId"] != null)
+            {
+                RebillDetailId = Convert.ToInt32(Request.QueryString["RebillDetailId"]);
 
-            rsTaskList = new DataReader("SELECT TaskID=dbo.Tasks.Id, OtherTaskID=0,dbo.Tasks.TaskCode, dbo.Tasks.TaskDescription  FROM dbo.Tasks INNER JOIN dbo.FacilityTasks ON dbo.Tasks.Id = dbo.FacilityTasks.TaskId  WHERE (dbo.FacilityTasks.FacilityID = " + Replace(rsTaskList__PFACID, "'", "''") + ")  UNION  SELECT TaskID=0, OtherTaskID=Id, TaskCode, TaskDescription=' * '+TaskDescription  FROM dbo.OtherTasks  ORDER BY OtherTaskID, TaskDescription");
-            rsTaskList.Open();
+                // Get the UPM
+                PayrollRepository repository = new PayrollRepository();
+                var upm = repository.GetUpmForCurrentTask(RebillDetailId, FacilityId);
+                txtUpm.Text = upm.ToString();
+            }
 
-            rsShifts = new DataReader("Select ID, Shift  From Shifts");
-            rsShifts.Open();
+            if (Request["Type"] != null && Request["Type"].ToString() == "Rebill" && RebillDetailId != 0)
+            {
+                // Get the rebill detail
+                GetRebillDetail(RebillDetailId);
+            }
+            else
+            {
+                // Get the tasks list
+                GetTasksList(FacilityId);
+            }
 
+            if (Request.QueryString["Id"] != null)
+            {
+                if (Convert.ToInt32(Request.QueryString["Id"]) == 0)
+                {
+                    lblRecordStatus.Text = "OPEN";
+                }
+                else
+                {
+                    TaskWorkedId = Convert.ToInt32(Request.QueryString["Id"]);
 
-         }
+                    if (!Page.IsPostBack)
+                    {
+                        // Get the existing task worked
+                        //TaskWorkedId = Convert.ToInt32(Request.QueryString["Id"]);
+                        PayrollRepository repository = new PayrollRepository();
+                        var taskWorked = repository.GetTaskWorked(TaskWorkedId);
 
-       } //Page Load
+                        lblDate.Text = Convert.ToDateTime(taskWorked.WorkDate).ToShortDateString();
+                        lblShift.Text = taskWorked.ShiftId.ToString();
+                        ddlEmployees.SelectedValue = taskWorked.EmployeeId.ToString();
+                        ddlTasks.SelectedValue = taskWorked.TaskId.ToString();
+                        txtHours.Text = taskWorked.HoursWorked.ToString();
+                        txtUpm.Text = taskWorked.Upm.ToString();
+                        ddlOutOfTown.SelectedValue = taskWorked.OutOfTownType;
+                        txtNotes.Text = taskWorked.Notes;
+                        lblLastModifiedBy.Text = taskWorked.LastModifiedBy;
+                        lblLastModifiedOn.Text = taskWorked.LastModifiedOn;
 
+                        btnDelete.Visible = true;
+                        PageBase pageBase = new PageBase();
+                        lblRecordStatus.Text = pageBase.getPayRollStatus(WorkDate, FacilityId);
+                    }
+                }               
+            }            
+        }
+
+        private void GetRebillDetail(int rebillDetailId)
+        {
+            RebillRepository repository = new RebillRepository();
+            var rebillDetailList = repository.GetRebillDetail(rebillDetailId);
+            lblTask.Text = rebillDetailList[0].Description;
+            TaskId = rebillDetailList[0].TaskId;
+            //OtherTaskId = rebillDetailList[0].O
+            lblTaskDesc.Visible = true;
+            lblTask.Visible = true;
+        }
+
+        private void GetTasksList(int facilityId)
+        {
+            PayrollRepository repository = new PayrollRepository();
+            var taskList = repository.GetFacilityTasks(facilityId);
+
+            foreach (var task in taskList)
+            {
+                var listItem = new ListItem();
+                //listItem.Value = task.TaskId + ", " + task.OtherTaskId;
+                listItem.Value = task.TaskId.ToString();
+                listItem.Text = task.TaskDescription;
+                ddlTasks.Items.Add(listItem);
+            }            
+
+            lblTaskDropdown.Visible = true;
+            ddlTasks.Visible = true;
+        }
+
+        private void PopulateEmployeesDropdown()
+        {
+            InterrailEmployeeRepository repository = new InterrailEmployeeRepository();
+            var employeesForTasksList = repository.GetEmployeesForTasks(FacilityId);
+
+            foreach(var employee in employeesForTasksList)
+            {
+                var listItem = new ListItem();
+                if (employee.EmployeeNumber != null)
+                {
+                    listItem.Text = employee.Lastname + ", " + employee.FirstName + "(" + employee.EmployeeNumber + ")";
+                    listItem.Value = employee.EmployeeId.ToString();
+                }
+                else
+                {
+                    listItem.Text = employee.Lastname + ", " + employee.FirstName + "(" + employee.TempNumber + ")";
+                    listItem.Value = employee.EmployeeId.ToString();
+                }
+
+                ddlEmployees.Items.Add(listItem);
+            }
+        }
+
+        protected void btnSave_Click(object sender, EventArgs e)
+        {
+            PayrollRepository repository = new PayrollRepository();
+
+            var taskId = ddlTasks.SelectedValue;
+            if (taskId == string.Empty)
+            {
+                taskId = TaskId.ToString();
+            }
+
+            var taskWorked = new InterrailTaskWorked()
+            {
+                TaskWorkedId = TaskWorkedId,
+                TaskId = Convert.ToInt32(taskId),
+                OtherTaskId = 0,
+                FacilityId = FacilityId,
+                EmployeeId = Convert.ToInt32(ddlEmployees.SelectedValue),
+                RebillDetailId = RebillDetailId,
+                WorkDate = lblDate.Text,
+                ShiftId = Convert.ToInt32(lblShift.Text),
+                Upm = Convert.ToDouble(txtUpm.Text),
+                HoursWorked = Convert.ToDouble(txtHours.Text),
+                PayrollStatus = lblRecordStatus.Text,
+                OutOfTownType = ddlOutOfTown.SelectedValue,
+                LastModifiedBy = Session["Username"].ToString(),
+                LastModifiedOn = DateTime.Now.ToString(),
+                Notes = txtNotes.Text
+            };
+
+            repository.SaveTaskWorked(taskWorked);
+            PageBase pageBase = new PageBase();
+            pageBase.UpdateUPM(taskWorked.WorkDate, taskWorked.TaskId, taskWorked.ShiftId.ToString(), FacilityId, taskWorked.RebillDetailId, taskWorked.LastModifiedBy, taskWorked.LastModifiedOn);
+
+            //while (pageBaseReader.Read())
+            //{
+            //    txtUpm.Text = pageBaseReader["UPM"].ToString();
+            //}
+
+            Response.Redirect("payroll.aspx?workdate=" + Request["WorkDate"] + "&shift=" + Request["Shift"]); 
+        }
+
+        protected void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (Request.QueryString["Id"] != null)
+            {
+                var taskWorkedId = Request.QueryString["Id"].ToString();
+                PayrollRepository repository = new PayrollRepository();
+                repository.DeleteTaskWorked(Convert.ToInt32(taskWorkedId));
+            }
+
+            Response.Redirect("payroll.aspx?workdate=" + Request["WorkDate"] + "&shift=" + Request["Shift"]); 
+        }
+
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("payroll.aspx?workdate=" + Request["WorkDate"] + "&shift=" + Request["Shift"]); 
+        }
     }
 }

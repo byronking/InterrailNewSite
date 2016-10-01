@@ -35,7 +35,8 @@ namespace InterrailPPRS.Reports
         public int nFacTasks;
         public string[,] arData;
         public string[] arFactors;
-        public string[] arFac = new string[19];
+        //public string[] arFac = new string[20];
+        public List<string> arFac { get; set; }
         public DataReader rsTBCPU;
         public string[] TaskBudgetedCPU = new string[200];
         public string[] TaskBudgetedCPUTaskCODE = new string[200];
@@ -78,167 +79,186 @@ namespace InterrailPPRS.Reports
 
         protected override void Page_Load(object sender, EventArgs e)
         {
+            try
+            {
+                base.Page_Load(sender, e);
 
-            base.Page_Load(sender, e);
+                GrantAccess("Super, Admin, User");
 
+                selYear = Request["selYear"];
+                sFac = cStr(Session["FacilityID"]);
+                //;
+                // First get the First day && Last day for( the weekly CPU range;
+                // First Friday of the year && last Thursday following Last Friday of the year;
+                //;
+                sFirstDay = cStr(BeginningYTD("1/15/" + selYear));
+                sLastDay = cStr(LastFriday("12/1/" + selYear));
 
-             GrantAccess("Super, Admin, User");
+                strSQL = " SELECT  Tasks.TaskCode, isNull(FacilityAnnualBudgetTask.BudgetedCPU, '') as BudgetedCPU  ";
+                strSQL += " FROM FacilityAnnualBudgetTask INNER JOIN ";
+                strSQL += " Tasks ON FacilityAnnualBudgetTask.TaskID = Tasks.Id ";
+                strSQL += " WHERE (FacilityAnnualBudgetTask.FacilityId = " + sFac + ") AND (FacilityAnnualBudgetTask.ReportingYear = " + selYear + ") ";
 
+                rsTBCPU = new DataReader(strSQL);
+                rsTBCPU.Open();
 
-            selYear = Request["selYear"];
-            sFac    = cStr(Session["FacilityID"]);
-            //;
-            // First get the First day && Last day for( the weekly CPU range;
-            // First Friday of the year && last Thursday following Last Friday of the year;
-            //;
-            sFirstDay = cStr(BeginningYTD("1/15/" + selYear));
-            sLastDay  = cStr(LastFriday("12/1/" + selYear));
-  
-            strSQL = " SELECT     Tasks.TaskCode, isNull(FacilityAnnualBudgetTask.BudgetedCPU, '') as BudgetedCPU  ";
-            strSQL += "FROM         FacilityAnnualBudgetTask INNER JOIN ";
-            strSQL += "                    Tasks ON FacilityAnnualBudgetTask.TaskID = Tasks.Id ";
-            strSQL += " WHERE     (FacilityAnnualBudgetTask.FacilityId = " + sFac + ") AND (FacilityAnnualBudgetTask.ReportingYear = " + selYear + ") ";
+                int i = 0;
+                while (rsTBCPU.Read())
+                {
+                    TaskBudgetedCPU[i] = rsTBCPU.Item("BudgetedCPU") + "";
+                    TaskBudgetedCPUTaskCODE[i] = rsTBCPU.Item("TaskCode") + "";
+                    i = i + 1;
+                }
 
-            rsTBCPU = new DataReader(strSQL);
-            rsTBCPU.Open();
-              
-              int i = 0;
-              while (rsTBCPU.Read()){
-                 TaskBudgetedCPU[i] = rsTBCPU.Item("BudgetedCPU") + "";
-                 TaskBudgetedCPUTaskCODE[i] = rsTBCPU.Item ("TaskCode") + "";
-                 i = i + 1;
-              }
+                MaxTaskBudgetedCPU = cStr(i - 1);
 
-              MaxTaskBudgetedCPU = cStr(i - 1);
+                strSQL = " Select IsNull(BudgetedCPU, 0) AS BudgetedCPU From FacilityAnnualBudget Where facilityID = " + sFac;
+                rsCPU = new DataReader(strSQL);
+                rsCPU.Open();
 
-              strSQL = " Select IsNull(BudgetedCPU, 0) AS BudgetedCPU From FacilityAnnualBudget Where facilityID = " + sFac;
-              rsCPU = new DataReader(strSQL);
-              rsCPU.Open();
+                if (rsCPU.Read())
+                {
+                    fBudgetedCPU = cDbl(rsCPU.Item("BudgetedCPU"));
+                }
+                else
+                {
+                    fBudgetedCPU = 0.0;
+                }
 
-              if (rsCPU.Read() ){
-                 fBudgetedCPU = cDbl(rsCPU.Item("BudgetedCPU"));
-              }else{
-                 fBudgetedCPU = 0.0;
-             }
-
-
-              //;
-              // Get Total Units for( Load && Unload Tasks;
-              //;
-              rsUnits = new DataReader(getSQL(sFac, sFirstDay, sLastDay, "'LO', 'UL'", "UNITS"));
-              rsUnits.Open();
-              
-              bool bHaveData = false;
-
-              while (rsUnits.Read() ){
-                 
-                 if ( rsUnits.Item("TotalUnits") == "" || cInt(rsUnits.Item("TotalUnits")) > 0){
-                     bHaveData = true;
-                 }
-
-              } //End Loop
-
-              if (bHaveData){
-                rsUnits.Requery();
-                rsUnits.Read();
-              }else{
-                rsUnits = new DataReader(getSQL(sFac, sFirstDay, sLastDay, "ALL", "UNITcDbl(S"));
+                //;
+                // Get Total Units for( Load && Unload Tasks;
+                //;
+                rsUnits = new DataReader(getSQL(sFac, sFirstDay, sLastDay, "'LO', 'UL'", "UNITS"));
                 rsUnits.Open();
-                rsUnits.Read();
-              }
 
-              //;
-              // Get all OTHER tasks (exclude LO && UL) for( this facility;
-              //;
-              strSQL =   " Select TASK=RTrim(TaskCode) + ' - ' + RTrim(TaskDescription) ";
-              strSQL +=  "  FROM FacilityTasks INNER JOIN Tasks ON TaskId = Tasks.Id ";
-              strSQL +=  " Where TaskCode NOT IN ('LO', 'UL') ";
-              strSQL +=  "   AND FacilityID = " + sFac;
-              strSQL +=  " Order By TaskCode ";
-              rsCPU = new DataReader(strSQL);
-              rsCPU.Open();
+                bool bHaveData = false;
 
-              for( i=0; i < UBound(arFac); i++){
-                arFac[i] = "";
-              }
+                while (rsUnits.Read())
+                {
 
-              if (bHaveData){
-                arFac[0] = "UL - Unload";
-                arFac[1] = "LO - Load";
-                i=2;
-              }else{
-                i=0;
-              }
+                    if (rsUnits.Item("TotalUnits") == "" || cInt(rsUnits.Item("TotalUnits")) > 0)
+                    {
+                        bHaveData = true;
+                    }
 
-              while (rsCPU.Read() ){
-                
-                arFac[i] = rsCPU.Item("Task");
-                i=i+1;
-              } //End Loop
+                } //End Loop
 
-              nFacTasks = i;
+                if (bHaveData)
+                {
+                    rsUnits.Requery();
+                    rsUnits.Read();
+                }
+                else
+                {
+                    rsUnits = new DataReader(getSQL(sFac, sFirstDay, sLastDay, "ALL", "UNITcDbl(S"));
+                    rsUnits.Open();
+                    rsUnits.Read();
+                }
 
+                //;
+                // Get all OTHER tasks (exclude LO && UL) for( this facility;
+                //;
+                strSQL = " Select TASK=RTrim(TaskCode) + ' - ' + RTrim(TaskDescription) ";
+                strSQL += "  FROM FacilityTasks INNER JOIN Tasks ON TaskId = Tasks.Id ";
+                strSQL += " Where TaskCode NOT IN ('LO', 'UL') ";
+                strSQL += "   AND FacilityID = " + sFac;
+                strSQL += " Order By TaskCode ";
+                rsCPU = new DataReader(strSQL);
+                rsCPU.Open();
 
+                //for( i=0; i < UBound(arFac); i++){
+                //  arFac[i] = "";
+                //}
 
-              //;
-              // Get Total Pay for( ALL Tasks;
-              //;
-              rsPay = new DataReader(getSQL(sFac, sFirstDay, sLastDay, "ALL", "PAY"));
-              rsPay.Open();
-              rsPay.Read();
+                //if (bHaveData){
+                //  arFac[0] = "UL - Unload";
+                //  arFac[1] = "LO - Load";
+                //  i=2;
+                //}else{
+                //  i=0;
+                //}
 
-              arData = new string[52, (nFacTasks+1)*2];
-              arFactors = new string[52];
+                //while (rsCPU.Read() ){
 
+                //  arFac[i] = rsCPU.Item("Task");
+                //  i=i+1;
+                //} //End Loop
 
-              double nFacTasksWithValues = nFacTasks;
+                arFac = new List<string>();
 
-              string[] arFacWithValues = new string[19];
-              for(i=0 ; i < UBound(arFacWithValues); i++){
-                arFacWithValues[i] = "";
-              }
+                while (rsCPU.Read())
+                {
+                    arFac.Add(rsCPU.Item("Task"));
+                }
 
-              for( i =  0; i <= 51; i++){
-                 for( int j = 0 ; j < nFacTasks+1;j++){
-                    arData[i,j] = "";
-                 }
-              }
-
-
-              int k=-1;
-              int l=1;
-
-              for(i=0 ; i < nFacTasks; i++){
-
-                rsTaskPay = new DataReader(getSQL(sFac, sFirstDay, sLastDay, "'" + Left(arFac[i], 2) + "'", "PAY"));
-                rsTaskPay.Open();
-                // Add TotalPay -;
-   
-                bHaveData = false;
-
-
-                int datarow = 0;
-                  while (rsTaskPay.Read()){
-                    
-                    arData[datarow, l-1] = rsTaskPay.Item("TotalPay");
-                    arRowHeader[datarow, 0] = FormatTheDate(cDate(rsTaskPay.Fields(1)).AddDays(6));
-                    datarow = datarow + 1;
-
-                  } //End Loop
-                  k = k + 1;
-                  arFacWithValues[k] = arFac[i];
-                  l=l+1;
+                nFacTasks = i;
 
 
 
-              }
+                //;
+                // Get Total Pay for( ALL Tasks;
+                //;
+                rsPay = new DataReader(getSQL(sFac, sFirstDay, sLastDay, "ALL", "PAY"));
+                rsPay.Open();
+                rsPay.Read();
 
-              CreatePageOneLines();
-    }
+                arData = new string[52, (nFacTasks + 1) * 2];
+                arFactors = new string[52];
 
+
+                double nFacTasksWithValues = nFacTasks;
+
+                string[] arFacWithValues = new string[19];
+                for (i = 0; i < UBound(arFacWithValues); i++)
+                {
+                    arFacWithValues[i] = "";
+                }
+
+                for (i = 0; i <= 51; i++)
+                {
+                    for (int j = 0; j < nFacTasks + 1; j++)
+                    {
+                        arData[i, j] = "";
+                    }
+                }
+
+
+                int k = -1;
+                int l = 1;
+
+                for (i = 0; i < nFacTasks; i++)
+                {
+
+                    rsTaskPay = new DataReader(getSQL(sFac, sFirstDay, sLastDay, "'" + Left(arFac[i], 2) + "'", "PAY"));
+                    rsTaskPay.Open();
+                    // Add TotalPay -;
+
+                    bHaveData = false;
+
+
+                    int datarow = 0;
+                    while (rsTaskPay.Read())
+                    {
+
+                        arData[datarow, l - 1] = rsTaskPay.Item("TotalPay");
+                        arRowHeader[datarow, 0] = FormatTheDate(cDate(rsTaskPay.Fields(1)).AddDays(6));
+                        datarow = datarow + 1;
+
+                    } //End Loop
+                    k = k + 1;
+                    arFacWithValues[k] = arFac[i];
+                    l = l + 1;
+                }
+
+                CreatePageOneLines();
+            }
+            catch (Exception ex)
+            {
+                //Response.Write(ex.ToString());
+            }
+        }
 
        // Task Headings;
-
         public string getSQL(string sFac,string  sFirstDay,string  sLastDay,string  sTask,string  sPayOrUnits){
 
       string strSQL = "";
@@ -250,11 +270,13 @@ namespace InterrailPPRS.Reports
        while (cDate(sEndDate) <= cDate(sLastDay)){
 
         if(sPayOrUnits == "UNITS"){
-           strSQL += " SELECT SUM(d.Units) AS TotalUnits, StartDate=Convert(SmallDateTime,'" + sStartDate + "' ,101)";
+           //strSQL += " SELECT SUM(d.Units) AS TotalUnits, StartDate=Convert(SmallDateTime,'" + sStartDate + "' ,101)";
+            strSQL += " SELECT SUM(d.Units) AS TotalUnits, StartDate=Convert(SmallDateTime,'" + sStartDate + "')";
            strSQL +=  " FROM Facility f INNER JOIN FacilityProductionDetail d ON f.Id = d.FacilityID ";
            strSQL +=  "      INNER JOIN Tasks ON d.TaskId = Tasks.Id  ";
         }else{
-           strSQL += " SELECT SUM(PayAmount) AS TotalPay, StartDate=Convert(SmallDateTime,'" + sStartDate + "' ,101),";
+           //strSQL += " SELECT SUM(PayAmount) AS TotalPay, StartDate=Convert(SmallDateTime,'" + sStartDate + "' ,101),";
+            strSQL += " SELECT SUM(PayAmount) AS TotalPay, StartDate=Convert(SmallDateTime,'" + sStartDate + "'),";
            strSQL +=  "(SELECT DataValue ";
                strSQL +=  "  FROM FacilityMonitoringDataEntry ";
                strSQL +=  " WHERE WorkDate = '" + cStr(sEndDate) + "'";
@@ -296,7 +318,8 @@ namespace InterrailPPRS.Reports
                 {
                     if (cDbl(num) != 0)
                     {
-                        FCurSP = "$ " + cStr(FormatNumber(num, 2));
+                        //FCurSP = "$ " + cStr(FormatNumber(num, 2));
+                        FCurSP = cStr(FormatNumber(num, 2));
                     }
                 }
             }
@@ -309,8 +332,8 @@ namespace InterrailPPRS.Reports
               Response.Write(PageOneLines);
         }
 
-        public void  CreatePageOneLines(){
-
+        public void  CreatePageOneLines()
+        {
           double SumTRCostPerUnit = 0;
           int RowsWithData = 0;
 
@@ -419,7 +442,7 @@ namespace InterrailPPRS.Reports
 
               Left3Data =    "<tr height=17 style='height:12.75pt' class='" + rc + "'>";
               Left3Data =    Left3Data + "<td height=17 class=xl53 style='height:12.75pt'>" + arRowHeader[i+1,0] + "</td>";
-              Left3Data =    Left3Data + "<td class=xl43 s   tyle='border-left:none' align='right'>" + FCurSP(cStr(sumrow)) + "</td>";
+              Left3Data =    Left3Data + "<td class=xl43 style='border-left:none' align='right'>" + FCurSP(cStr(sumrow)) + "</td>";
               Left3Data =    Left3Data + "<td class=xl50 style='border-left:none' align='right'>" + FCurSP(cStr(SafeDbl(arRowHeader[i+1,1]) - sumrow)) + "</td>";
                   stringBuffer = stringBuffer + Left3Data;
 
@@ -478,139 +501,179 @@ namespace InterrailPPRS.Reports
 
         }
 
-        public void WritePage2Ave(){
+        public void WritePage2Ave()
+        {
+            string Page2Ave = "";
+            string stringBuffer = "";
 
-              string Page2Ave = "";
-              string stringBuffer = "";
+            Page2Ave = Page2Ave +   "<tr class=xl45 height=17 style='height:12.75pt;border:1'>";
+            Page2Ave = Page2Ave +   "<td height=17 class=xl2222226 style='height:12.75pt'><b>&nbsp;</b></td>";
+            Left3Ave = Page2Ave;
 
-              Page2Ave =    Page2Ave +   "<tr class=xl45 height=17 style='height:12.75pt;border:1'>";
-              Page2Ave =    Page2Ave +   "<td height=17 class=xl2222226 style='height:12.75pt'><b>&nbsp;</b></td>";
-              Left3Ave = Page2Ave;
+            double localAve = 0;
+            double localcount = 0;
+            double locallast = 0;
 
-              double localAve = 0;
-              double localcount = 0;
-              double locallast = 0;
-
-              for(int i = 1; i<= 52; i++){
+            for(int i = 1; i<= 52; i++)
+            {
                 locallast = SafeDbl(arRowHeader[i,3]);
                 localAve = localAve + locallast;
-                if (locallast != 0){
-                   localcount = localcount + 1;
+                if (locallast != 0)
+                {
+                    localcount = localcount + 1;
                 }
-              } //Next
+            } //Next
 
-              if (localcount > 0){
-                 localAve = localAve / localcount;
-              }
+            if (localcount > 0)
+            {
+                localAve = localAve / localcount;
+            }
 
-              Page2Ave =    Page2Ave +  "<td class=xl2222225 align='right' bgcolor='#99CCFF'>&nbsp;</td>";
+            Page2Ave =    Page2Ave +  "<td class=xl2222225 align='right' bgcolor='#99CCFF'>&nbsp;</td>";
 
-              localAve = 0;
-              localcount = 0;
+            localAve = 0;
+            localcount = 0;
 
-              for( int i = 1; i <= 52; i++){
+            for( int i = 1; i <= 52; i++)
+            {
                 locallast = SafeDbl(arRowHeader[i,1]) - SafeDbl(arRowHeader[i,3]);
                 localAve = localAve + locallast;
-                if (locallast != 0){
-                   localcount = localcount + 1;
-               }
-              }//Next
-              if (localcount > 0){
-                 localAve = localAve / localcount;
-             }
+                if (locallast != 0)
+                {
+                    localcount = localcount + 1;
+                }
+            }//Next
 
-              Page2Ave =    Page2Ave +  "<td class=xl2222225 align='right' bgcolor='#FFFF99'>&nbsp;</td>";
+            if (localcount > 0)
+            {
+                localAve = localAve / localcount;
+            }
 
+            Page2Ave = Page2Ave +  "<td class=xl2222225 align='right' bgcolor='#FFFF99'>&nbsp;</td>";
 
-              for( int j = 0 ; j <= 19; j++){
-                 if ( j < nFacTasks){
-
+            //for (int j = 0; j <= nFacTasks+1; j++)
+            for (int j = 0; j <= 19; j++)
+            {
+                if ( j < nFacTasks)
+                {
                     localAve = 0;
                     localcount = 0;
                     locallast = 0;
 
-                    for( int i = 1; i <= 52;i++){
-                      locallast = SafeDbl(arData[i-1,j]);
-                      localAve = localAve + locallast;
-                      if (locallast != 0){
-                         localcount = localcount + 1;
-                      }
-                    } //Next
-
-                    if (localcount > 0){
-                       localAve = localAve / localcount;
-                    }
-                    if ( j % 2 == 0){
-                            strColor = "#99CCFF";
-                    }else{
-                        strColor = "#FFFF99";
-                    }
-
-
-                    string strTaskCodeBCPU = Left(arFac[j],2);
-            
-                    string strBCPU = "";
-            
-                    for( int k = 0; k <= cInt(MaxTaskBudgetedCPU); k++){
-                        if ( Trim(cStr(TaskBudgetedCPUTaskCODE[k] + "")) == strTaskCodeBCPU){
-                            strBCPU = TaskBudgetedCPU[k];
+                    for( int i = 1; i <= 52;i++)
+                    {
+                        locallast = SafeDbl(arData[i-1,j]);
+                        localAve = localAve + locallast;
+                        if (locallast != 0)
+                        {
+                            localcount = localcount + 1;
                         }
                     } //Next
 
-                    if ( strBCPU == "0"){
-                       strBCPU = "";
-                    }else{
-                       strBCPU = "$ " + strBCPU;
-                    } 
+                    if (localcount > 0)
+                    {
+                       localAve = localAve / localcount;
+                    }
+
+                    if ( j % 2 == 0)
+                    {
+                        strColor = "#99CCFF";
+                    }
+                    else
+                    {
+                        strColor = "#FFFF99";
+                    }
+                    
+                    // hack
+                    string strTaskCodeBCPU = string.Empty;
+
+                    var e = from s in arFac
+                            select s;
+
+                    var arFacCount = e.Count();
+
+                    if (j < arFacCount)
+                    {
+                        strTaskCodeBCPU = Left(arFac[j], 2);
+                        //string strTaskCodeBCPU = arFac[j];
+                    }
             
+                    string strBCPU = "";
+            
+                    for( int k = 0; k <= cInt(MaxTaskBudgetedCPU); k++)
+                    {
+                        if (Trim(cStr(TaskBudgetedCPUTaskCODE[k] + "")) == strTaskCodeBCPU)
+                        {
+                            strBCPU = TaskBudgetedCPU[k];
+                        }
+                    }//Next
+
+                    if ( strBCPU == "0")
+                    {
+                       strBCPU = "";
+                    }
+                    else
+                    {
+                       strBCPU = "$ " + strBCPU;
+                    }            
            
                     stringBuffer =    stringBuffer +  "<td class=xl2222225 align='right' bgcolor='" + strColor + "'>" + FCurSP(cStr(localAve)) + "</td>";
                     localAve = 0;
                     localcount = 0;
 
-                    for(int i = 1; i <= 52; i++){
-                      locallast = 0;
-                      if (SafeDbl(arRowHeader[i,2]) != 0){
-                          locallast = SafeDbl(arData[i-1,j])/SafeDbl(arRowHeader[i,2]);
-                      }
-                      localAve = localAve + locallast;
-                      if (locallast != 0){
-                         localcount = localcount + 1;
-                      }
+                    for(int i = 1; i <= 52; i++)
+                    {
+                        locallast = 0;
+
+                        if (SafeDbl(arRowHeader[i,2]) != 0)
+                        {
+                            locallast = SafeDbl(arData[i-1,j])/SafeDbl(arRowHeader[i,2]);
+                        }
+
+                        localAve = localAve + locallast;
+                        if (locallast != 0)
+                        {
+                            localcount = localcount + 1;
+                        }
                     }//Next
 
-                    if (localcount > 0){
-                       localAve = localAve / localcount;
-                    }
+                    if (localcount > 0)
+                    {
+                        localAve = localAve / localcount;
+                    }            
             
-            
-                    stringBuffer =    stringBuffer +  "<td class=xl2222225 align='right' bgcolor='" + strColor + "'>" + strBCPU + "</td>";
-            
+                    stringBuffer =    stringBuffer +  "<td class=xl2222225 align='right' bgcolor='" + strColor + "'>" + strBCPU + "</td>";            
                 }
 
-                 if (j == 5){
-                        Page2Ave = Page2Ave + stringBuffer;
-                        stringBuffer = "";
-                 }else{
-                     if (j == 11){
+                if (j == 5)
+                {
+                    Page2Ave = Page2Ave + stringBuffer;
+                    stringBuffer = "";
+                }
+                else
+                {
+                    if (j == 11)
+                    {
                         Page3Ave = stringBuffer;
                         stringBuffer = "";
-                    }else{
-                         if (j == 19){
+                    }
+                    else
+                    {
+                        if (j == 19)
+                        {
                             Page4Ave = stringBuffer;
                             stringBuffer = "";
-                         }
+                        }
                     }
-                 }
+                }
 
-                 } //Next
+            } //Next
 
-              Page2Ave =    Page2Ave +   "</tr>";
-              Page3Ave =    Left3Ave + Page3Ave +   "</tr>";
-              Page4Ave =    Left3Ave + Page4Ave +   "</tr>";
+            Page2Ave =    Page2Ave +   "</tr>";
+            Page3Ave =    Left3Ave + Page3Ave +   "</tr>";
+            Page4Ave =    Left3Ave + Page4Ave +   "</tr>";
 
-              Response.Write(Page2Ave);
-
+            Response.Write(Page2Ave);
         }
 
         public void WritePage3Ave(){
@@ -734,12 +797,14 @@ namespace InterrailPPRS.Reports
            string Left3TitleLine2 = "";
 
            Page2TitleLine =    Page2TitleLine + "<tr height=17 style='height:22.75pt'>";
-           Page2TitleLine =    Page2TitleLine + "  <td height=17 class=xl30 style='height:22.75pt' bgcolor='#FFFF99'><b>Week Ending</b></td>";
-           Page2TitleLine =    Page2TitleLine + "  <td class=xl30 bgcolor='#99CCFF'><b>Total Pay</b></td>";
-           Page2TitleLine =    Page2TitleLine + "  <td class=xl30 style='border-left:none' bgcolor='#FFFF99'><b>Pay Difference From 1st Page</b></td>";
-           Left3TitleLine =        "<tr height=17 style='height:22.75pt'>  <td height=17 class=xl30 style='height:22.75pt' bgcolor='#FFFF99'><b>Week Ending</b></td>";
+           Page2TitleLine =    Page2TitleLine + "  <td height=17 class=xl30 style='height:22.75pt' bgcolor='#FFFF99'><b>Week<br/>Ending</b></td>";
+           Page2TitleLine = Page2TitleLine + "  <td class=xl30 bgcolor='#99CCFF'><b>Total<br/>Pay</b></td>";
+           Page2TitleLine = Page2TitleLine + "  <td class=xl30 style='border-left:none' bgcolor='#FFFF99'><b>Pay Diff<br/>From 1st<br/>Page</b></td>";
+           Left3TitleLine = "<tr height=17 style='height:22.75pt'>  <td height=17 class=xl30 style='height:22.75pt' bgcolor='#FFFF99'><b>Week<br/>Ending</b></td>";
 
-           for( int i = 0; i <= 19; i++){
+           //for( int i = 0; i <= 19; i++)
+            for( int i = 0; i <= 12; i++)
+            {
 
              if (i % 2 == 0){
                 strColor = "#99CCFF";
@@ -748,8 +813,8 @@ namespace InterrailPPRS.Reports
              }
 
              if(i < nFacTasks){
-                stringBuffer =    stringBuffer + "<td class=xl47 style='border-left:none' bgcolor='" + strColor + "'><b>Total Pay</b></td>";
-                stringBuffer =    stringBuffer + "<td class=xl48 style='border-left:none' bgcolor='" + strColor + "'><b>Cost p/Unit</b></td>";
+                 stringBuffer = stringBuffer + "<td class=xl47 style='border-left:none' bgcolor='" + strColor + "'><b>Total<br/>Pay</b></td>";
+                stringBuffer = stringBuffer + "<td class=xl48 style='border-left:none' bgcolor='" + strColor + "'><b>Cost<br/>p/Unit</b></td>";
              }
                  if(i == 5){
                         Page2TitleLine = Page2TitleLine + stringBuffer;
@@ -778,8 +843,9 @@ namespace InterrailPPRS.Reports
            Left3TitleLine2 =    Left3TitleLine2 +  "<td class=xl30 style='border-top:none' bgcolor='#99CCFF'></td>";
            Left3TitleLine2 =    Left3TitleLine2 +  "<td class=xl30 style='border-left:none;border-top:none' bgcolor='#FFFF99'></td>";
 
-           for( int i = 0; i <= 19; i++){
-
+            for( int i = 0; i <= 12; i++)
+            {
+            //for( int i = 0; i <= 19; i++){
                  if (i % 2 == 0){
                   strColor = "#99CCFF";
                  }else{
@@ -808,8 +874,8 @@ namespace InterrailPPRS.Reports
             } //Next
 
            Page2TitleLine =    Page2TitleLine + "  </tr>";
-           Page3TitleLine =    "<tr height=17 style='height:22.75pt'> <td height=17 class=xl30 style='height:12.75pt;border-top:none' bgcolor='#FFFF99'><b>Week Ending</b></td>" + Page3TitleLine + "  </tr>";
-           Page4TitleLine =    "<tr height=17 style='height:22.75pt'> <td height=17 class=xl30 style='height:12.75pt;border-top:none' bgcolor='#FFFF99'><b>Week Ending</b></td>" + Page4TitleLine + "  </tr>";
+           Page3TitleLine = "<tr height=17 style='height:22.75pt'> <td height=17 class=xl30 style='height:12.75pt;border-top:none' bgcolor='#FFFF99'><b>Week<br/>Ending</b></td>" + Page3TitleLine + "  </tr>";
+           Page4TitleLine = "<tr height=17 style='height:22.75pt'> <td height=17 class=xl30 style='height:12.75pt;border-top:none' bgcolor='#FFFF99'><b>Week<br/>Ending</b></td>" + Page4TitleLine + "  </tr>";
 
            Response.Write(Page2TitleLine);
 

@@ -103,7 +103,7 @@ namespace InterrailPPRS.App_Code
                     {
                         EmployeeId = Convert.ToInt32(reader["id"]),
                         EmployeeNumber = reader["employeenumber"].ToString(),
-                        TempNumber = reader["tempnumber"].ToString(),
+                        TempNumber = reader["tempnumber"].ToString().Trim(),
                         LastName = reader["lastname"].ToString(),
                         FirstName = reader["firstname"].ToString(),
                         MiddleInitial = reader["middleinitial"].ToString(),
@@ -329,8 +329,8 @@ namespace InterrailPPRS.App_Code
                 using (SqlCommand cmd = new SqlCommand("SaveInterrailEmployee", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@employeenumber", SqlDbType.Char).Value = employee.EmployeeNumber;
-                    cmd.Parameters.Add("@tempnumber", SqlDbType.Char).Value = employee.TempNumber;
+                    cmd.Parameters.Add("@employeenumber", SqlDbType.Char).Value = employee.EmployeeNumber ?? string.Empty;
+                    cmd.Parameters.Add("@tempnumber", SqlDbType.Char).Value = employee.TempNumber ?? string.Empty; ;
                     cmd.Parameters.Add("@lastname", SqlDbType.VarChar).Value = employee.LastName;
                     cmd.Parameters.Add("@firstname", SqlDbType.VarChar).Value = employee.FirstName;
                     cmd.Parameters.Add("@middleinitial", SqlDbType.VarChar).Value = employee.MiddleInitial;
@@ -425,8 +425,8 @@ namespace InterrailPPRS.App_Code
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add("@id", SqlDbType.Int).Value = employee.EmployeeId;
-                    cmd.Parameters.Add("@employeenumber", SqlDbType.Char).Value = employee.EmployeeNumber;
-                    cmd.Parameters.Add("@tempnumber", SqlDbType.Char).Value = employee.TempNumber;
+                    cmd.Parameters.Add("@employeenumber", SqlDbType.Char).Value = employee.EmployeeNumber ?? string.Empty;
+                    cmd.Parameters.Add("@tempnumber", SqlDbType.Char).Value = employee.TempNumber ?? string.Empty;
                     cmd.Parameters.Add("@lastname", SqlDbType.VarChar).Value = employee.LastName;
                     cmd.Parameters.Add("@firstname", SqlDbType.VarChar).Value = employee.FirstName;
                     cmd.Parameters.Add("@middleinitial", SqlDbType.VarChar).Value = employee.MiddleInitial;
@@ -534,6 +534,102 @@ namespace InterrailPPRS.App_Code
             }
 
             return employeeNumbersList;
+        }
+
+        public List<EmployeesForTasks> GetEmployeesForTasks(int facilityId)
+        {
+            var employeesForTasksList = new List<EmployeesForTasks>();
+
+            using (SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.AppSettings["MM_Main_STRING"]))
+            using (SqlCommand cmd = new SqlCommand("GetEmployeesByFacilityId", conn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@facilityid", SqlDbType.Int).Value = facilityId;
+                cmd.Connection.Open();
+
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var employeeForTasks = new EmployeesForTasks()
+                    {
+                        EmployeeId = Convert.ToInt32(reader["Id"].ToString()),
+                        EmployeeNumber = reader["EmployeeNumber"].ToString(),
+                        FacilityId = Convert.ToInt32(reader["FacilityId"].ToString()),
+                        FirstName = reader["FirstName"].ToString(),
+                        Lastname = reader["Lastname"].ToString(),
+                        MiddleInitial = reader["MiddleInitial"].ToString(),
+                        TempNumber = reader["TempNumber"].ToString()
+                    };
+
+                    employeesForTasksList.Add(employeeForTasks);
+                }
+            }
+
+            return employeesForTasksList;
+        }
+
+        public int GetNewTempNumber()
+        {
+            var tempNumber = 0;
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.AppSettings["MM_Main_STRING"]))
+                using (SqlCommand cmd = new SqlCommand("GetNewTempNumber", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Connection.Open();
+
+                    var reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        tempNumber = Convert.ToInt32(reader["tempNumber"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.ToString());
+            }
+
+            return tempNumber;
+        }
+
+        public bool ValidateEmployeeNumber(int employeeNumber)
+        {
+            var validEmployeeNumber = false;
+            var existingEmployeeNumber = 0;
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.AppSettings["MM_Main_STRING"]))
+                using (SqlCommand cmd = new SqlCommand("ValidateEmployeeNumber", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@employeeNumber", SqlDbType.VarChar).Value = employeeNumber;
+                    cmd.Connection.Open();
+
+                    var reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        existingEmployeeNumber = Convert.ToInt32(reader["employeeNumber"]);
+                    }
+
+                    if (employeeNumber != existingEmployeeNumber)
+                    {
+                        validEmployeeNumber = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.ToString());
+            }
+
+            return validEmployeeNumber;
         }
     }
 }

@@ -1,0 +1,19 @@
+﻿USE [PPRS1]
+GO
+/****** Object:  StoredProcedure [dbo].[GetEmployeesByFacilityIdForLists]    Script Date: 09/04/2014 19:39:34 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+
+CREATE PROCEDURE [dbo].[GetEmployeesByFacilityIdForLists]
+
+@facilityId int
+
+as 
+
+begin
+
+	select Id, LastName, FirstName, EmployeeNumber from employee where Active = 1 and FacilityID = @facilityId
+	
+end
