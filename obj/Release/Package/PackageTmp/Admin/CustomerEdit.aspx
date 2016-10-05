@@ -139,13 +139,13 @@
                         <tr valign="baseline"> 
                             <td nowrap align="right">Code:</td>
                             <td> 
-                                <asp:TextBox ID="txtCustomerCode" runat="server" ReadOnly="true" Width="250" ClientIDMode="Static" />
+                                <asp:TextBox ID="txtCustomerCode" runat="server" Width="250" ClientIDMode="Static" />
                             </td>
                         </tr>
                         <tr valign="baseline"> 
                             <td nowrap align="right">Name:</td>
                             <td> 
-                                <asp:TextBox ID="txtCustomerName" runat="server" ReadOnly="true" Width="250" ClientIDMode="Static" />
+                                <asp:TextBox ID="txtCustomerName" runat="server" Width="250" ClientIDMode="Static" />
                             </td>
                         </tr>
                         <tr valign="baseline"> 
@@ -225,13 +225,19 @@
         $(document).ready(function () {
 
             $("#btnSave").click(function (e) {
-
                 if ($("#txtCustomerCode").val() == "") {
-                    alert("Please select a carrier");
+                    alert("Please enter a customer code");
                     $("#lblErrorMsg").show();
                     e.preventDefault();
                 }
-                else if ($("#txtContactName").val() == "") {
+
+                if ($("#txtCustomerCode").val() == "") {
+                    alert("Please enter a customer name");
+                    $("#lblErrorMsg").show();
+                    e.preventDefault();
+                }
+
+                if ($("#txtContactName").val() == "") {
                     alert("Please enter a contact name");
                     $("#lblErrorMsg").show();
                     e.preventDefault();

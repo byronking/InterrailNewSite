@@ -113,6 +113,11 @@ namespace InterrailPPRS.Admin
                         txtHireDate.Text = Convert.ToDateTime(employee.HireDate).ToShortDateString();
                     }
 
+                    if (employee.InactiveDate != null)
+                    {
+                        txtInactiveDate.Text = Convert.ToDateTime(employee.InactiveDate).ToShortDateString();
+                    }
+
                     if (employee.TempStartDate != null)
                     {
                         txtStartDate.Text = Convert.ToDateTime(employee.TempStartDate).ToShortDateString();
@@ -177,12 +182,13 @@ namespace InterrailPPRS.Admin
             var repository = new InterrailEmployeeRepository();
             var employeeList = repository.GetEmployeesHiredThisWeek(StartDate, EndDate);
 
-            EmployeeNumber = Year + Month + employeeList.Count.ToString("00");            
+            EmployeeNumber = Year + Month + employeeList.Count.ToString("00");
+            EmployeeNumber = Convert.ToString(Convert.ToInt32(EmployeeNumber) * 10);
 
             var employeeNumbersList = repository.GetAllEmployeeNumbers();
 
             // Return the index of the employee number, if it exists.
-            var existingEmployeeNumbersList = employeeNumbersList.FindIndex(e => e.Number == EmployeeNumber);
+            var existingEmployeeNumbersList = employeeNumbersList.FindIndex(e => e.Number.Trim() == EmployeeNumber);
 
             while (existingEmployeeNumbersList > 0)
             {
@@ -190,7 +196,7 @@ namespace InterrailPPRS.Admin
                 EmployeeNumber = Convert.ToString(Convert.ToInt32(EmployeeNumber) + 1);
 
                 // Check against the list again.
-                existingEmployeeNumbersList = employeeNumbersList.FindIndex(e => e.Number == EmployeeNumber);                
+                existingEmployeeNumbersList = employeeNumbersList.FindIndex(e => e.Number.Trim() == EmployeeNumber);
             }
 
             txtEmployeeNumber.Text = EmployeeNumber;
