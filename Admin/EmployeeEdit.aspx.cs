@@ -180,10 +180,10 @@ namespace InterrailPPRS.Admin
             Month = d.ToString("MM");
 
             var repository = new InterrailEmployeeRepository();
-            var employeeList = repository.GetEmployeesHiredThisWeek(StartDate, EndDate);
+            //var employeeList = repository.GetEmployeesHiredThisWeek(StartDate, EndDate);
 
-            EmployeeNumber = Year + Month + employeeList.Count.ToString("00");
-            EmployeeNumber = Convert.ToString(Convert.ToInt32(EmployeeNumber) * 10);
+            EmployeeNumber = Year + Month + "000";
+            //EmployeeNumber = Convert.ToString(Convert.ToInt32(EmployeeNumber) * 10);
 
             var employeeNumbersList = repository.GetAllEmployeeNumbers();
 
@@ -307,6 +307,8 @@ namespace InterrailPPRS.Admin
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                lblValidationMessage.Text = ex.Message;
+                lblValidationMessage.Visible = true;
             }
         }
 

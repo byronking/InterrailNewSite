@@ -1,3 +1,4 @@
+C:\Projects\InterrailPPRS\bin\InterrailPPRS.dll.config
 C:\Projects\InterrailPPRS\bin\InterrailPPRS.dll
 C:\Projects\InterrailPPRS\bin\InterrailPPRS.pdb
 C:\Projects\InterrailPPRS\obj\Debug\InterrailPPRS.csprojResolveAssemblyReference.cache
@@ -8,4 +9,3 @@ C:\Projects\InterrailPPRS\obj\Debug\InterrailPPRS.Reports.AdminReport.resources
 C:\Projects\InterrailPPRS\obj\Debug\InterrailPPRS.csproj.GenerateResource.Cache
 C:\Projects\InterrailPPRS\obj\Debug\InterrailPPRS.dll
 C:\Projects\InterrailPPRS\obj\Debug\InterrailPPRS.pdb
-C:\Projects\InterrailPPRS\bin\InterrailPPRS.dll.config
