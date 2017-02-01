@@ -1,7 +1,6 @@
 C:\Projects\InterrailPPRS\bin\InterrailPPRS.dll.config
 C:\Projects\InterrailPPRS\bin\InterrailPPRS.dll
 C:\Projects\InterrailPPRS\bin\InterrailPPRS.pdb
-C:\Projects\InterrailPPRS\obj\Debug\InterrailPPRS.csprojResolveAssemblyReference.cache
 C:\Projects\InterrailPPRS\obj\Debug\InterrailPPRS.Rebilling.ManageAttachments.resources
 C:\Projects\InterrailPPRS\obj\Debug\InterrailPPRS.Reports.WebForm1.resources
 C:\Projects\InterrailPPRS\obj\Debug\InterrailPPRS.Reports.WebForm2.resources

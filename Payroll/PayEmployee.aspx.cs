@@ -52,9 +52,7 @@ namespace InterrailPPRS.Payroll
         protected override void Page_Load(object sender, EventArgs e)
         {
             base.Page_Load(sender, e);
-
             GrantAccess("Super, Admin, User");
-
 
             if (Request["ActionType"] == "UPDATE")
             {
@@ -66,7 +64,6 @@ namespace InterrailPPRS.Payroll
                 }
                 else
                 {
-
                     string[] arEmp;
                     //int nHours;
 
@@ -74,7 +71,6 @@ namespace InterrailPPRS.Payroll
 
                     for (int i = 0; i < arEmp.Length; i++)
                     {
-
                         if (isOutofTown(System.Convert.ToInt32(arEmp[i]), System.Convert.ToInt32(Session["FacilityID"])))
                         {
                             outoftowntype = "O";
@@ -115,8 +111,6 @@ namespace InterrailPPRS.Payroll
 
             } //action type Recalc
 
-
-
             if (Request["NewTask"] != null && Request["NewTask"].ToString() == "Yes")
             {
                 // get task list
@@ -134,9 +128,7 @@ namespace InterrailPPRS.Payroll
                 {
                     sTaskOptionList = sTaskOptionList + "<option value=\"" + cStr(rsT.Item("ID")) + "\">" + rsT.Item("TaskCode") + "</option>";
                 }
-
             }
-
 
             if (Request["ReturnTo"] != null && Request["ReturnTo"].ToString().Length > 0)
             {
@@ -146,7 +138,6 @@ namespace InterrailPPRS.Payroll
             {
                 strBackTo = Server.UrlEncode(Request.ServerVariables["URL"] + "?" + Request.ServerVariables["QUERY_STRING"]);
             }
-
 
             PFacilityID = Session["FacilityID"].ToString();
             PWorkDate = Request["WorkDate"];
@@ -288,35 +279,71 @@ namespace InterrailPPRS.Payroll
                 rsEmp = new DataReader(strSQL);
                 rsEmp.Open();
 
-
             }
-
         }
 
-
-        public double  getUnitRate(string tid,string wd, string eid){
-
-            string strSQL;
+        /// <summary>
+        /// This gets the employee hourly rate. If the employee is not local, it gets the employee's home rate.
+        /// </summary>
+        /// <param name="tid"></param>
+        /// <param name="wd"></param>
+        /// <param name="eid"></param>
+        /// <returns></returns>
+        public double  getUnitRate(string tid, string wd, string eid)
+        {
+            string strSQL = string.Empty;
             DataReader localRS;
 
-            strSQL =  "";
-            strSQL +=  "Select Top 1 isNull(HoursPayRate, 0) as HoursPayRate, isNull(UnitsPayRate, 0) as UnitsPayRate from EmployeeRates ";     
-            strSQL +=  "WHERE  FacilityID = " + PFacilityID;
-            strSQL +=  "  AND  TaskID = " + tid;
-            strSQL +=  "  AND  ShiftID = " + PShift;
-            strSQL +=  "  AND  EmployeeID = " + eid;
-            strSQL +=  "  AND  EffectiveDate <= '" + wd + "' ";
-            strSQL +=  " order by  EffectiveDate DESC "; 
+            // Check the home facility of the employee
+            var facilityIdQuery = "";
+            facilityIdQuery += "select facilityId from employee where id = " + eid;
+
+            var resultSet = new DataReader(facilityIdQuery);
+            resultSet.Open();
+
+            var facilityId = 0;
+
+            if (resultSet.Read())
+            {
+                facilityId = Convert.ToInt32(resultSet.Item("FacilityId"));
+            }
+
+            if (facilityId.ToString() == PFacilityID)
+            {
+                // Get the rate for workers of the facility
+                strSQL = "";
+                strSQL += "Select Top 1 isNull(HoursPayRate, 0) as HoursPayRate, isNull(UnitsPayRate, 0) as UnitsPayRate from EmployeeRates ";
+                strSQL += "WHERE  FacilityID = " + PFacilityID;
+                strSQL += "  AND  TaskID = " + tid;
+                strSQL += "  AND  ShiftID = " + PShift;
+                strSQL += "  AND  EmployeeID = " + eid;
+                strSQL += "  AND  EffectiveDate <= '" + wd + "' ";
+                strSQL += " order by  EffectiveDate DESC ";
+            }
+            else
+            {
+                // Get the rate for out-of-town workers.
+                strSQL = "";
+                strSQL += "Select Top 1 isNull(HoursPayRate, 0) as HoursPayRate, isNull(UnitsPayRate, 0) as UnitsPayRate from EmployeeRates ";
+                strSQL += "WHERE  FacilityID = " + facilityId;
+                strSQL += "  AND  TaskID = " + tid;
+                strSQL += "  AND  ShiftID = " + PShift;
+                strSQL += "  AND  EmployeeID = " + eid;
+                strSQL += "  AND  EffectiveDate <= '" + wd + "' ";
+                strSQL += " order by  EffectiveDate DESC ";
+            }
     
              localRS = new DataReader(strSQL);
              localRS.Open();
 
-            if (localRS.Read()) {
+            if (localRS.Read())
+            {
                return cDbl(localRS.Item("UnitsPayRate"));
-            }else{
+            }
+            else
+            {
                 return 0.0;
             }
-
         }
     }
 }

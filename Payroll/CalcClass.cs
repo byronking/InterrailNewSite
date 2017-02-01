@@ -15,11 +15,11 @@ namespace InterrailPPRS.Payroll
 	/// 
     public class PayItem
     {
-       public TaskWorkedForCalc Parent;
-       public double HoursPayed = 0.0;
-       public double PayRate = 0.0;
-       public double PayMultiplier = 0.0;
-       public double PayAmount = 0.0;
+        public TaskWorkedForCalc Parent;
+        public double HoursPayed = 0.0;
+        public double PayRate = 0.0;
+        public double PayMultiplier = 0.0;
+        public double PayAmount = 0.0;
 
         public PayItem(TaskWorkedForCalc p, double mux, double hours, double amount, double rate)
         {
@@ -348,7 +348,8 @@ namespace InterrailPPRS.Payroll
 
 
     }
-	public class Emp
+
+    public class Emp
 	{
         public int EmployeeId;
         public DateTime HireDate;
@@ -360,18 +361,17 @@ namespace InterrailPPRS.Payroll
             EmployeeId    =   (int)     reader["EmployeeId"];   
             if (!reader.IsDBNull(reader.GetOrdinal("HireDate")))
             {
-                HireDate      =   System.DateTime.Parse(reader["HireDate"].ToString());      
+                HireDate =   System.DateTime.Parse(reader["HireDate"].ToString());      
             }
-
 
             while(!reader.IsClosed && ((int)reader["EmployeeID"] == EmployeeId) ) 
             { 
                 //Loop through your rows of data 
                 DayWorked d = new DayWorked(this,reader);
-                DayWorkedList.Add(d); 
-//                notEOF = reader.Read();
+                DayWorkedList.Add(d);
             }
         }
+
         public double HoursWorked()
         {
             double hw = 0;
@@ -423,30 +423,19 @@ namespace InterrailPPRS.Payroll
 
             return true;
         }
-		//--- ADDED TASKID PARAMETER 3/12/2007 [Steve Hicks]-----
-		public double HighestHourly(string connectString, string startDate, string taskID)
+
+		public double HighestHourly(string connectString, string startDate, string taskID, int employeeId)
         {
             double hr = 0.0;
-
             string sql =  "";
-            sql = sql + " SELECT Top 1  MAX(EmployeeRates.HoursPayRate) AS MaxRate ";
-            sql = sql + " FROM    Tasks INNER JOIN ";
-            sql = sql + "   EmployeeRates ON Tasks.Id = EmployeeRates.TaskID INNER JOIN ";
-            sql = sql + "   Employee ON EmployeeRates.EmployeeID = Employee.Id ";
-            sql = sql + " Where  (Employee.Id = " + EmployeeId.ToString()+ ") ";
-            sql = sql + "  AND    (EmployeeRates.EffectiveDate < '" + startDate + "')";
-            sql = sql + "  AND    (Tasks.PayType = 'HOURS') ";
-			//--- ADDED TASKID PARAMETER 3/12/2007 [Steve Hicks]-----
-			sql = sql + "  AND (EmployeeRates.TaskID = '13') ";
-			//------------------------------------------
-            sql = sql + " GROUP BY EmployeeRates.EffectiveDate ";
-            sql = sql + " ORDER BY EmployeeRates.EffectiveDate DESC ";
+
+            sql = sql + " select max(hourspayrate) as MaxRate from EmployeeRates where EmployeeId = " + employeeId + " and EffectiveDate < '" + startDate + 
+                "' and TaskID = " + taskID;
 
             SqlCommand cmd = new SqlCommand(sql, new SqlConnection(connectString)); 
             cmd.CommandTimeout = 360;
             cmd.Connection.Open(); 
             SqlDataReader reader = cmd.ExecuteReader(); 
-
 
             if(reader.Read()) 
             {
@@ -500,7 +489,8 @@ namespace InterrailPPRS.Payroll
         }
 
 	}
-	public class CalcClass
+
+    public class CalcClass
 	{
 		public int facilityID;
 		public string AssFacilities;
@@ -675,24 +665,6 @@ namespace InterrailPPRS.Payroll
            // sql = sql + "   Order by EffectiveDate DESC ";
             sql = sql + "             )";
             sql = sql + " ),0) as RebillSubTaskHourPayRate  ";
-
-//			sql = sql + "             IsNull((select Top 1 UnitsPayRate from EmployeeRates ";
-//			sql = sql + "                   where EmployeeRates.EffectiveDate <= EmployeeTaskWorked.WorkDate ";
-//			sql = sql + "                    and  EmployeeRates.FacilityID = EmployeeTaskWorked.FacilityID ";
-//			sql = sql + "                    and  EmployeeRates.EmployeeID = EmployeeTaskWorked.EmployeeID ";
-//			sql = sql + "                    and  EmployeeRates.ShiftID = EmployeeTaskWorked.ShiftID ";
-//			sql = sql + "                    and  EmployeeRates.TaskID = EmployeeTaskWorked.TaskID ";
-//			sql = sql + "                   Order by EmployeeRates.EffectiveDate DESC ";
-//			sql = sql + "              ),0) as UnitPayRate, ";
-//			
-//			sql = sql + "             IsNull((select Top 1 HoursPayRate from EmployeeRates  ";
-//			sql = sql + "                   where EmployeeRates.EffectiveDate <= EmployeeTaskWorked.WorkDate    ";
-//			sql = sql + "                    and  EmployeeRates.FacilityID = EmployeeTaskWorked.FacilityID ";
-//			sql = sql + "                    and  EmployeeRates.EmployeeID = EmployeeTaskWorked.EmployeeID ";
-//			sql = sql + "                    and  EmployeeRates.ShiftID = EmployeeTaskWorked.ShiftID ";
-//			sql = sql + "                    and  EmployeeRates.TaskID = EmployeeTaskWorked.TaskID ";
-//			sql = sql + "                   Order by EmployeeRates.EffectiveDate DESC ";
-//			sql = sql + "              ),0) as HourPayRate ";
 
 			sql = sql + " from EmployeeTaskWorked inner join Tasks on  EmployeeTaskWorked.TaskID = Tasks.ID ";
             sql = sql + "                         inner join Employee on  EmployeeTaskWorked.EmployeeID = Employee.ID ";
@@ -870,73 +842,21 @@ namespace InterrailPPRS.Payroll
                                 double otr = OutOfTownHourlyRate;
                                 if (e.JustHourly(connectString, facilityID, startDate, endDate))
                                 {
-                                    double HHR = e.HighestHourly(connectString, startDate, t.TaskID.ToString());
+                                    double HHR = e.HighestHourly(connectString, startDate, t.TaskID.ToString(), e.EmployeeId);
                                     if ( otr < HHR)
                                     {
                                         otr = HHR;
                                     }
                                 }
-//                                if (t.OutOfTownType == "D")
-//                                {
-                                //    t.PayList.Add(new PayItem(t, 1.0, t.HoursWorked, (t.HoursWorked * OutOfTownHourlyRate), OutOfTownHourlyRate));
-                                    if (reghours > 0.0)
-                                    {
-                                        t.PayList.Add(new PayItem(t, 1.0, reghours, reghours * otr, otr));
-                                    }
-                                    if (othours > 0.0)
-                                    {
-                                        t.PayList.Add(new PayItem(t, 1.5, othours, (1.5 * othours * otr), otr));
-                                    }
-//                                }
-//                                else  // Out of town type == O
-//                                {
-//                                    double DayHoursWorked = t.Parent.HoursWorked();
-//                                    if (DayHoursWorked > OutOfTownMinHours)
-//                                    {
-//                                        //t.PayList.Add(new PayItem(t, 1.0, t.HoursWorked, (t.HoursWorked * OutOfTownHourlyRate), OutOfTownHourlyRate));
-//                                        if (reghours > 0.0)
-//                                        {
-//                                            t.PayList.Add(new PayItem(t, 1.0, reghours, reghours *  otr,  otr));
-//                                        }
-//                                        if (othours > 0.0)
-//                                        {
-//                                            t.PayList.Add(new PayItem(t, 1.5, othours, (1.5 * othours *  otr),  otr));
-//                                        }
-//                                    }
-//                                    else
-//                                    {
-//                                        //  t.PayList.Add(new PayItem(t, 1.0, (OutOfTownMinHours / t.Parent.TaskWorkedList.Count), ((OutOfTownMinHours / t.Parent.TaskWorkedList.Count) * OutOfTownHourlyRate)));
-//                                        // to show actual hours worked but pay
-//                                        //t.PayList.Add(new PayItem(t, 1.0, t.HoursWorked, ((OutOfTownMinHours / t.Parent.TaskWorkedList.Count) * OutOfTownHourlyRate), OutOfTownHourlyRate));
-//                                        if (reghours > 0.0)
-//                                        {
-//                                            double one = ((OutOfTownMinHours / t.Parent.TaskWorkedList.Count) * OutOfTownHourlyRate);
-//                                            double two = ((reghours) * otr);
-//                                            if (one > two)
-//                                            {
-//                                                t.PayList.Add(new PayItem(t, 1.0, reghours, ((OutOfTownMinHours / t.Parent.TaskWorkedList.Count) * OutOfTownHourlyRate), OutOfTownHourlyRate));
-//                                            }
-//                                            else
-//                                            {
-//                                                t.PayList.Add(new PayItem(t, 1.0, reghours, ((reghours) * otr), otr));
-//                                            }
-//                                        }
-//                                        if (othours > 0.0)
-//                                        {
-//                                            double one = ((OutOfTownMinHours / t.Parent.TaskWorkedList.Count) * OutOfTownHourlyRate);
-//                                            double two = ((othours) * otr);
-//                                            if (one > two)
-//                                            {
-//                                                t.PayList.Add(new PayItem(t, 1.5, othours, (1.5 * (OutOfTownMinHours / t.Parent.TaskWorkedList.Count) * OutOfTownHourlyRate), OutOfTownHourlyRate));
-//                                            }
-//                                            else
-//                                            {
-//                                                t.PayList.Add(new PayItem(t, 1.5, othours, (1.5 * (othours) * otr), otr));
-//                                            }
-//                                        }
-//                                    }
-//
-//                                }
+
+                                if (reghours > 0.0)
+                                {
+                                    t.PayList.Add(new PayItem(t, 1.0, reghours, reghours * otr, otr));
+                                }
+                                if (othours > 0.0)
+                                {
+                                    t.PayList.Add(new PayItem(t, 1.5, othours, (1.5 * othours * otr), otr));
+                                }
                             }
                             DayHours = DayHours + t.HoursWorked;
 
@@ -1323,7 +1243,7 @@ namespace InterrailPPRS.Payroll
                                 double otr = OutOfTownHourlyRate;
                                 if (e.JustHourly(connectString, facilityID, startDate, endDate))
                                 {
-                                    double HHR = e.HighestHourly(connectString, startDate, t.TaskID.ToString());
+                                    double HHR = e.HighestHourly(connectString, startDate, t.TaskID.ToString(), e.EmployeeId);
                                     if ( otr < HHR)
                                     {
                                         otr = HHR;
@@ -1659,8 +1579,6 @@ namespace InterrailPPRS.Payroll
 
 
             // insert task worked pay records
-
-
             sql =  "";
             sql2 =  "";
 
@@ -1679,14 +1597,6 @@ namespace InterrailPPRS.Payroll
                             sql = sql + " Values ";
                             sql = sql + " (" + t.Id.ToString() + ", " + p.PayMultiplier.ToString() + ", ";
                             sql = sql + " " + p.PayRate.ToString() + " ";
-//                            if (p.HoursPayed > 0)
-//                            {
-//                                sql = sql + System.Convert.ToString(p.PayAmount/p.HoursPayed);
-//                            }
-//                            else
-//                            {
-//                                sql = sql + "0";
-//                            }
                             sql = sql + ", " + p.HoursPayed.ToString() + ", " + p.PayAmount.ToString() + ",  'PAYROLL', '" + UserName + "', '" + System.DateTime.Now.ToString() + "' ) ";
                             sql = sql + " \n ";
                         }
