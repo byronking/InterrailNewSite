@@ -121,21 +121,19 @@ namespace InterrailPPRS.Reports
 
 			            Response.Write("<td class='cellTopLine' align='left' width='35%'>" + rsUnits.Fields(1) + "</td>");
 			            Response.Write("<td class='cellTopLine' align='left' width='22%'>" + rsUnits.Fields(4) + "</td>");
-			            Response.Write("<td class='cellTopLine' align='right' width='14%'>" + FNum(cStr(SafeDbl(rsUnits.Fields(5))),0) + "</td>");
-			            Response.Write("<td class='cellTopLine' align='right' width='14%'>" + FNum(cStr(SafeDbl(rsUnits.Fields(6))),0) + "</td>");
-			            //FacilityTotal = cDbl(FNum(cStr(SafeDbl(cStr(cDbl(rsUnits.Fields(5)) + cDbl(rsUnits.Fields(6))))), 0));
+			            Response.Write("<td class='cellTopLine' align='right' width='14%'>" + SafeDbl(rsUnits.Fields(5)).ToString("0") + "</td>");
+			            Response.Write("<td class='cellTopLine' align='right' width='14%'>" + SafeDbl(rsUnits.Fields(6)).ToString("0") + "</td>");
                         FacilityTotal = Convert.ToDouble(rsUnits.Fields(5)) + Convert.ToDouble(rsUnits.Fields(6));
-			            Response.Write("<td class='cellTopLine' align='right' width='14%'>" + FNum(cStr(SafeDbl(cStr(FacilityTotal))),0) + "</td>");
+			            Response.Write("<td class='cellTopLine' align='right' width='14%'>" + SafeDbl(cStr(FacilityTotal)).ToString("0") + "</td>");
 			            Response.Write("</tr>");
 		
 		            }else{
 			            Response.Write("<td align='left' width='35%'>&nbsp;</td>");// + rsUnits.Fields(1) + "</td>");
 			            Response.Write("<td align='left' width='22%'>" + rsUnits.Fields(4) + "</td>");
-			            Response.Write("<td align='right' width='14%'>" + FNum(cStr(SafeDbl(rsUnits.Fields(5))),0) + "</td>");
-			            Response.Write("<td align='right' width='14%'>" + FNum(cStr(SafeDbl(rsUnits.Fields(6))),0) + "</td>");
-			            //FacilityTotal = cDbl(FNum(cStr(SafeDbl(cStr(cDbl(rsUnits.Fields(5)) + cDbl(rsUnits.Fields(6))))), 0));
+			            Response.Write("<td align='right' width='14%'>" + SafeDbl(rsUnits.Fields(5)).ToString("0") + "</td>");
+			            Response.Write("<td align='right' width='14%'>" + SafeDbl(rsUnits.Fields(6)).ToString("0") + "</td>");
                         FacilityTotal = Convert.ToDouble(rsUnits.Fields(5)) + Convert.ToDouble(rsUnits.Fields(6));
-			            Response.Write("<td align='right' width='14%'>" + FNum(cStr(SafeDbl(cStr(FacilityTotal))),0) + "</td>");
+			            Response.Write("<td align='right' width='14%'>" + SafeDbl(cStr(FacilityTotal)).ToString("0") + "</td>");
 			            Response.Write("</tr>");
 		            }
 		
@@ -164,9 +162,9 @@ namespace InterrailPPRS.Reports
 					            Response.Write("<tr class='reportTotalLine'>");
 					            Response.Write("<td align='left' width='35%' class='cellTopBottomBorder'>&nbsp;</td>");
 					            Response.Write("<td align='left' width='22%' class='cellTopBottomBorder'>&nbsp;</td>");
-					            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + FNum(cStr(SafeDbl(cStr(CompanyLoadTotal))),0) + "</td>");
-					            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + FNum(cStr(SafeDbl(cStr(CompanyUnloadTotal))),0) + "</td>");
-					            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + FNum(cStr(SafeDbl(cStr(CompanyUnitTotal))),0) + "</td>");
+					            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + SafeDbl(cStr(CompanyLoadTotal)).ToString("0") + "</td>");
+					            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + SafeDbl(cStr(CompanyUnloadTotal)).ToString("0") + "</td>");
+					            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + SafeDbl(cStr(CompanyUnitTotal)).ToString("0") + "</td>");
 					            Response.Write("</tr>");
 									
 					            sumiRow = 0;
@@ -185,9 +183,9 @@ namespace InterrailPPRS.Reports
 				            Response.Write("<tr class='reportTotalLine'>");
 				            Response.Write("<td align='left' width='35%' class='cellTopBottomBorder'>&nbsp;</td>");
 				            Response.Write("<td align='left' width='22%' class='cellTopBottomBorder'>&nbsp;</td>");
-				            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + FNum(cStr(SafeDbl(cStr(CompanyLoadTotal))),0) + "</td>");
-				            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + FNum(cStr(SafeDbl(cStr(CompanyUnloadTotal))),0) + "</td>");
-				            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + FNum(cStr(SafeDbl(cStr(CompanyUnitTotal))),0) + "</td>");
+				            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + SafeDbl(cStr(CompanyLoadTotal)).ToString("0") + "</td>");
+				            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + SafeDbl(cStr(CompanyUnloadTotal)).ToString("0") + "</td>");
+				            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + SafeDbl(cStr(CompanyUnitTotal)).ToString("0") + "</td>");
 				            Response.Write("</tr>");
 			
 			            }
@@ -204,9 +202,9 @@ namespace InterrailPPRS.Reports
     	            Response.Write("<td align='right'  width='14%' class='cellTopBottomBorder'>Total</td></tr>");
 		            Response.Write("<tr><td align='left' width='35%' class='cellTopBottomBorder'>&nbsp;</td>");
 		            Response.Write("<td align='left' width='22%' class='cellTopBottomBorder'>&nbsp;</td>");
-		            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + FNum(cStr(SafeDbl(cStr(LoadTotalUnits))),0) + "</td>");
-		            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + FNum(cStr(SafeDbl(cStr(unLoadTotalUnits))),0) + "</td>");
-		            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + FNum(cStr(SafeDbl(cStr(TotalUnits))),0) + "</td></tr>");
+		            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + SafeDbl(cStr(LoadTotalUnits)).ToString("0") + "</td>");
+		            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + SafeDbl(cStr(unLoadTotalUnits)).ToString("0") + "</td>");
+		            Response.Write("<td align='right' width='14%' class='cellTopBottomBorder'>" + SafeDbl(cStr(TotalUnits)).ToString("0") + "</td></tr>");
 		            Response.Write("</tr><tr><td colspan=5><br>&nbsp;</td></tr></table>");
 
             }
