@@ -190,8 +190,7 @@ namespace InterrailPPRS.Reports
 			
 			            }
 		            }
-	  
-		
+	  		
               } //End Loop
   
               //Write Final Summary;
@@ -208,7 +207,5 @@ namespace InterrailPPRS.Reports
 		            Response.Write("</tr><tr><td colspan=5><br>&nbsp;</td></tr></table>");
 
             }
-
-
     }
 }
