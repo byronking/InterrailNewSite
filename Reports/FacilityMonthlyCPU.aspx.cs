@@ -487,13 +487,22 @@ namespace InterrailPPRS.Reports
                         UnLoadHours = "";
                    }
 
-                  Response.Write ("  <td class=xl5520928 style='border-top:none;border-left:none' align='right'>" +  FNum(cStr(SafeDbl(UnLoadHours)), 2) + "</td>");
-                  Response.Write("  <td class=xl5620928 style='border-top:none;border-left:none' align='right'>" + cStr(SafeDbl(UnLoadUnits)) + "</td>");
-                  //Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none' align='right'>" +  FNum(cStr(SafeDbl(UnLoadUnits)), 0) + "</td>");
+                if (UnLoadHours != string.Empty)
+                {
+                    UnLoadHours = SafeDbl(UnLoadHours).ToString("#.##");
+                }
+                else
+                {
+                    UnLoadHours = "0";
+                }
+                Response.Write("  <td class=xl5520928 style='border-top:none;border-left:none' align='right'>" + UnLoadHours + "</td>");
+                Response.Write("  <td class=xl5620928 style='border-top:none;border-left:none' align='right'>" + cStr(SafeDbl(UnLoadUnits)) + "</td>");
                   if(SafeDbl(UnLoadHours) != 0 && SafeDbl(UnLoadUnits) != 0){
-                    Response.Write ("  <td class=xl4620928 style='border-top:none;border-left:none' align='right'>" +  FNum(cStr(SafeDiv(cStr(SafeDbl(cStr(UnLoadUnits))) , cStr(SafeDbl(cStr(UnLoadHours))))), 2)  + "</td>");
-                  }else{
-                    Response.Write ("  <td class=xl4620928 style='border-top:none;border-left:none' >&nbsp;</td>");
+                    var unloadUnits = SafeDiv(cStr(SafeDbl(cStr(UnLoadUnits))), cStr(SafeDbl(cStr(UnLoadHours))));
+                    Response.Write("  <td class=xl4620928 style='border-top:none;border-left:none' align='right'>" + unloadUnits.ToString("#.##") + "</td>");
+                }
+                else{
+                    Response.Write ("  <td class=xl4620928 style='border-top:none;border-left:none' >0</td>");
                  }
 
                   unLoadTotalHours = unLoadTotalHours + SafeDbl(UnLoadHours);
@@ -528,12 +537,30 @@ namespace InterrailPPRS.Reports
                             LoadHours = "";
                    }
 
-                Response.Write ("  <td class=xl5520928 style='border-top:none;border-left:none' align='right'>" +  FNum(cStr(SafeDbl(cStr(LoadHours))), 2) + "</td>");
-                Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none' align='right'>" +  FNum(cStr(SafeDbl(cStr(LoadUnits))), 0) + "</td>");
+                if (LoadHours != string.Empty)
+                {
+                    LoadHours = SafeDbl(LoadHours).ToString("#.##");
+                }
+                else
+                {
+                    LoadHours = "0";
+                }
+                Response.Write("  <td class=xl5520928 style='border-top:none;border-left:none' align='right'>" + LoadHours + "</td>");
+
+                if (LoadUnits != string.Empty)
+                {
+                    LoadUnits = SafeDbl(LoadUnits).ToString("#.##");
+                }
+                else
+                {
+                    LoadUnits = "0";
+                }
+                Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none' align='right'>" + LoadUnits + "</td>");
                 if(SafeDbl(cStr(SafeDbl(cStr(LoadHours)))) != 0 && SafeDbl(cStr(SafeDbl(cStr(LoadUnits)))) != 0){
-                    Response.Write ("  <td class=xl4620928 style='border-top:none;border-left:none' align='right'>" +  FNum(cStr(SafeDiv(cStr(SafeDbl(cStr(LoadUnits))) , cStr(SafeDbl(cStr(LoadHours))))), 2)  + "</td>");
+                    var loadUnits = SafeDiv(cStr(SafeDbl(cStr(LoadUnits))), cStr(SafeDbl(cStr(LoadHours))));
+                    Response.Write ("  <td class=xl4620928 style='border-top:none;border-left:none' align='right'>" +  loadUnits.ToString("#.##")  + "</td>");
                 }else{
-                    Response.Write ("  <td class=xl4620928 style='border-top:none;border-left:none' >&nbsp;</td>");
+                    Response.Write ("  <td class=xl4620928 style='border-top:none;border-left:none' >0</td>");
                }
 
                 LoadTotalHours = SafeDbl(cStr(LoadTotalHours)) + SafeDbl(LoadHours);
@@ -570,10 +597,9 @@ namespace InterrailPPRS.Reports
                     sUM = cStr(SafeDbl(cStr(sUM1)) / SafeDbl(cStr(sUM2))  / SafeDbl(cStr(sUM3)));
                     UMTotals = SafeDbl(cStr(UMTotals)) + SafeDbl(sUM);
                     nUMTotals = nUMTotals + 1;
-                    //Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none' >" +  FNum(sUM, 0) + "</td>");
-                    Response.Write("  <td class=xl5620928 style='border-top:none;border-left:none' >" + sUM + "</td>");
+                    Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none' >" +  cStr(SafeDbl(sUM).ToString("#.##")) + "</td>");
                 }else{
-                    Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none' >&nbsp;</td>");
+                    Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none' >0</td>");
                }
 
 
@@ -605,13 +631,22 @@ namespace InterrailPPRS.Reports
                             shuttlingHours = "";
                    }
 
-                Response.Write ("  <td class=xl4620928 style='border-top:none;border-left:none' align='right'>" +  FNum(cStr(SafeDbl(shuttlingHours)), 2) + "</td>");
-                Response.Write ("  <td class=xl5720928 style='border-top:none;border-left:none' align='right'>" +  FNum(cStr(SafeDbl(shuttlingUnits)), 0) + "</td>");
+                if (shuttlingHours != string.Empty)
+                {
+                    shuttlingHours = SafeDbl(shuttlingHours).ToString("#.##");
+                }
+                else
+                {
+                    shuttlingHours = "0";
+                }
+                Response.Write ("  <td class=xl4620928 style='border-top:none;border-left:none' align='right'>" + shuttlingHours + "</td>");
+                Response.Write ("  <td class=xl5720928 style='border-top:none;border-left:none' align='right'>" +  cStr(SafeDbl(shuttlingUnits)) + "</td>");
 
                 if(SafeDbl(shuttlingHours) != 0 && SafeDbl(shuttlingUnits) != 0){
-                   Response.Write ("  <td class=xl4620928 style='border-top:none;border-left:none' align='right'>" +  FNum(cStr(SafeDiv(cStr(SafeDbl(cStr(shuttlingUnits))), cStr(SafeDbl(cStr(shuttlingHours))))), 2) + "</td>");
+                    var shuttlingUnitsDiv = SafeDiv(cStr(SafeDbl(cStr(shuttlingUnits))), cStr(SafeDbl(cStr(shuttlingHours))));
+                   Response.Write ("  <td class=xl4620928 style='border-top:none;border-left:none' align='right'>" + shuttlingUnitsDiv.ToString("#.##") + "</td>");
                 }else{
-                   Response.Write ("  <td class=xl4620928 style='border-top:none;border-left:none' align='right'>&nbsp;</td>");
+                   Response.Write ("  <td class=xl4620928 style='border-top:none;border-left:none' align='right'>0</td>");
                }
 
                 ShuttlingTotalHours = SafeDbl(cStr(ShuttlingTotalHours)) + SafeDbl(shuttlingHours);
@@ -630,22 +665,40 @@ namespace InterrailPPRS.Reports
                             }else{
                                     spotting1 = "";
                                     spotting2 = "";
-                                    spotting3 = "";
+                                    spotting3 = "0";
                            }
                     }else{
                             spotting1 = "";
                             spotting2 = "";
-                            spotting3 = "";
+                            spotting3 = "0";
                    }
+                
+                if (spotting1 != string.Empty && spotting1 != "0")
+                {
+                    spotting1 = SafeDbl(spotting1).ToString("#.##");
+                }
+                else
+                {
+                    spotting1 = "0";
+                }
+                Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none' >" +  spotting1 + "</td>");
 
-                Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none' >" +  FNum(cStr(SafeDbl(spotting1)), 0) + "</td>");
-                Response.Write ("  <td class=xl5520928 style='border-top:none;border-left:none' >" +  FNum(cStr(SafeDbl(spotting2)), 0) + "</td>");
-                Response.Write ("  <td class=xl5520928 style='border-top:none;border-left:none' >" +  FNum(cStr(SafeDbl(spotting3)), 2) + "</td>");
+                if (spotting2 != string.Empty && spotting2 != "0")
+                {
+                    spotting2 = SafeDbl(spotting2).ToString("#.##");
+                }
+                else
+                {
+                    spotting2 = "0";
+                }
+                Response.Write ("  <td class=xl5520928 style='border-top:none;border-left:none' >" +  spotting2 + "</td>");
+
+                // if statement setting to "0" above
+                Response.Write ("  <td class=xl5520928 style='border-top:none;border-left:none' >" +  spotting3 + "</td>");
 
                 RCs_In   = RCs_In + SafeDbl(spotting1);
                 RCs_Out  = RCs_Out + SafeDbl(spotting2);
                 DownTime = DownTime + SafeDbl(spotting3);
-
 
                 //;
                 // Spotting Hours;
@@ -670,7 +723,7 @@ namespace InterrailPPRS.Reports
                       double RC_Hr = SafeDiv(cStr(SafeDbl(spotting1) + SafeDbl(spotting1)) , cStr(SafeDbl(spottingHours)));
                       Response.Write ("  <td class=xl4620928 style='border-top:none;border-left:none' >" +  FNum(cStr(RC_Hr), 2) + "</td>");
                 }else{
-                      Response.Write ("  <td class=xl4620928 style='border-top:none;border-left:none' >&nbsp;</td>");
+                      Response.Write ("  <td class=xl4620928 style='border-top:none;border-left:none' >0</td>");
                }
 
 
@@ -684,15 +737,14 @@ namespace InterrailPPRS.Reports
                                     bTrainingHours = rsTrainingHours.Read();
 
                             }else{
-                                    trainingHours = "";
+                                    trainingHours = "0";
                            }
                     }else{
-                            trainingHours = "";
+                            trainingHours = "0";
                    }
 
-                Response.Write ("  <td class=xl5820928 style='border-top:none;border-left:none'>" +  FNum(cStr(SafeDbl(trainingHours)), 2) + "</td>");
+                Response.Write ("  <td class=xl5820928 style='border-top:none;border-left:none'>" + trainingHours + "</td>");
                 TrainingTotalHours = SafeDbl(cStr(TrainingTotalHours)) + SafeDbl(trainingHours);
-
 
                 //;
                 // Clerical Hours;
@@ -703,15 +755,14 @@ namespace InterrailPPRS.Reports
                                     bClericalHours = rsClericalHours.Read();
 
                             }else{
-                                    clericalHours = "";
+                                    clericalHours = "0";
                            }
                     }else{
-                            clericalHours = "";
+                            clericalHours = "0";
                    }
 
-                Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none'>" +  FNum(cStr(SafeDbl(clericalHours)), 2) + "</td>");
+                Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none'>" + clericalHours + "</td>");
                 ClericalTotalHours = SafeDbl(cStr(ClericalTotalHours)) + SafeDbl(clericalHours);
-
 
                 //;
                     // Misc. (Rebilling) Hours;
@@ -722,15 +773,14 @@ namespace InterrailPPRS.Reports
                                     bRBHours = rsRBHours.Read();
 
                             }else{
-                                    RBHours = "";
+                                    RBHours = "0";
                            }
                     }else{
-                            RBHours = "";
+                            RBHours = "0";
                    }
 
-                Response.Write ("  <td class=xl5520928 style='border-top:none;border-left:none'>" +  FNum(cStr(SafeDbl(RBHours)), 2) + "</td>");
+                Response.Write ("  <td class=xl5520928 style='border-top:none;border-left:none'>" + RBHours + "</td>");
                 RBTotalHours = SafeDbl(cStr(RBTotalHours)) + SafeDbl(RBHours);
-
 
                 //;
                     // UA Hours;
@@ -741,52 +791,76 @@ namespace InterrailPPRS.Reports
                                     bUAHours = rsUAHours.Read();
 
                             }else{
-                                    UAHours = "";
+                                    UAHours = "0";
                            }
                     }else{
-                            UAHours = "";
+                            UAHours = "0";
                    }
 
-                Response.Write ("  <td class=xl5520928 style='border-top:none;border-left:none'>" +  FNum(cStr(SafeDbl(UAHours)), 2) + "</td>");
+                Response.Write ("  <td class=xl5520928 style='border-top:none;border-left:none'>" + UAHours + "</td>");
                 UATotalHours = SafeDbl(cStr(UATotalHours)) + SafeDbl(UAHours);
-
-
 
                 //;
                 // Self Audits;
                 //;
-                if (bSelfAudit ){
-                               Response.Write ("  <td class=xl5820928 style='border-top:none;border-left:none' >" +  FNum(rsSelfAudit.Fields(0), 0) + "&nbsp;</td>");
-                               Total_SA_Bay = SafeDbl(cStr(Total_SA_Bay)) + SafeDbl(rsSelfAudit.Fields(0));
-                               Total_SC_Bay = SafeDbl(cStr(Total_SC_Bay)) + SafeDbl(rsSelfAudit.Fields(4));
-                               Response.Write ("  <td class=xl5820928 style='border-top:none;border-left:none' >" +  FNum(rsSelfAudit.Fields(2), 2) + "&nbsp;</td>");
-                               Response.Write ("  <td class=xl6720928 style='border-top:none;border-left:none' >" +  FNum(rsSelfAudit.Fields(1), 0) + "&nbsp;</td>");
-                               Total_SA_Fac = SafeDbl(cStr(Total_SA_Fac)) + SafeDbl(rsSelfAudit.Fields(1));
-                               Total_SC_Fac = SafeDbl(cStr(Total_SC_Fac)) + SafeDbl(rsSelfAudit.Fields(5));
-                               Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none' >" +  FNum(rsSelfAudit.Fields(3), 2) + "&nbsp;</td>");
+                if (bSelfAudit)
+                {
+                    var rsSelfAuditFields0 = "0";
+                    if (rsSelfAudit.Fields(0) != "0")
+                    {
+                        rsSelfAuditFields0 = SafeDbl(rsSelfAudit.Fields(0)).ToString("#.##");
+                    }
+                    Response.Write ("  <td class=xl5820928 style='border-top:none;border-left:none' >" + rsSelfAuditFields0 + "&nbsp;</td>");
 
-                               bSelfAudit = rsSelfAudit.Read();
+                    Total_SA_Bay = SafeDbl(cStr(Total_SA_Bay)) + SafeDbl(rsSelfAudit.Fields(0));
+                    Total_SC_Bay = SafeDbl(cStr(Total_SC_Bay)) + SafeDbl(rsSelfAudit.Fields(4));
+
+                    var rsSelfAuditFields2 = "0";
+                    if (Convert.ToDouble(rsSelfAudit.Fields(2)) > 0)
+                    {
+                        rsSelfAuditFields2 = SafeDbl(rsSelfAudit.Fields(2)).ToString("#.##");
+                    }
+                    Response.Write ("  <td class=xl5820928 style='border-top:none;border-left:none' >" + rsSelfAuditFields2 + "&nbsp;</td>");
+
+                    var rsSelfAuditFields1 = "0";
+                    if (rsSelfAudit.Fields(1) != "0")
+                    {
+                        rsSelfAuditFields1 = SafeDbl(rsSelfAudit.Fields(1)).ToString("#.##");
+                    }
+                    Response.Write ("  <td class=xl6720928 style='border-top:none;border-left:none' >" + rsSelfAuditFields1 + "&nbsp;</td>");
+
+                    Total_SA_Fac = SafeDbl(cStr(Total_SA_Fac)) + SafeDbl(rsSelfAudit.Fields(1));
+                    Total_SC_Fac = SafeDbl(cStr(Total_SC_Fac)) + SafeDbl(rsSelfAudit.Fields(5));
+                    var rsSelfAuditFields3 = "0";
+                    if (Convert.ToDouble(rsSelfAudit.Fields(3)) > 0)
+                    {
+                        rsSelfAuditFields3 = SafeDbl(rsSelfAudit.Fields(3)).ToString("#.##");
+                    }
+                    Response.Write ("  <td class=xl5620928 style='border-top:none;border-left:none' >" + rsSelfAuditFields3 + "&nbsp;</td>");
+
+                    bSelfAudit = rsSelfAudit.Read();
                }
 
                 Response.Write ("</tr>");
-
               }
+        }
 
-            }
-
+        /// <summary>
+        /// This writes the totals row for the top grid.
+        /// </summary>
         public void WriteTopTotal()
         {
-
             Response.Write("<tr height=18 style='height:13.5pt'>");
             Response.Write("  <td height=18 class=xl4120928 style='height:13.5pt;border-top:none;border-right:.5pt solid black;'><b>Total</b></td>");
             //;
             // UnLoading;
             //;
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(unLoadTotalHours), 2) + "</td>");
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + unLoadTotalHours.ToString("#.##") + "</td>");
             Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + cStr(unLoadTotalUnits) + "</td>");
             if (SafeDbl(cStr(unLoadTotalHours)) != 0 && SafeDbl(cStr(unLoadTotalUnits)) != 0)
             {
-                Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;' >" + FNum(cStr(SafeDiv(cStr(unLoadTotalUnits), cStr(unLoadTotalHours))), 2) + "</td>");
+                var unloadTotals = SafeDiv(cStr(unLoadTotalUnits), cStr(unLoadTotalHours));
+                Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;' >" + unloadTotals.ToString("#.##") + "</td>");
             }
             else
             {
@@ -795,15 +869,21 @@ namespace InterrailPPRS.Reports
             //;
             // Loading;
             //;
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(LoadTotalHours), 2) + "</td>");
+            var loadTotalHours = "0";
+            if (LoadTotalHours > 0)
+            {
+                loadTotalHours = LoadTotalHours.ToString("#.##");
+            }
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + loadTotalHours + "</td>");
             Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + cStr(LoadTotalUnits) + "</td>");
             if (SafeDbl(cStr(LoadTotalHours)) != 0 && SafeDbl(cStr(LoadTotalUnits)) != 0)
             {
-                Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;' >" + FNum(cStr(SafeDiv(cStr(LoadTotalUnits), cStr(LoadTotalHours))), 2) + "</td>");
+                var loadTotals = SafeDiv(cStr(LoadTotalUnits), cStr(LoadTotalHours));
+                Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;' >" + loadTotals.ToString("#.##") + "</td>");
             }
             else
             {
-                Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>&nbsp;</td>");
+                Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>0</td>");
             }
             //;
             // Total Units / Man;
@@ -811,55 +891,113 @@ namespace InterrailPPRS.Reports
             if (SafeDbl(cStr(nUMTotals)) != 0)
             {
                 UMTotals = SafeDbl(cStr(UMTotals)) / SafeDbl(cStr(nUMTotals));
-                Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;' >" + FNum(cStr(UMTotals), 0) + "</td>");
+                Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;' >" + UMTotals.ToString("#.##") + "</td>");
             }
             else
             {
-                Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>&nbsp;</td>");
+                Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>0</td>");
             }
 
             //;
             // Shuttling;
             //;
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;' align='right'>" + FNum(cStr(ShuttlingTotalHours), 2) + "</td>");
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;' align='right'>" + FNum(cStr(ShuttlingTotalUnits), 0) + "</td>");
+            var shuttlingTotalHours = "0";
+            if (ShuttlingTotalHours > 0)
+            {
+                shuttlingTotalHours = ShuttlingTotalHours.ToString("#.##");
+            }
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;' align='right'>" + shuttlingTotalHours + "</td>");
+
+            var shuttlingTotalUnits = "0";
+            if (ShuttlingTotalUnits > 0)
+            {
+                shuttlingTotalUnits = ShuttlingTotalUnits.ToString("#.##");
+            }
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;' align='right'>" + shuttlingTotalUnits + "</td>");
             if (SafeDbl(cStr(ShuttlingTotalUnits)) != 0 && SafeDbl(cStr(ShuttlingTotalHours)) != 0)
             {
                 Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;' align='right'>" + FNum(cStr(SafeDiv(cStr(ShuttlingTotalUnits), cStr(ShuttlingTotalHours))), 2) + "</td>");
             }
             else
             {
-                Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>&nbsp;</td>");
+                Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>0</td>");
             }
             //;
             // Spotting;
             //;
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(RCs_In), 0) + "</td>");
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(RCs_Out), 0) + "</td>");
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(DownTime), 2) + "</td>");
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(SpottingTotalHours), 2) + "</td>");
+            var rCsIn = "0";
+            if (RCs_In > 0)
+            {
+                rCsIn = RCs_In.ToString("0");
+            }
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + rCsIn + "</td>");
+
+            var rCsOut = "0";
+            if (RCs_Out > 0)
+            {
+                rCsOut = RCs_Out.ToString("0");
+            }
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + rCsOut + "</td>");
+
+            var downTime = "0";
+            if(DownTime > 0)
+            {
+                downTime = DownTime.ToString("#.##");
+            }
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + downTime + "</td>");
+
+            var spottingTotalHours = "0";
+            if (SpottingTotalHours > 0)
+            {
+                spottingTotalHours = SpottingTotalHours.ToString("#.##");
+            }
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + spottingTotalHours + "</td>");
 
             if (SpottingTotalHours > 0)
             {
                 Total_RC_Hr = (RCs_In + RCs_Out) / SpottingTotalHours;
-                Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(Total_RC_Hr), 2) + "</td>");
+                Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + Total_RC_Hr.ToString("#.##") + "</td>");
             }
             else
             {
-                Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>&nbsp;</td>");
+                Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>0</td>");
             }
             //;
             // Miscellaneous (Training, Clerical, RB, UA);
             //;
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(TrainingTotalHours), 2) + "</td>");
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(ClericalTotalHours), 2) + "</td>");
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(RBTotalHours), 2) + "</td>");
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(UATotalHours), 2) + "</td>");
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + TrainingTotalHours.ToString("#.##") + "</td>");
+            var clericalTotalHours = "0";
+            if(ClericalTotalHours > 0)
+            {
+                clericalTotalHours = ClericalTotalHours.ToString("#.##");
+            }
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + clericalTotalHours + "</td>");
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + RBTotalHours.ToString("#.##") + "</td>");
 
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(Total_SA_Bay), 0) + "</td>");
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(SafeDiv(FNum(cStr(Total_SC_Bay), 2), cStr(Total_SA_Bay))), 2) + "</td>");
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(Total_SA_Fac), 0) + "</td>");
-            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(SafeDiv(FNum(cStr(Total_SC_Fac), 2), cStr(Total_SA_Fac))), 2) + "</td>");
+            var uATotalHours = "0";
+            if (UATotalHours > 0)
+            {
+                uATotalHours = UATotalHours.ToString("#.##");
+            }
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + uATotalHours + "</td>");
+            //;
+            // Sealf-Audits;
+            //;
+            var totalSABay = "0";
+            if (Total_SA_Bay > 0)
+            {
+                totalSABay = Total_SA_Bay.ToString("#");
+            }
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + totalSABay + "</td>");
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(SafeDiv(FNum(cStr(Total_SC_Bay), 2), cStr(Total_SA_Bay))), 2).Replace("$", "") + "</td>");
+
+            var totalSAFac = "0";
+            if (Total_SA_Fac > 0)
+            {
+                totalSAFac = Total_SA_Fac.ToString("#");
+            }
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + totalSAFac + "</td>");
+            Response.Write("  <td class=xl9120928 style='border-right:.5pt solid black;'>" + FNum(cStr(SafeDiv(FNum(cStr(Total_SC_Fac), 2), cStr(Total_SA_Fac))), 2).Replace("$", "") + "</td>");
             Response.Write("</tr>");
             //;
             Response.Write("<tr height=18 style='height:13.5pt'>");
@@ -943,7 +1081,6 @@ namespace InterrailPPRS.Reports
     string CPU = "";
     if(bBudgetCPU){
       Response.Write("  <td class=xl11020928 style='border-right:.5pt solid black; border-left:none' colspan=2 align='right'>" + rsBudgetCPU.Fields(0) + "</td>");
-      //Response.Write("  <td class=xl11020928 style='border-right:.5pt solid black; border-left:none' colspan=2 align='right'>" +  FNum(rsBudgetCPU.Fields(0), 0) + "</td>");
       Response.Write("  <td class=xl11020928 style='border-right:.5pt solid black; border-left:none' colspan=2 align='right'>" +  FCur(rsBudgetCPU.Fields(1), 2) + "</td>");
       Response.Write("  <td class=xl11020928 style='border-right:.5pt solid black; border-left:none' colspan=2 align='right'>" +  FCur(rsBudgetCPU.Fields(2), 2) + "</td>");
 
@@ -1115,7 +1252,6 @@ namespace InterrailPPRS.Reports
           Response.Write("  <td class=xl9120928 colspan=24 style='border-right:none'>&nbsp;</td>");
           Response.Write("</tr>");
 
-                }
-
+        }
     }
 }

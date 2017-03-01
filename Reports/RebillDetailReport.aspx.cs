@@ -443,20 +443,18 @@ namespace InterrailPPRS.Reports
 
         }
 
-        public void PrintTaskTotals (string lastTaskDescription, string  subtotalHours,string  subtotalAmount,string  subtotalMC){
-
-              Response.Write("<tr class='reportTotalLine'>");
-              Response.Write("    <td align='right'  class='cellTopBottomBorder' width='7%'>&nbsp;</td>");
-              Response.Write("    <td align='Left'   class='cellTopBottomBorder' width='33%'>Total for " + lastTaskDescription  + "</td>");
-              Response.Write("    <td align='right'  class='cellTopBottomBorder' width='8%'>" + cStr(cDbl(subtotalHours)) + "&nbsp;&nbsp;&nbsp;</td>");
-              Response.Write("    <td align='right'  class='cellTopBottomBorder' width='4%'>&nbsp;&nbsp;</td>");
-              Response.Write("    <td align='right'  class='cellTopBottomBorder' width='10%'>" + cStr(FormatNumber(subtotalAmount, 2, 0)) + "&nbsp;&nbsp;</td>");
-              Response.Write("    <td align='right'  class='cellTopBottomBorder' width='8%'>&nbsp;&nbsp;</td>");
-              //      Response.Write("    <td align=//right//  class=//cellTopBottomBorder// width=//8%//>" + cStr(FormatNumber(subtotalMC, 2, 0)) + "&nbsp;&nbsp;</td>");
-              Response.Write("    <td align='Left'   class='cellTopBottomBorder' colspan='3'  width='30%'>&nbsp;&nbsp;(" + cStr(FormatNumber(subtotalAmount, 2, 0)) + ")</td>");
-              Response.Write("</tr>");
-              Response.Write("<tr><td colspan='8'>&nbsp;</td></tr>");
-
+        public void PrintTaskTotals (string lastTaskDescription, string  subtotalHours,string  subtotalAmount,string  subtotalMC)
+        {            
+            Response.Write("<tr class='reportTotalLine'>");
+            Response.Write("    <td align='right'  class='cellTopBottomBorder' width='7%'>&nbsp;</td>");
+            Response.Write("    <td align='Left'   class='cellTopBottomBorder' width='33%'>Total for " + lastTaskDescription  + "</td>");
+            Response.Write("    <td align='right'  class='cellTopBottomBorder' width='8%'>" + cStr(cDbl(subtotalHours)) + "&nbsp;&nbsp;&nbsp;</td>");
+            Response.Write("    <td align='right'  class='cellTopBottomBorder' width='4%'>&nbsp;&nbsp;</td>");
+            Response.Write("    <td align='right'  class='cellTopBottomBorder' width='10%'>" + cStr(FormatNumber(subtotalAmount, 2, 0)) + "&nbsp;&nbsp;</td>");
+            Response.Write("    <td align='right'  class='cellTopBottomBorder' width='8%'>&nbsp;&nbsp;</td>");
+            Response.Write("    <td align='Left'   class='cellTopBottomBorder' colspan='3'  width='30%'>&nbsp;&nbsp;(" + cStr(FormatNumber(subtotalAmount, 2, 0)) + ")</td>");
+            Response.Write("</tr>");
+            Response.Write("<tr><td colspan='8'>&nbsp;</td></tr>");
         }
 
         public void  ShowRebillDetailReport(){
@@ -658,19 +656,18 @@ namespace InterrailPPRS.Reports
 
         }
 
-        public void PrintUnitTaskTotals (string lastTaskDescriptionPR,string  subtotalHoursPR,string  subtotalAmountPR,string  subtotalMCPR){
-
-              Response.Write("<tr class='reportTotalLine'>");
-              Response.Write("    <td align='right'  class='cellTopBottomBorder' width='7%'>&nbsp;</td>");
-              Response.Write("    <td align='Left'  colspan='2'  class='cellTopBottomBorder' width='33%'>Total for " + lastTaskDescriptionPR  + "</td>");
-              Response.Write("    <td align='right'  class='cellTopBottomBorder' width='8%'>" + cStr(FormatNumber(subtotalHoursPR, 2, 0)) + "&nbsp;&nbsp;&nbsp;</td>");
-              Response.Write("    <td align='right'  class='cellTopBottomBorder' width='4%'>&nbsp;&nbsp;</td>");
-              Response.Write("    <td align='right'  class='cellTopBottomBorder' width='10%'>" + cStr(FormatNumber(subtotalAmountPR, 2, 0)) + "&nbsp;&nbsp;</td>");
-              Response.Write("    <td align='right'  class='cellTopBottomBorder' colspan='1' >&nbsp;&nbsp;</td>");
-              Response.Write("    <td align='Left'   class='cellTopBottomBorder' colspan='3'  width='30%'>&nbsp;&nbsp;</td>");
-              Response.Write("</tr>");
-              Response.Write("<tr><td colspan='8'>&nbsp;</td></tr>");
-
+        public void PrintUnitTaskTotals (string lastTaskDescriptionPR,string  subtotalHoursPR,string  subtotalAmountPR,string  subtotalMCPR)
+        {
+            Response.Write("<tr class='reportTotalLine'>");
+            Response.Write("    <td align='right'  class='cellTopBottomBorder' width='7%'>&nbsp;</td>");
+            Response.Write("    <td align='Left'  colspan='2'  class='cellTopBottomBorder' width='33%'>Total for " + lastTaskDescriptionPR  + "</td>");
+            Response.Write("    <td align='right'  class='cellTopBottomBorder' width='8%'>" + cStr(subtotalHoursPR) + "&nbsp;&nbsp;&nbsp;</td>");
+            Response.Write("    <td align='right'  class='cellTopBottomBorder' width='4%'>&nbsp;&nbsp;</td>");
+            Response.Write("    <td align='right'  class='cellTopBottomBorder' width='10%'>" + cStr(FormatNumber(subtotalAmountPR, 2, 0)) + "&nbsp;&nbsp;</td>");
+            Response.Write("    <td align='right'  class='cellTopBottomBorder' colspan='1' >&nbsp;&nbsp;</td>");
+            Response.Write("    <td align='Left'   class='cellTopBottomBorder' colspan='3'  width='30%'>&nbsp;&nbsp;</td>");
+            Response.Write("</tr>");
+            Response.Write("<tr><td colspan='8'>&nbsp;</td></tr>");
         }
 
         public void ShowRebillUnitReport(){
@@ -754,13 +751,13 @@ namespace InterrailPPRS.Reports
 	                sAmount = cStr(cDbl(UnitRS.Item("Rate")) * cDbl(UnitRS.Item("TotalHours")));
 	                subtotalHours = subtotalHours + cDbl(UnitRS.Item("TotalHours"));
 	            }else{
-	                Response.Write("    <td align='right'  width='8%'>" + cStr(FormatNumber(UnitRS.Item("TotalUnits"), 0, 0)) + "&nbsp;&nbsp;&nbsp;</td>");
+	                Response.Write("    <td align='right'  width='8%'>" + UnitRS.Item("TotalUnits") + "&nbsp;&nbsp;&nbsp;</td>");
 	                sAmount = cStr(cDbl(UnitRS.Item("Rate")) * cDbl(UnitRS.Item("TotalUnits")));
 	                subtotalHours = subtotalHours + cDbl(UnitRS.Item("TotalUnits"));
 	            }
 
 
-               Response.Write("    <td align='right'  width='4%'>&nbsp;" + UnitRS.Item("Rate") + "&nbsp;</td>");
+               Response.Write("    <td align='right'  width='4%'>&nbsp;" + cStr(FormatNumber(UnitRS.Item("Rate"), 2, 0)) + "&nbsp;</td>");
 
                sMatCosts = cStr(UnitRS.Item("MaterialCosts"));
 

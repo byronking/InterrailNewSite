@@ -549,7 +549,6 @@ namespace InterrailPPRS.Payroll
 			// execute query for reg tasks
 			string sql = "";
 
-
 			sql = sql + " ( select EmployeeTaskWorked.Id,  Employee.HireDate, EmployeeTaskWorked.TaskID,  EmployeeTaskWorked.OtherTaskID, ";
 			sql = sql + "       EmployeeTaskWorked.FacilityID, EmployeeTaskWorked.EmployeeId, EmployeeTaskWorked.WorkDate,  ";
 			sql = sql + "       EmployeeTaskWorked.ShiftID, EmployeeTaskWorked.UPM, EmployeeTaskWorked.HoursWorked,  ";
@@ -692,11 +691,6 @@ namespace InterrailPPRS.Payroll
 			sql = sql + " and  EmployeeTaskWorked.EmployeeID IN (Select ID from Employee where facilityID =  " + facilityID.ToString()  + " OR FacilityID IN  (" + AssFacilities +") )  ) ";
             
             sql = sql + " Order by EmployeeTaskWorked.EmployeeID, EmployeeTaskWorked.Workdate, EmployeeTaskWorked.HoursWorked  ";
-
-            
-            //Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
-            //Trace.WriteLine(sql);
-
 
 			SqlCommand cmd = new SqlCommand(sql, new SqlConnection(connectString));
             cmd.CommandTimeout = 360;
@@ -1538,20 +1532,6 @@ namespace InterrailPPRS.Payroll
             string sql =  "";
             string sql2 =  "";
 
-//            sql = sql + " Delete FROM EmployeeTaskWorkedPay  ";
-//            sql = sql + " WHERE  ( EmployeeTaskWorkedID in ";
-//            sql = sql + "    (Select id from EmployeeTaskWorked where ";
-//            sql = sql + "          FacilityID =  "  + facilityID.ToString();
-//            sql = sql + "       AND   ";
-//            sql = sql + "        WorkDate Between '" + startDate + "' AND '" + endDate + "' ) )";
-//
-//            SqlCommand cmd = new SqlCommand(sql, new SqlConnection(connectString)); 
-//            cmd.CommandTimeout = 360;
-//            cmd.Connection.Open(); 
-//            cmd.ExecuteNonQuery();
-
-
-
             sql =  "";
             sql = sql + " Delete FROM EmployeeTaskWorkedPay  ";
             sql = sql + " WHERE  ( EmployeeTaskWorkedID in ";
@@ -1564,8 +1544,6 @@ namespace InterrailPPRS.Payroll
             cmd.CommandTimeout = 360;
             cmd.Connection.Open(); 
             cmd.ExecuteNonQuery();
-
-
 
             sql =  "";
             sql = sql + " Delete FROM EmployeeTaskWorkedPay  ";

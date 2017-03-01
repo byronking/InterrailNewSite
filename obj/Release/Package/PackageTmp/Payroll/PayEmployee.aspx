@@ -4,25 +4,22 @@
 
 <script type="C#" runat="server">
 
-    protected void OnLoad(System.EventArgs e ){
+    protected void OnLoad(System.EventArgs e )
+    {
         base.OnLoad(e);
-        
     }
-        
+
 </script>
 
 <asp:Content ID="headerScripts" ContentPlaceHolderID="Scripts" runat="server">
     <script type="text/javascript" language="javascript">
     function bodyload()
     {
-
-      LoadMembers();
+        LoadMembers();  
+        setCustomerTask();
+        updateUPM();
   
-      setCustomerTask();
-
-      updateUPM();
-  
-      OriginalFormCheckSumValue = CheckStringForForm(document.form1);
+        OriginalFormCheckSumValue = CheckStringForForm(document.form1);
     }
 
     function setCustomerTask()
@@ -52,8 +49,7 @@
     }
 
     function updateUPM()
-    {
-   
+    {   
        var upm;
        var h;
        var nc;
@@ -102,8 +98,7 @@
 
     function goOutOfTown()
     {
-      //  var theList=window.open("/common/OutOfTown.aspx");
-       var theList=showModalDialog("../common/OutOfTown.aspx",0,"dialogWidth:700px;dialogHeight:600px;unadorned:yes;status:no;resizable:no;help:no;dialogTop:50px;dialogLeft:50px");
+      var theList=showModalDialog("../common/OutOfTown.aspx",0,"dialogWidth:700px;dialogHeight:600px;unadorned:yes;status:no;resizable:no;help:no;dialogTop:50px;dialogLeft:50px");
        if ((theList) && (theList != ''))
              {
            var arList = theList.split('|');
@@ -168,9 +163,8 @@
 
           //OriginalFormCheckSumValue = CheckStringForForm(document.form1);
 
-              frm.ActionType.value = "UPDATE";
-              frm.action = "Payemployee.aspx";
-                //frm.action = "/col.aspx";
+        frm.ActionType.value = "UPDATE";
+        frm.action = "Payemployee.aspx";
       
           frm.submit();
       }
