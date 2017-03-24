@@ -84,7 +84,7 @@
                               </p>
                               <p>Pick Pay Period
                                                           <select name="Payperiod">
-                                                          <% =getPayPeriods(0,52,"") %>
+                                                          <% =getPayPeriods(0,520,"") %>
                                                           </select>
                               </p>
                               <p>
